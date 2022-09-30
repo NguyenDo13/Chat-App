@@ -1,4 +1,5 @@
 import 'package:chat_app/presentation/UIData/app_content.dart';
+import 'package:chat_app/presentation/UIData/dimentions.dart';
 import 'package:chat_app/presentation/UIData/style.dart';
 import 'package:flutter/material.dart';
 
@@ -54,11 +55,11 @@ class _InputTextFieldState extends State<InputTextField> {
           _textTitle,
           style: LabelStyle,
         ),
-        const SizedBox(height: 10.0),
+        SizedBox(height: Dimensions.height10),
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecorationStyle,
-          height: 60.0,
+          height: Dimensions.height60,
           child: TextField(
             onChanged: (value) {
               widget.onChanged(value);
@@ -75,7 +76,7 @@ class _InputTextFieldState extends State<InputTextField> {
             ),
             decoration: InputDecoration(
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.only(top: 14.0),
+              contentPadding: EdgeInsets.only(top: Dimensions.height14),
               prefixIcon: _iconField,
               hintText: _hintText,
               hintStyle: HintTextStyle,

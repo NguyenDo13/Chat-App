@@ -77,58 +77,55 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
             widget.borderRadiusBoxDecoration,
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: TextField(
-            controller: textEditingController,
-            textAlign: TextAlign.start,
-            textInputAction: widget.textInputAction,
-            enableSuggestions: widget.enableSuggestions,
-            autocorrect: widget.autocorrect,
-            keyboardType: widget.textInputType,
-            maxLength: widget.maxLength,
-            style: const TextStyle(
+        child: TextField(
+          controller: textEditingController,
+          textAlign: TextAlign.start,
+          textInputAction: widget.textInputAction,
+          enableSuggestions: widget.enableSuggestions,
+          autocorrect: widget.autocorrect,
+          keyboardType: widget.textInputType,
+          maxLength: widget.maxLength,
+          style: const TextStyle(
+            decoration: TextDecoration.none,
+          ),
+          onSubmitted: widget.onSubmitted,
+          onChanged: (value) {
+            widget.onChanged(value);
+          },
+          cursorColor: widget.cursorColor,
+          decoration: InputDecoration(
+            focusColor: widget.focusColorInput,
+            hintText: widget.hintText,
+            labelText: widget.labelText,
+            labelStyle: const TextStyle(
               decoration: TextDecoration.none,
+              color: Colors.red,
             ),
-            onSubmitted: widget.onSubmitted,
-            onChanged: (value) {
-              widget.onChanged(value);
-            },
-            cursorColor: widget.cursorColor,
-            decoration: InputDecoration(
-              focusColor: widget.focusColorInput,
-              hintText: widget.hintText,
-              labelText: widget.labelText,
-              labelStyle: const TextStyle(
-                decoration: TextDecoration.none,
-                color: Colors.red,
-              ),
-              hintTextDirection: widget.enableRTLHintText
-                  ? ui.TextDirection.rtl
-                  : ui.TextDirection.ltr,
-              suffixIcon: textEditingController.text.isEmpty
-                  ? Visibility(
-                      visible: widget.isShowSearchButton,
-                      child: Icon(
-                        Icons.search,
-                        color: widget.suffixIconColor,
-                      ),
-                    )
-                  : IconButton(
-                      onPressed: () {
-                        widget.onDeleted();
-                        setState(() {
-                          textEditingController.clear();
-                        });
-                      },
-                      icon: const Icon(Icons.clear),
+            hintTextDirection: widget.enableRTLHintText
+                ? ui.TextDirection.rtl
+                : ui.TextDirection.ltr,
+            suffixIcon: textEditingController.text.isEmpty
+                ? Visibility(
+                    visible: widget.isShowSearchButton,
+                    child: Icon(
+                      Icons.search,
                       color: widget.suffixIconColor,
                     ),
-              focusedErrorBorder: InputBorder.none,
-              border: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              enabledBorder: InputBorder.none,
-            ),
+                  )
+                : IconButton(
+                    onPressed: () {
+                      widget.onDeleted();
+                      setState(() {
+                        textEditingController.clear();
+                      });
+                    },
+                    icon: const Icon(Icons.clear),
+                    color: widget.suffixIconColor,
+                  ),
+            focusedErrorBorder: InputBorder.none,
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
           ),
         ),
       ),

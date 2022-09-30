@@ -1,66 +1,145 @@
+import 'package:chat_app/presentation/UIData/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static TextTheme lightTextTheme = TextTheme(
-    bodyText1: GoogleFonts.openSans(
+    displayLarge: GoogleFonts.openSans(
+      fontSize: 4.0,
+      fontWeight: FontWeight.w700,
+      color: Colors.red,
+    ),
+    displayMedium: GoogleFonts.openSans(
       fontSize: 14.0,
       fontWeight: FontWeight.w700,
-      color: Colors.black,
+      color: Colors.white,
     ),
-    headline1: GoogleFonts.openSans(
+    displaySmall: GoogleFonts.openSans(
       fontSize: 32.0,
       fontWeight: FontWeight.bold,
       color: Colors.black,
     ),
-    headline2: GoogleFonts.openSans(
+    headlineMedium: GoogleFonts.openSans(
       fontSize: 21.0,
       fontWeight: FontWeight.w700,
       color: Colors.black,
     ),
-    headline3: GoogleFonts.openSans(
+    headlineSmall: GoogleFonts.openSans(
       fontSize: 16.0,
       fontWeight: FontWeight.w600,
       color: Colors.black,
     ),
-    headline6: GoogleFonts.openSans(
+    titleLarge: GoogleFonts.openSans(
       fontSize: 20.0,
       fontWeight: FontWeight.w600,
+      color: Colors.black,
+    ),
+    titleMedium: GoogleFonts.openSans(
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.black,
+    ),
+    titleSmall: GoogleFonts.openSans(
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.black,
+    ),
+    bodyLarge: GoogleFonts.openSans(
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.black,
+    ),
+    bodyMedium: GoogleFonts.openSans(
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.black,
+    ),
+    bodySmall: GoogleFonts.openSans(
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.black,
+    ),
+    labelLarge: GoogleFonts.openSans(
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.black,
+    ),
+    labelSmall: GoogleFonts.openSans(
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
       color: Colors.black,
     ),
   );
 
   static TextTheme darkTextTheme = TextTheme(
-    bodyText1: GoogleFonts.openSans(
+    displayLarge: GoogleFonts.openSans(
+      fontSize: 24.0,
+      fontWeight: FontWeight.w700,
+      color: Colors.white,
+    ), //*
+    displayMedium: GoogleFonts.openSans(
+      fontSize: 20.0,
+      fontWeight: FontWeight.w700,
+      color: Colors.white,
+    ),
+    displaySmall: GoogleFonts.openSans(
+      fontSize: 15,
+      fontWeight: FontWeight.normal,
+      color: Colors.white,
+    ),//*
+    
+    titleMedium: GoogleFonts.openSans(
       fontSize: 14.0,
       fontWeight: FontWeight.w700,
       color: Colors.white,
-    ),
-    headline1: GoogleFonts.openSans(
-      fontSize: 32.0,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-    headline2: GoogleFonts.openSans(
-      fontSize: 21.0,
-      fontWeight: FontWeight.w700,
-      color: Colors.white,
-    ),
-    headline3: GoogleFonts.openSans(
+    ), //*
+    titleSmall: GoogleFonts.openSans(
+      fontSize: 15,
+      color: lightGreyDarkMode,
+      fontWeight: FontWeight.w600,
+    ), //*
+
+    bodyLarge: GoogleFonts.openSans(
       fontSize: 16.0,
       fontWeight: FontWeight.w600,
       color: Colors.white,
-    ),
-    headline6: GoogleFonts.openSans(
-      fontSize: 20.0,
-      fontWeight: FontWeight.w600,
+    ), //*
+    bodyMedium: GoogleFonts.openSans(
+      fontSize: 14.0,
+      fontWeight: FontWeight.normal,
       color: Colors.white,
-    ),
-    caption: GoogleFonts.openSans(
+    ), //*
+    bodySmall: GoogleFonts.openSans(
       fontSize: 12.0,
       fontWeight: FontWeight.normal,
       color: Colors.white,
+    ), //*
+
+    labelLarge: GoogleFonts.openSans(
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+      color: lightGreyDarkMode,
+    ),//*
+    labelSmall: GoogleFonts.openSans(
+      fontSize: 10.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.white,
+    ), //*
+    headlineMedium: GoogleFonts.openSans(
+      fontSize: 16.0,
+      fontWeight: FontWeight.w700,
+      color: Colors.white,
     ),
+    headlineSmall: GoogleFonts.openSans(
+      fontSize: 14.0,
+      fontWeight: FontWeight.normal,
+      color: lightGreyDarkMode,
+    ),//*
+    titleLarge: GoogleFonts.openSans(
+      fontSize: 16.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.white,
+    ),//*
   );
 
   static ThemeData light() {
@@ -101,6 +180,7 @@ class AppTheme {
         selectedLabelStyle: TextStyle(fontSize: 14),
         selectedItemColor: Colors.blue,
       ),
+      fontFamily: 'openSans',
       textTheme: darkTextTheme,
     );
   }

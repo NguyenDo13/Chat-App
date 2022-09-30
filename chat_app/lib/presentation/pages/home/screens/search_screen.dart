@@ -1,6 +1,8 @@
 import 'package:chat_app/presentation/UIData/app_content.dart';
+import 'package:chat_app/presentation/UIData/colors.dart';
+import 'package:chat_app/presentation/UIData/dimentions.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
-import 'package:chat_app/presentation/widgets/input_text_field_search.dart';
+import 'package:chat_app/presentation/pages/home/components/input_text_field_search.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -10,34 +12,22 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: TextFieldWidget(
-          padding: 0,
-          boxDecorationColor: Colors.grey[900]!,
-          onChanged: (value) {},
-          onDeleted: () {},
-          onSubmitted: (value) {},
-          suffixIconColor: Colors.white,
-        ),
-      ),
+      appBar: _buildAppbar(),
       body: Container(
-        margin: const EdgeInsets.all(14),
+        margin: EdgeInsets.symmetric(horizontal: Dimensions.width14, vertical: Dimensions.height14),
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 0, 0),
+                padding: EdgeInsets.only(left: Dimensions.width8),
                 child: Text(
                   'GỢI Ý',
-                  style: GoogleFonts.openSans(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: Dimensions.height20),
               _buildListFriend(),
             ],
           ),
@@ -46,24 +36,42 @@ class SearchScreen extends StatelessWidget {
     );
   }
 
+  AppBar _buildAppbar() {
+    return AppBar(
+      toolbarHeight: Dimensions.height72,
+      title: TextFieldWidget(
+        padding: 0,
+        boxDecorationColor: blackDarkMode!,
+        onChanged: (value) {},
+        onDeleted: () {},
+        onSubmitted: (value) {},
+        suffixIconColor: Colors.white,
+      ),
+    );
+  }
+
   Widget _buildListFriend() {
     return Container(
-      constraints: const BoxConstraints(
-        maxHeight: 1000,
+      constraints: BoxConstraints(
+        maxHeight: Dimensions.screenHeight,
       ),
       child: ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: LIST_USERS.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            leading: Container(
-              padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-              child: StateAvatar(
-                avatar: 'assets/avatars/${LIST_USERS[index][0].avatar}',
-                isStatus: LIST_USERS[index][0].state,
-                radius: 48,
+          return Padding(
+            padding: EdgeInsets.only(bottom: Dimensions.height10),
+            child: ListTile(
+              leading: Container(
+                padding: EdgeInsets.only(right: Dimensions.width8),
+                child: StateAvatar(
+                  avatar: 'assets/avatars/${LIST_USERS[index][0].avatar}',
+                  isStatus: LIST_USERS[index][0].state,
+                  radius: Dimensions.double12 * 4,
+                ),
               ),
+              title: Text(LIST_USERS[index][0].username),
             ),
-            title: Text(LIST_USERS[index][0].username),
           );
         },
       ),

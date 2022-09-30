@@ -1,3 +1,4 @@
+import 'package:chat_app/presentation/UIData/dimentions.dart';
 import 'package:flutter/material.dart';
 
 class StateAvatar extends StatefulWidget {
@@ -33,20 +34,27 @@ class _StateAvatarState extends State<StateAvatar> {
                 ),
               ),
               Positioned(
-                bottom: 2,
-                right: 2,
+                bottom: widget.radius == Dimensions.double40
+                    ? -Dimensions.height2
+                    : Dimensions.height2,
+                right: widget.radius == Dimensions.double40
+                    ? -Dimensions.width10 / Dimensions.width10
+                    : Dimensions.width2,
                 child: Container(
-                  padding: const EdgeInsets.all(2.0),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.height2,
+                    vertical: Dimensions.height2,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFF303030),
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(Dimensions.double40),
                   ),
                   child: Container(
-                    width: 10,
-                    height: 10,
+                    width: Dimensions.height10,
+                    height: Dimensions.height10,
                     decoration: BoxDecoration(
                       color: Colors.green,
-                      borderRadius: BorderRadius.circular(40),
+                      borderRadius: BorderRadius.circular(Dimensions.double40),
                     ),
                   ),
                 ),

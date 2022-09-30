@@ -1,6 +1,7 @@
-import 'package:chat_app/presentation/UIData/theme.dart';
+import 'package:chat_app/presentation/UIData/dimentions.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ListOnlineUser extends StatelessWidget {
   const ListOnlineUser({super.key});
@@ -26,28 +27,36 @@ class ListOnlineUser extends StatelessWidget {
       'user4.jpeg'
     ];
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-      constraints: const BoxConstraints(maxHeight: 118),
+      padding: EdgeInsets.fromLTRB(
+        Dimensions.width14,
+        Dimensions.height14,
+        Dimensions.width14,
+        0,
+      ),
+      constraints: BoxConstraints(
+        maxHeight: Dimensions.height120 + Dimensions.height14,
+      ),
       child: ListView.builder(
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         itemCount: 13,
         itemBuilder: (BuildContext context, int index) {
           return Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-            constraints: const BoxConstraints(maxWidth: 62),
+            margin: EdgeInsets.only(right: Dimensions.width12),
+            constraints: BoxConstraints(maxWidth: Dimensions.width62),
             child: Column(
               children: [
                 StateAvatar(
                   avatar: "assets/avatars/${listUsers[index]}",
                   isStatus: true,
-                  radius: 60,
+                  radius: Dimensions.double30 * 2,
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: Dimensions.height4),
                 Text(
                   'Bắt đầu cuộc gọi',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style: AppTheme.darkTextTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
             ),

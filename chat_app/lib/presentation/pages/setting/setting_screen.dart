@@ -1,3 +1,5 @@
+import 'package:chat_app/presentation/UIData/dimentions.dart';
+import 'package:chat_app/presentation/pages/setting/components/feature_setting.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,44 +25,50 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      // mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 20),
-        const Center(
+        SizedBox(height: Dimensions.height20),
+        Center(
           child: StateAvatar(
-              avatar: 'assets/avatars/user1.jpg', isStatus: false, radius: 200),
+            avatar: 'assets/avatars/user1.jpg',
+            isStatus: false,
+            radius: Dimensions.double40 * 5,
+          ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: Dimensions.height20),
         Text(
           'Nguyễn Trường Sinh',
           maxLines: 4,
-          style: GoogleFonts.openSans(
-            color: Colors.white,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.displayLarge,
         ),
-        const SizedBox(height: 50),
+        SizedBox(height: Dimensions.height10 * 5),
         ListTile(
           leading: Container(
-            margin: const EdgeInsets.fromLTRB(12, 0, 6, 0),
-            width: 50,
-            height: 50,
+            margin: EdgeInsets.fromLTRB(
+              Dimensions.width14,
+              0,
+              Dimensions.width12 / 2,
+              0,
+            ),
+            width: Dimensions.height10 * 5,
+            height: Dimensions.height10 * 5,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
+              borderRadius: BorderRadius.circular(Dimensions.double40),
               color: Colors.blue[400],
             ),
-            child: const Center(
+            child: Center(
               child: Icon(
                 CupertinoIcons.circle_lefthalf_fill,
                 color: Colors.white,
-                size: 28,
+                size: Dimensions.double14 * 2,
               ),
             ),
           ),
-          title: const Text('Chế độ tối'),
+          title: Text(
+            'Chế độ tối',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
           trailing: Container(
-            margin: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+            margin: EdgeInsets.only(right: Dimensions.width16),
             child: Switch(
               activeColor: Colors.blue[400],
               value: isDarkMode,
@@ -72,53 +80,25 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
           ),
         ),
-        const SizedBox(height: 10),
-        _featuresSetting(
+        SizedBox(height: Dimensions.height10),
+        FeatureSetting(
           icon: CupertinoIcons.person_circle,
           title: 'Thông tin cá nhân',
           color: Colors.deepPurple[400]!,
         ),
-        const SizedBox(height: 10),
-        _featuresSetting(
+        SizedBox(height: Dimensions.height10),
+        FeatureSetting(
           icon: CupertinoIcons.person_crop_circle_badge_exclam,
           title: 'Người dùng đã chặn',
           color: Colors.orange[400]!,
         ),
-        const SizedBox(height: 10),
-        _featuresSetting(
+        SizedBox(height: Dimensions.height10),
+        FeatureSetting(
           icon: Icons.logout,
           title: 'Chuyển tài khoản',
           color: Colors.pink[400]!,
         ),
       ],
-    );
-  }
-
-  ListTile _featuresSetting({
-    required IconData icon,
-    required String title,
-    required Color color,
-  }) {
-    return ListTile(
-      onTap: () {},
-      leading: Container(
-        // color: Colors.blue,
-        margin: const EdgeInsets.fromLTRB(12, 0, 6, 0),
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(40),
-          color: color,
-        ),
-        child: Center(
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: 28,
-          ),
-        ),
-      ),
-      title: Text(title),
     );
   }
 }
