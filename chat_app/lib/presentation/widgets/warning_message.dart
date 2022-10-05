@@ -5,15 +5,18 @@ class WarningMessage extends StatelessWidget {
   final bool isDataValid;
   final String message;
 
-  const WarningMessage(
-      {super.key, required this.isDataValid, required this.message});
+  const WarningMessage({
+    super.key,
+    required this.isDataValid,
+    required this.message,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(12, 6, 0, 0),
       child: Visibility(
-        visible: !isDataValid,
+        visible: isDataValid,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -27,8 +30,8 @@ class WarningMessage extends StatelessWidget {
             ),
             Text(
               message,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                color: Colors.red.shade300,
                 fontSize: 10,
               ),
             ),

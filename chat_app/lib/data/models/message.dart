@@ -2,14 +2,19 @@
 import 'package:chat_app/presentation/enum/enums.dart';
 
 class Message {
+  String? sId;
   final List<String>? content;
+  // final String? message;
   final ChatMessageType type;
   final ChatMessageStatus status;
+  String stampTime;
   final bool isSender;
   Message({
+    this.sId,
     this.content,
     required this.type,
     required this.status,
+    required this.stampTime,
     required this.isSender,
   });
 }
@@ -22,7 +27,7 @@ List<Message> demoMessages = [
     content: [
       "Chào, Trường Sinh!",
       "Bạn có thể kể cho tôi về con mèo của bạn, tôi nhớ nó quá!",
-    ],
+    ], stampTime: '',
   ),
   Message(
     isSender: true,
@@ -31,7 +36,7 @@ List<Message> demoMessages = [
     content: [
       "Chào, Nguyễn Dộ",
       "Đương nhiên rồi",
-    ],
+    ], stampTime: '',
   ),
   Message(
     isSender: false,
@@ -39,7 +44,7 @@ List<Message> demoMessages = [
     type: ChatMessageType.text,
     content: [
       "Cảm ơn 🥰! thế nó sao rồi?",
-    ],
+    ], stampTime: '',
   ),
   Message(
     isSender: true,
@@ -49,7 +54,7 @@ List<Message> demoMessages = [
       "Nó mới vừa ăn tối xong",
       "Tôi sẽ không nó cho bạn biết là hiện tại nó đang đi ị* 🤢",
       "😂😂😂😂🤣",
-    ],
+    ], stampTime: '',
   ),
   Message(
     isSender: false,
@@ -60,7 +65,7 @@ List<Message> demoMessages = [
       "Hay ra dẻ quá à! 🤣🤣",
       "Thôi bỏ qua câu chuyện nhạt nhẽo ấy đi",
       "Hôm nay làm việc thế nào?",
-    ],
+    ], stampTime: '',
   ),
   Message(
     isSender: true,
@@ -69,7 +74,7 @@ List<Message> demoMessages = [
     content: [
       "Tôi hả? Cũng bình thường.",
       "Vẫn bị sếp mắng như mọi lần",
-    ],
+    ], stampTime: '',
   ),
   Message(
     isSender: false,
@@ -79,6 +84,6 @@ List<Message> demoMessages = [
       "Ohmm",
       "Không Sao! mai sẽ khác",
       "Tôi có chút hẹn, gặp lại sau nhé!"
-    ],
+    ], stampTime: '',
   ),
 ];

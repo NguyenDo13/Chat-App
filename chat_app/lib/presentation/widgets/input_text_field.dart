@@ -1,6 +1,5 @@
-import 'package:chat_app/presentation/UIData/app_content.dart';
+import 'package:chat_app/presentation/UIData/colors.dart';
 import 'package:chat_app/presentation/UIData/dimentions.dart';
-import 'package:chat_app/presentation/UIData/style.dart';
 import 'package:flutter/material.dart';
 
 class InputTextField extends StatefulWidget {
@@ -31,13 +30,18 @@ class _InputTextFieldState extends State<InputTextField> {
   void initState() {
     _iconField = const Icon(Icons.error);
     if (widget.isEmail) {
-      _textTitle = EMAIL;
+      _textTitle = 'Email';
       _iconField = const Icon(Icons.email, color: Colors.white);
-      _hintText = ENTER_EMAIL;
+      _hintText = 'Enter your Email';
     } else if (widget.isPassword) {
-      _textTitle = PASS;
+      _textTitle = 'Password';
       _iconField = const Icon(Icons.lock, color: Colors.white);
-      _hintText = ENTER_PASS;
+      _hintText = 'Enter your Password';
+    } else {
+      _textTitle = 'Verify';
+      _iconField =
+          const Icon(Icons.verified_user_outlined, color: Colors.white);
+      _hintText = 'Re-enter your Password';
     }
     _controller = TextEditingController();
     _controller.addListener(() {
@@ -53,33 +57,45 @@ class _InputTextFieldState extends State<InputTextField> {
       children: <Widget>[
         Text(
           _textTitle,
-          style: LabelStyle,
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: Colors.white70,
+                fontWeight: FontWeight.bold,
+              ),
         ),
         SizedBox(height: Dimensions.height10),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: BoxDecorationStyle,
+          decoration: BoxDecoration(
+            color: customPurple,
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6.0,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
           height: Dimensions.height60,
           child: TextField(
-            onChanged: (value) {
-              widget.onChanged(value);
-            },
+            onChanged: (value) => widget.onChanged(value),
             onSubmitted: widget.onSubmitted,
             controller: _controller,
-            keyboardType: widget.isEmail == true
+            keyboardType: widget.isEmail
                 ? TextInputType.emailAddress
                 : TextInputType.multiline,
-            obscureText: widget.isPassword == true ? true : false,
-            style: const TextStyle(
-              color: Colors.white,
-              fontFamily: 'OpenSans',
-            ),
+            obscureText: !widget.isEmail ? true : false,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Colors.white,
+                ),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: Dimensions.height14),
               prefixIcon: _iconField,
               hintText: _hintText,
-              hintStyle: HintTextStyle,
+              hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Colors.white70,
+                  ),
             ),
           ),
         ),

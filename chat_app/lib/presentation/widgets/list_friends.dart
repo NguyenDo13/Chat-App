@@ -1,9 +1,11 @@
+import 'package:chat_app/presentation/UIData/colors.dart';
 import 'package:chat_app/presentation/UIData/dimentions.dart';
-import 'package:chat_app/presentation/pages/home/screens/chat_screen.dart';
+import 'package:chat_app/presentation/screens/chat/chat_screen.dart';
+import 'package:chat_app/presentation/services/app_state_provider.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ListFriends extends StatelessWidget {
   final List<dynamic> listUsers;
@@ -16,6 +18,7 @@ class ListFriends extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppStateProvider appState = context.watch<AppStateProvider>();
     return Container(
       constraints: BoxConstraints(
         maxHeight: Dimensions.screenHeight,
@@ -59,7 +62,7 @@ class ListFriends extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: Dimensions.width152,
                     child: Text(
                       listUsers[index][1], //* Content
@@ -97,7 +100,9 @@ class ListFriends extends StatelessWidget {
                       maxHeight: Dimensions.height40,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.grey[800],
+                      color: appState.darkMode
+                          ? Colors.grey[800]
+                          : lightGreyLightMode,
                       borderRadius: BorderRadius.circular(Dimensions.double40),
                     ),
                     child: Center(

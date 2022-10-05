@@ -5,70 +5,73 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   static TextTheme lightTextTheme = TextTheme(
     displayLarge: GoogleFonts.openSans(
-      fontSize: 4.0,
+      fontSize: 24.0,
       fontWeight: FontWeight.w700,
-      color: Colors.red,
-    ),
+      color: Colors.black,
+    ), //*
     displayMedium: GoogleFonts.openSans(
-      fontSize: 14.0,
+      fontSize: 20.0,
       fontWeight: FontWeight.w700,
-      color: Colors.white,
+      color: Colors.black,
     ),
     displaySmall: GoogleFonts.openSans(
-      fontSize: 32.0,
-      fontWeight: FontWeight.bold,
+      fontSize: 15,
+      fontWeight: FontWeight.normal,
       color: Colors.black,
-    ),
-    headlineMedium: GoogleFonts.openSans(
-      fontSize: 21.0,
+    ), //*
+
+    titleMedium: GoogleFonts.openSans(
+      fontSize: 14.0,
       fontWeight: FontWeight.w700,
       color: Colors.black,
-    ),
-    headlineSmall: GoogleFonts.openSans(
+    ), //*
+    titleSmall: GoogleFonts.openSans(
+      fontSize: 15,
+      color: lightGreyDarkMode,
+      fontWeight: FontWeight.w600,
+    ), //*
+
+    bodyLarge: GoogleFonts.openSans(
       fontSize: 16.0,
       fontWeight: FontWeight.w600,
       color: Colors.black,
-    ),
-    titleLarge: GoogleFonts.openSans(
-      fontSize: 20.0,
-      fontWeight: FontWeight.w600,
-      color: Colors.black,
-    ),
-    titleMedium: GoogleFonts.openSans(
-      fontSize: 12.0,
-      fontWeight: FontWeight.normal,
-      color: Colors.black,
-    ),
-    titleSmall: GoogleFonts.openSans(
-      fontSize: 12.0,
-      fontWeight: FontWeight.normal,
-      color: Colors.black,
-    ),
-    bodyLarge: GoogleFonts.openSans(
-      fontSize: 12.0,
-      fontWeight: FontWeight.normal,
-      color: Colors.black,
-    ),
+    ), //*
     bodyMedium: GoogleFonts.openSans(
-      fontSize: 12.0,
+      fontSize: 14.0,
       fontWeight: FontWeight.normal,
       color: Colors.black,
-    ),
+    ), 
     bodySmall: GoogleFonts.openSans(
       fontSize: 12.0,
       fontWeight: FontWeight.normal,
       color: Colors.black,
-    ),
+    ), //*
+
     labelLarge: GoogleFonts.openSans(
       fontSize: 12.0,
       fontWeight: FontWeight.normal,
-      color: Colors.black,
-    ),
+      color: lightGreyDarkMode,
+    ), //*
     labelSmall: GoogleFonts.openSans(
-      fontSize: 12.0,
+      fontSize: 10.0,
       fontWeight: FontWeight.normal,
       color: Colors.black,
+    ), //*
+    headlineMedium: GoogleFonts.openSans(
+      fontSize: 16.0,
+      fontWeight: FontWeight.w700,
+      color: Colors.black,
     ),
+    headlineSmall: GoogleFonts.openSans(
+      fontSize: 14.0,
+      fontWeight: FontWeight.normal,
+      color: lightGreyDarkMode,
+    ), //*
+    titleLarge: GoogleFonts.openSans(
+      fontSize: 16.0,
+      fontWeight: FontWeight.normal,
+      color: Colors.black,
+    ), //*
   );
 
   static TextTheme darkTextTheme = TextTheme(
@@ -86,8 +89,8 @@ class AppTheme {
       fontSize: 15,
       fontWeight: FontWeight.normal,
       color: Colors.white,
-    ),//*
-    
+    ), //*
+
     titleMedium: GoogleFonts.openSans(
       fontSize: 14.0,
       fontWeight: FontWeight.w700,
@@ -119,7 +122,7 @@ class AppTheme {
       fontSize: 12.0,
       fontWeight: FontWeight.normal,
       color: lightGreyDarkMode,
-    ),//*
+    ), //*
     labelSmall: GoogleFonts.openSans(
       fontSize: 10.0,
       fontWeight: FontWeight.normal,
@@ -134,12 +137,12 @@ class AppTheme {
       fontSize: 14.0,
       fontWeight: FontWeight.normal,
       color: lightGreyDarkMode,
-    ),//*
+    ), //*
     titleLarge: GoogleFonts.openSans(
       fontSize: 16.0,
       fontWeight: FontWeight.normal,
       color: Colors.white,
-    ),//*
+    ), //*
   );
 
   static ThemeData light() {
@@ -156,10 +159,12 @@ class AppTheme {
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         foregroundColor: Colors.white,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.blue,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        selectedItemColor: Colors.green,
+        selectedItemColor: Colors.blue,
+        selectedLabelStyle: TextStyle(fontSize: 14),
+        unselectedItemColor: lightGreyDarkMode,
       ),
       textTheme: lightTextTheme,
     );
@@ -174,7 +179,7 @@ class AppTheme {
       ),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
         foregroundColor: Colors.white,
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.blue,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         selectedLabelStyle: TextStyle(fontSize: 14),

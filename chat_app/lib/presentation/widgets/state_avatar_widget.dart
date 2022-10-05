@@ -1,15 +1,18 @@
 import 'package:chat_app/presentation/UIData/dimentions.dart';
+import 'package:chat_app/presentation/services/app_state_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StateAvatar extends StatefulWidget {
   final String avatar;
   final bool isStatus;
   final double radius;
-  const StateAvatar(
-      {super.key,
-      required this.avatar,
-      required this.isStatus,
-      required this.radius});
+  const StateAvatar({
+    super.key,
+    required this.avatar,
+    required this.isStatus,
+    required this.radius,
+  });
 
   @override
   State<StateAvatar> createState() => _StateAvatarState();
@@ -18,6 +21,7 @@ class StateAvatar extends StatefulWidget {
 class _StateAvatarState extends State<StateAvatar> {
   @override
   Widget build(BuildContext context) {
+    AppStateProvider appState = context.watch<AppStateProvider>();
     return Stack(
       children: widget.isStatus
           ? [
@@ -29,7 +33,7 @@ class _StateAvatarState extends State<StateAvatar> {
                 width: widget.radius,
                 height: widget.radius,
                 child: CircleAvatar(
-                  backgroundColor: Colors.brown.shade800,
+                  backgroundColor: Colors.grey.shade800,
                   backgroundImage: AssetImage(widget.avatar),
                 ),
               ),
@@ -46,7 +50,9 @@ class _StateAvatarState extends State<StateAvatar> {
                     vertical: Dimensions.height2,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF303030),
+                    color: appState.darkMode
+                        ? const Color(0xFF303030)
+                        : Colors.white,
                     borderRadius: BorderRadius.circular(Dimensions.double40),
                   ),
                   child: Container(
@@ -65,7 +71,7 @@ class _StateAvatarState extends State<StateAvatar> {
                 width: widget.radius,
                 height: widget.radius,
                 child: CircleAvatar(
-                  backgroundColor: Colors.brown.shade800,
+                  backgroundColor: Colors.grey.shade800,
                   backgroundImage: AssetImage(widget.avatar),
                 ),
               ),
