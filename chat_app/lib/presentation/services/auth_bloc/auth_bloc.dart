@@ -35,11 +35,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginWithAccessTokenEvent>((event, emit) async {
       final shared = await sharedPreferences;
       final tokenUser = shared.getString('auth_token');
-      log('Bearer $tokenUser');
       if (tokenUser != null) {
-        final value = await authRepository
-            .getDataLoginWithAccessToken(data: null, header: {
-          'Content-Type': 'application/json; charset=UTF-8',
+        final value =
+            await authRepository.getDataLoginWithAccessToken(data: {}, header: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
           'Authorization': 'Bearer $tokenUser'
         });
 

@@ -6,14 +6,14 @@ class AuthUser {
 
   AuthUser.fromJson(Map<String, dynamic> json) {
     accessToken = json['accessToken'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['accessToken'] = this.accessToken;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['accessToken'] = accessToken;
+    if (user != null) {
+      data['user'] = user!.toJson();
     }
     return data;
   }
@@ -38,11 +38,11 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['email'] = this.email;
-    data['password'] = this.password;
-    data['profile'] = this.profile;
-    data['__v'] = this.iV;
+    data['_id'] = sId;
+    data['email'] = email;
+    data['password'] = password;
+    data['profile'] = profile;
+    data['__v'] = iV;
     return data;
   }
 }
