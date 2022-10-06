@@ -6,7 +6,7 @@ class BaseResponse {
   int? result = -1;
   int? time;
   Error? error;
-  dynamic data = [];
+  dynamic data;
 
   BaseResponse({
     this.result,

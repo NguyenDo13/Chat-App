@@ -7,13 +7,15 @@ import '../network/base_api_service.dart';
 import '../network/network_api_service.dart';
 
 class AuthRepository extends IServiceAPI {
-
+  String urlEndPointRegister = "auth/register";
   String urlEndPointLogin = "auth/login";
   String urlEndPointLoginTokenAccess = "auth/loginwithaccesstoken";
+
   final BaseApiServices apiServices = NetworkApiService();
   late Environment environment;
-  AuthRepository({required Environment e}) {
-    environment = e;
+
+  AuthRepository({required this.environment}) {
+    urlEndPointRegister = environment.baseURL + urlEndPointRegister;
     urlEndPointLogin = environment.baseURL + urlEndPointLogin;
     urlEndPointLoginTokenAccess =
         environment.baseURL + urlEndPointLoginTokenAccess;
@@ -30,23 +32,38 @@ class AuthRepository extends IServiceAPI {
   }
 
   @override
-  Future getData({required data}) async {
+  Future<BaseResponse?> getDataLogin({required data, required header}) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointLogin,
         data,
-        null,
+        header,
       );
-      return response;
+      return BaseResponse.fromJson(response);
     } on Exception catch (_) {
       return null;
     }
   }
 
-  Future getDataLoginToken({required data}) async {
+  @override
+  Future<BaseResponse?> getDataLoginWithAccessToken({required data, required header,}) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointLoginTokenAccess,
+        data,
+        header,
+      );
+      return BaseResponse.fromJson(response);
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  Future getDataRegister({required data, required header}) async {
+    try {
+      final response = await apiServices.getPostApiResponse(
+        urlEndPointRegister,
         data,
         null,
       );

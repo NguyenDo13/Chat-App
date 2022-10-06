@@ -1,21 +1,37 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 class User {
-  String? sId;
-  String username;
+  String? id;
+  String? username;
   String? email;
   String? password;
   bool? isDarkMode;
-  String avatar;
-  bool state;
+  String? avatar;
+  bool? state;
   User({
-    this.sId,
-    required this.username,
+    this.id,
+    this.username,
     this.email,
     this.password,
     this.isDarkMode,
-    required this.avatar,
-    required this.state,
+    this.avatar,
+    this.state,
   });
+
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'] != null ? map['id'] as String : null,
+      username: map['username'] != null ? map['username'] as String : null,
+      email: map['email'] != null ? map['email'] as String : null,
+      password: map['password'] != null ? map['password'] as String : null,
+      isDarkMode: map['isDarkMode'] != null ? map['isDarkMode'] as bool : null,
+      avatar: map['avatar'] != null ? map['avatar'] as String : null,
+      state: map['state'] != null ? map['state'] as bool : null,
+    );
+  }
+  
 }
 
 

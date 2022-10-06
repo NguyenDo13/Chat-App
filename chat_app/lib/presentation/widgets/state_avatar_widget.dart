@@ -1,5 +1,5 @@
 import 'package:chat_app/presentation/UIData/dimentions.dart';
-import 'package:chat_app/presentation/services/app_state_provider.dart';
+import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
