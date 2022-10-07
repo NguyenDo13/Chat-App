@@ -1,7 +1,10 @@
 import 'package:chat_app/presentation/UIData/dimentions.dart';
 import 'package:chat_app/presentation/UIData/colors.dart';
 import 'package:chat_app/presentation/UIData/images_animations.dart';
-import 'package:chat_app/presentation/pages/chit_chat_app.dart';
+import 'package:chat_app/presentation/pages/login/components/forgot_password_btn.dart';
+import 'package:chat_app/presentation/pages/login/components/remember_me_checkbox.dart';
+import 'package:chat_app/presentation/pages/login/components/signup_btn.dart';
+import 'package:chat_app/presentation/pages/login/components/social_btn_row.dart';
 import 'package:chat_app/presentation/pages/signup/sign_up_screen.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
@@ -32,93 +35,94 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: InkWell(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: BlocBuilder<AuthBloc, AuthState>(
-          builder: (context, state) {
-            return SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(
-                  Dimensions.width10 * 4,
-                  Dimensions.height62,
-                  Dimensions.width10 * 4,
-                  0,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.fromLTRB(
+              Dimensions.width10 * 4,
+              Dimensions.height62,
+              Dimensions.width10 * 4,
+              0,
+            ),
+            height: Dimensions.screenHeight,
+            width: Dimensions.screenWidth,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                colors: [
+                  redAccent,
+                  deepPurple,
+                  deepPurple,
+                  deepPurple,
+                  redAccent,
+                ],
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  'Sign In',
+                  style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                        color: Colors.white70,
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
-                height: Dimensions.screenHeight,
-                width: Dimensions.screenWidth,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      redAccent,
-                      deepPurple,
-                      deepPurple,
-                      deepPurple,
-                      redAccent,
-                    ],
-                  ),
+                SizedBox(height: Dimensions.height20),
+                InputTextField(
+                  isEmail: true,
+                  onChanged: (email) => _formatEmail(email),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
+                WarningMessage(
+                  isDataValid: _isValidEmail,
+                  message: 'Email is required!',
+                ),
+                SizedBox(height: Dimensions.height20),
+                InputTextField(
+                  isPassword: true,
+                  onChanged: (password) => _formatPassword(password),
+                ),
+                WarningMessage(
+                  isDataValid: _isValidPassword,
+                  message: _messagePassword,
+                ),
+                const ForgotPasswordBtn(),
+                RememberMeCheckbox(
+                    rememberMe: _rememberMe,
+                    onChange: (value) {
+                      setState(() {
+                        _rememberMe = value!;
+                      });
+                    }),
+                ButtonRoundWhite(
+                  textButton: 'Login',
+                  onTap: _loginApp,
+                ),
+                Column(
+                  children: [
+                    const Text(
+                      '- OR -',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: Dimensions.height10),
                     Text(
-                      'Sign In',
-                      style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                      'Sign in with',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: Colors.white70,
-                            fontSize: 30.0,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    SizedBox(height: Dimensions.height20),
-                    InputTextField(
-                      isEmail: true,
-                      onChanged: (email) => _formatEmail(email),
-                    ),
-                    WarningMessage(
-                      isDataValid: _isValidEmail,
-                      message: 'Email is required!',
-                    ),
-                    SizedBox(height: Dimensions.height20),
-                    InputTextField(
-                      isPassword: true,
-                      onChanged: (password) => _formatPassword(password),
-                    ),
-                    WarningMessage(
-                      isDataValid: _isValidPassword,
-                      message: _messagePassword,
-                    ),
-                    _buildForgotPasswordBtn(),
-                    _buildRememberMeCheckbox(),
-                    ButtonRoundWhite(
-                      textButton: 'Login',
-                      onTap: _loginApp,
-                    ),
-                    Column(
-                      children: [
-                        const Text(
-                          '- OR -',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(height: Dimensions.height10),
-                        Text(
-                          'Sign in with',
-                          style:
-                              Theme.of(context).textTheme.titleMedium!.copyWith(
-                                    color: Colors.white70,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ],
-                    ),
-                    _buildSocialBtnRow(),
-                    _buildSignupBtn(),
                   ],
                 ),
-              ),
-            );
-          },
+                const SocialBtnRow(),
+                const SignupBtn(),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -132,15 +136,6 @@ class _LoginScreenState extends State<LoginScreen> {
             password: _password,
           ),
         );
-    if (context.read<AuthBloc>().state is LoggedState) {
-      print("login successful");
-    }
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (_) => const ChitChatApp(),
-    //   ),
-    // );
   }
 
   _formatPassword(String password) {
@@ -173,142 +168,5 @@ class _LoginScreenState extends State<LoginScreen> {
         _email = email;
       });
     }
-  }
-
-  Widget _buildForgotPasswordBtn() {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        alignment: Alignment.centerRight,
-        padding: EdgeInsets.all(Dimensions.height10),
-        child: Text(
-          'Forgot Password?',
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: Colors.white70,
-                fontWeight: FontWeight.bold,
-              ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRememberMeCheckbox() {
-    return SizedBox(
-      height: Dimensions.height20,
-      child: Row(
-        children: <Widget>[
-          Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.white70),
-            child: Checkbox(
-              value: _rememberMe,
-              checkColor: deepPurple,
-              activeColor: Colors.white70,
-              onChanged: (value) {
-                setState(() {
-                  _rememberMe = value!;
-                });
-              },
-            ),
-          ),
-          Text(
-            'Remember me',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: Colors.white70,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSocialBtn(Function onTap, AssetImage logo) {
-    return InkWell(
-      onTap: () => onTap,
-      child: Container(
-        height: Dimensions.height60 - Dimensions.height8,
-        width: Dimensions.height60 - Dimensions.height8,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white70,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black45,
-              offset: Offset(0, 2),
-              blurRadius: 6.0,
-            ),
-          ],
-          image: DecorationImage(
-            image: logo,
-            fit: BoxFit.fitHeight,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSocialBtnRow() {
-    return Padding(
-      padding: EdgeInsets.only(top: Dimensions.height20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          _buildSocialBtn(
-            () {},
-            const AssetImage(
-              IMG_FB,
-            ),
-          ),
-          _buildSocialBtn(
-            () {},
-            const AssetImage(
-              IMG_GG,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSignupBtn() {
-    return Container(
-      margin: EdgeInsets.only(top: Dimensions.height30),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: Dimensions.height8),
-            child: const Text(
-              'Don\'t have an Account?',
-              style: TextStyle(
-                color: Colors.white70,
-                fontSize: 12.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-          SizedBox(width: Dimensions.width8),
-          InkWell(
-            onTap: () {
-              context.read<AuthBloc>().emit(RegisterState());
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const SignUpScreen(),
-                ),
-              );
-            },
-            child: Text(
-              'Sign Up',
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    fontSize: 20,
-                    color: Colors.white70,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -4,18 +4,15 @@ import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ChitChatApp extends StatefulWidget {
-  const ChitChatApp({
-    Key? key,
-  }) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<ChitChatApp> createState() => _ChitChatAppState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _ChitChatAppState extends State<ChitChatApp> {
-  int currentPage = 0;
-
+class _HomePageState extends State<HomePage> {
+int currentPage = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +65,7 @@ class _ChitChatAppState extends State<ChitChatApp> {
     );
   }
 
-  AppBar _appBarPage(
+    AppBar _appBarPage(
     int currentPage,
     BuildContext context,
     String img,
@@ -109,7 +106,7 @@ class _ChitChatAppState extends State<ChitChatApp> {
     );
   }
 
-  IconButton _actionButton(Function() action, IconData icon) {
+    IconButton _actionButton(Function() action, IconData icon) {
     return IconButton(
       onPressed: action,
       icon: Icon(

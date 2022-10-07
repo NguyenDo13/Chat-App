@@ -1,10 +1,10 @@
 class Environment {
-  String baseURL = 'http://192.168.1.4:5000/api/';
+  String baseURL = 'http://192.168.1.105:5000/api/';
   Environment({required bool isServerDev}) {
     if (isServerDev) {
-      baseURL = 'http://192.168.1.4:5000/api/';
+      baseURL = 'http://192.168.1.105:5000/api/';
     } else {
-      baseURL = 'http://192.168.1.4:5000/public/api/';
+      baseURL = 'http://192.168.1.2:5000/public/api/';
     }
   }
 }

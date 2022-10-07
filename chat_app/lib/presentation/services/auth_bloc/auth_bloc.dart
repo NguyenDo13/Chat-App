@@ -16,43 +16,52 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) : super(LoginState()) {
     // Event to login by application account
     on<NormalLoginEvent>((event, emit) async {
+      // Post request (email, password) to server, receive response value
       final value = await authRepository.getDataLogin(
         data: {'email': event.email, 'password': event.password},
         header: {'Content-Type': 'application/json'},
       );
 
-      if (value == null) emit(LoginState());
-      if (value!.result != 1) emit(LoginState());
+      // Ckeck correct value data
+      if (value == null || value.result != 1) return emit(LoginState());
 
+      // Store accessToken to login
       final authUser = authRepository.convertDynamicToObject(value.data[0]);
       final shared = await sharedPreferences;
-
       shared.setString('auth_token', authUser.accessToken.toString());
+
+      // Login success
       emit(LoggedState(authUser));
     });
 
     // Event to login with a code that is accessToken. It is allocated when previously logged in.
     on<LoginWithAccessTokenEvent>((event, emit) async {
+      // To wait event
+      emit(LoginLoadingState());
+
+      // Init data for request
       final shared = await sharedPreferences;
       final tokenUser = shared.getString('auth_token');
-      if (tokenUser != null) {
-        final value =
-            await authRepository.getDataLoginWithAccessToken(data: {}, header: {
+
+      // Check data not null
+      if (tokenUser == null) return emit(LoginState());
+
+      // Post a request to the server, receive a response value
+      final value = await authRepository.getDataLoginWithAccessToken(
+        data: {},
+        header: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           'Authorization': 'Bearer $tokenUser'
-        });
+        },
+      );
 
-        if (value != null) {
-          final authUser = authRepository.convertDynamicToObject(value.data[0]);
+      // Check value not null
+      if (value == null) return emit(LoginState());
 
-          emit(LoggedState(authUser));
-        } else {
-          emit(LoginState());
-        }
-      } else {
-        emit(LoginState());
-      }
+      // Get data User
+      final authUser = authRepository.convertDynamicToObject(value.data[0]);
+      emit(LoggedState(authUser));
     });
 
     // Event to login by Google account

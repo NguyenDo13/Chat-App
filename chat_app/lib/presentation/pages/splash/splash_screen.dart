@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:chat_app/presentation/UIData/colors.dart';
 import 'package:chat_app/presentation/UIData/dimentions.dart';
-import 'package:chat_app/presentation/pages/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -15,20 +14,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    Timer(const Duration(seconds: 3), _navigateToHomeScreen);
-    super.initState();
-  }
-
-  _navigateToHomeScreen() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
