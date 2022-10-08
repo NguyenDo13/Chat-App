@@ -7,7 +7,6 @@ import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class SettingScreen extends StatelessWidget {

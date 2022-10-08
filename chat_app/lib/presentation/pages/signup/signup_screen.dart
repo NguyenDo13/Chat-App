@@ -1,4 +1,5 @@
 import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
+import 'package:chat_app/presentation/helper/notify/alert_error.dart';
 import 'package:chat_app/presentation/pages/signup/components/signin_btn.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/res/style.dart';
@@ -34,20 +35,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           if (state.message != null) {
             showDialog(
               context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text("Error"),
-                  content: Text(state.message!),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text("oke"),
-                    ),
-                  ],
-                );
-              },
+              builder: (context) => AlertError(
+                title: "error",
+                content: state.message ?? 'Cannot connect to server',
+                nameBtn: 'Oke',
+              ),
             );
           }
           if (state.loading) {
@@ -99,18 +91,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: Dimensions.height20),
                   LagreButtonRound(
                     textButton: 'Sign Up',
-                    onTap: () {
-                      if (!_isValidEmail &&
-                          !_isValidPassword &&
-                          !_isValidVerified) {
-                        context.read<AuthBloc>().add(
-                              RegisterEvent(
-                                email: _email,
-                                password: _password,
-                              ),
-                            );
-                      }
-                    },
+                    onTap: () => _signupApp(context),
                   ),
                   const SignInBtn(),
                 ],
@@ -120,6 +101,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  _signupApp(BuildContext context) {
+    if (_isValidEmail || _isValidPassword || _isValidVerified) return;
+    context.read<AuthBloc>().add(
+          RegisterEvent(
+            email: _email,
+            password: _password,
+          ),
+        );
   }
 
   Text _buildSignUpTitle(BuildContext context) {

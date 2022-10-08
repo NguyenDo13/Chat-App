@@ -4,15 +4,15 @@ import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class AppHome extends StatefulWidget {
+  const AppHome({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AppHome> createState() => _AppHomeState();
 }
 
-class _HomePageState extends State<HomePage> {
-int currentPage = 0;
+class _AppHomeState extends State<AppHome> {
+  int currentPage = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,13 +43,13 @@ int currentPage = 0;
             ),
             BottomNavigationBarItem(
               icon: _buildStateNavigationItem(
-                icon: CupertinoIcons.phone_solid,
+                icon: CupertinoIcons.group_solid,
               ),
               label: TITLES_PAGE[1],
             ),
             BottomNavigationBarItem(
               icon: _buildStateNavigationItem(
-                icon: CupertinoIcons.collections_solid,
+                icon: CupertinoIcons.bell_fill,
               ),
               label: TITLES_PAGE[2],
             ),
@@ -65,7 +65,7 @@ int currentPage = 0;
     );
   }
 
-    AppBar _appBarPage(
+  AppBar _appBarPage(
     int currentPage,
     BuildContext context,
     String img,
@@ -106,7 +106,7 @@ int currentPage = 0;
     );
   }
 
-    IconButton _actionButton(Function() action, IconData icon) {
+  IconButton _actionButton(Function() action, IconData icon) {
     return IconButton(
       onPressed: action,
       icon: Icon(

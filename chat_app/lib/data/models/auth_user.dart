@@ -1,12 +1,26 @@
-class AuthUser {
-  String? accessToken;
-  User? user;
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app/data/models/access_token.dart';
+import 'package:chat_app/data/models/user_presence.dart';
 
-  AuthUser({this.accessToken, this.user});
+class AuthUser {
+  AccessToken? accessToken;
+  User? user;
+  UserPresence? userPresence;
+
+  AuthUser({
+    this.accessToken,
+    this.user,
+    this.userPresence,
+  });
 
   AuthUser.fromJson(Map<String, dynamic> json) {
-    accessToken = json['accessToken'];
+    accessToken = json['accessToken'] != null
+        ? AccessToken.fromJson(json['accessToken'])
+        : null;
     user = json['user'] != null ? User.fromJson(json['user']) : null;
+    userPresence = json['userPresence'] != null
+        ? UserPresence.fromJson(json['userPresence'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -23,16 +37,24 @@ class User {
   String? sId;
   String? email;
   String? password;
-  String? profile;
+  bool? isDarkMode;
+  String? urlImage;
   int? iV;
 
-  User({this.sId, this.email, this.password, this.profile, this.iV});
+  User(
+      {this.sId,
+      this.email,
+      this.password,
+      this.isDarkMode,
+      this.urlImage,
+      this.iV});
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     email = json['email'];
     password = json['password'];
-    profile = json['profile'];
+    isDarkMode = json['isDarkMode'];
+    urlImage = json['urlImage'];
     iV = json['__v'];
   }
 
@@ -42,39 +64,9 @@ class User {
     data['_id'] = sId;
     data['email'] = email;
     data['password'] = password;
-    data['profile'] = profile;
+    data['isDarkMode'] = isDarkMode;
+    data['urlImage'] = urlImage;
     data['__v'] = iV;
     return data;
   }
 }
-// class AuthUser {
-//   String? accessToken;
-//   User? user;
-
-//   AuthUser({
-//     this.accessToken,
-//     this.user,
-//   });
-
-//   AuthUser.fromJson(Map<String, dynamic> json) {
-//     accessToken = json['accessToken'];
-//     user = json['user'] != null ? User.fromMap(json['user']) : null;
-//   }
-
-
-
-//   @override
-//   String toString() => 'AuthUser(accessToken: $accessToken, user: $user)';
-
-//   @override
-//   bool operator ==(covariant AuthUser other) {
-//     if (identical(this, other)) return true;
-  
-//     return 
-//       other.accessToken == accessToken &&
-//       other.user == user;
-//   }
-
-//   @override
-//   int get hashCode => accessToken.hashCode ^ user.hashCode;
-// }

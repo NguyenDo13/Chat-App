@@ -1,4 +1,4 @@
-import 'package:chat_app/presentation/pages/home/home_page.dart';
+import 'package:chat_app/presentation/pages/app_home.dart';
 import 'package:chat_app/presentation/pages/login/login_screen.dart';
 import 'package:chat_app/presentation/pages/signup/signup_screen.dart';
 import 'package:chat_app/presentation/pages/splash/splash_screen.dart';
@@ -24,13 +24,13 @@ class _AppControllerState extends State<AppController> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is AuthLoadingState) {
-          Future.delayed(const Duration(seconds: 1), () {
+          Future.delayed(const Duration(milliseconds: 1500), () {
             context.read<AuthBloc>().add(LoginWithAccessTokenEvent());
           });
           return const SplashScreen();
         }
         if (state is LoggedState) {
-          return const HomePage();
+          return const AppHome();
         }
         if (state is LoginState) {
           return const LoginScreen();

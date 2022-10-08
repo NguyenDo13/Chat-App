@@ -6,7 +6,7 @@ import 'package:chat_app/presentation/pages/stories/stories_screen.dart';
 import 'package:flutter/material.dart';
 
 const int maxValueInteger = 10000000;
-const List<String> TITLES_PAGE = ['Đoạn chat', 'Cuộc gọi', 'Tin', 'Cá nhân'];
+const List<String> TITLES_PAGE = ['Đoạn chat', 'Nhóm', 'Thông báo', 'Cá nhân'];
 
 //* DS các trang cho navigation_bar
 const List<Widget> pages = [

@@ -11,6 +11,7 @@ import '../network/network_api_service.dart';
 class AuthRepository extends IServiceAPI {
   String urlEndPointRegister = "auth/register";
   String urlEndPointLogin = "auth/login";
+  String urlEndPointLogout = "auth/logout";
   String urlEndPointLoginTokenAccess = "auth/loginwithaccesstoken";
 
   final BaseApiServices apiServices = NetworkApiService();
@@ -21,6 +22,7 @@ class AuthRepository extends IServiceAPI {
     urlEndPointLogin = environment.baseURL + urlEndPointLogin;
     urlEndPointLoginTokenAccess =
         environment.baseURL + urlEndPointLoginTokenAccess;
+        urlEndPointLogout = environment.baseURL + urlEndPointLogout;
   }
 
   @override
@@ -74,6 +76,20 @@ class AuthRepository extends IServiceAPI {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointRegister,
+        data,
+        header,
+      );
+      return BaseResponse.fromJson(response);
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+
+  Future<BaseResponse?> getDataLogout(
+      {required data, required header}) async {
+    try {
+      final response = await apiServices.getPostApiResponse(
+        urlEndPointLogout,
         data,
         header,
       );
