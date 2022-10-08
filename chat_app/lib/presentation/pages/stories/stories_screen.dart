@@ -1,4 +1,4 @@
-import 'package:chat_app/presentation/UIData/dimentions.dart';
+import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/stories/story.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';

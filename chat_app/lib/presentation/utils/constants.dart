@@ -1,5 +1,4 @@
 // ignore_for_file: constant_identifier_names
-
 import 'package:chat_app/presentation/pages/calls/calls_screen.dart';
 import 'package:chat_app/presentation/pages/home/home_screen.dart';
 import 'package:chat_app/presentation/pages/setting/setting_screen.dart';

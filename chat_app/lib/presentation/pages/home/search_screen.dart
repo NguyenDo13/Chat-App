@@ -1,6 +1,6 @@
 import 'package:chat_app/data/models/user.dart';
-import 'package:chat_app/presentation/UIData/colors.dart';
-import 'package:chat_app/presentation/UIData/dimentions.dart';
+import 'package:chat_app/presentation/res/colors.dart';
+import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:chat_app/presentation/pages/home/components/input_text_field_search.dart';

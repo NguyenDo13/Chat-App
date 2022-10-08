@@ -1,9 +1,7 @@
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/repository/auth_repository.dart';
-import 'package:chat_app/presentation/UIData/theme.dart';
+import 'package:chat_app/presentation/res/theme.dart';
 import 'package:chat_app/presentation/pages/app_controller.dart';
-import 'package:chat_app/presentation/pages/login/login_screen.dart';
-import 'package:chat_app/presentation/pages/splash/splash_screen.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
@@ -57,7 +55,7 @@ class _MyAppState extends State<MyApp> {
                 environment: Environment(isServerDev: true),
               ),
               shared,
-            )..add(LoginWithAccessTokenEvent()),
+            ),
             child: GetMaterialApp(
               title: 'Chat App',
               debugShowCheckedModeBanner: false,

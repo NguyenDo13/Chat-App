@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-import 'package:chat_app/presentation/UIData/colors.dart';
-import 'package:chat_app/presentation/UIData/dimentions.dart';
+import 'package:chat_app/presentation/res/colors.dart';
+import 'package:chat_app/presentation/res/dimentions.dart';
 
 // ignore: must_be_immutable
 class RememberMeCheckbox extends StatefulWidget {

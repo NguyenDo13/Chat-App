@@ -1,8 +1,9 @@
-abstract class AuthEvent { // Events for user authentication
+abstract class AuthEvent {
+  // Events for user authentication
   const AuthEvent();
 }
 
-// Register a new account 
+// Register a new account
 class RegisterEvent extends AuthEvent {
   final String email;
   final String password;
@@ -11,6 +12,8 @@ class RegisterEvent extends AuthEvent {
     required this.password,
   });
 }
+
+class InitRegisterEvent extends AuthEvent {}
 
 // Login by account app
 class NormalLoginEvent extends AuthEvent {

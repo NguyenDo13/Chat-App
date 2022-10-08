@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/interfaces/i_service_api.dart';
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/response/base_response.dart';
-
+import 'package:chat_app/data/models/error.dart';
 import '../network/base_api_service.dart';
 import '../network/network_api_service.dart';
 
@@ -31,6 +33,10 @@ class AuthRepository extends IServiceAPI {
     return AuthUser.fromJson(value);
   }
 
+  Error convertDynamicToError(value) {
+    return Error.fromJson(value);
+  }
+
   @override
   Future<BaseResponse?> getDataLogin({required data, required header}) async {
     try {
@@ -46,7 +52,10 @@ class AuthRepository extends IServiceAPI {
   }
 
   @override
-  Future<BaseResponse?> getDataLoginWithAccessToken({required data, required header,}) async {
+  Future<BaseResponse?> getDataLoginWithAccessToken({
+    required data,
+    required header,
+  }) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointLoginTokenAccess,
@@ -60,14 +69,15 @@ class AuthRepository extends IServiceAPI {
   }
 
   @override
-  Future getDataRegister({required data, required header}) async {
+  Future<BaseResponse?> getDataRegister(
+      {required data, required header}) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointRegister,
         data,
-        null,
+        header,
       );
-      return response;
+      return BaseResponse.fromJson(response);
     } on Exception catch (_) {
       return null;
     }

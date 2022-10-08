@@ -1,11 +1,11 @@
-import 'package:chat_app/presentation/UIData/colors.dart';
-import 'package:chat_app/presentation/UIData/dimentions.dart';
+import 'package:chat_app/presentation/res/colors.dart';
+import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
 
-class ButtonRoundWhite extends StatelessWidget {
+class LagreButtonRound extends StatelessWidget {
   final String textButton;
   final VoidCallback onTap;
-  const ButtonRoundWhite({
+  const LagreButtonRound({
     super.key,
     required this.textButton,
     required this.onTap,

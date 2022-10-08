@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:camera/camera.dart';
-import 'package:chat_app/presentation/UIData/colors.dart';
-import 'package:chat_app/presentation/UIData/dimentions.dart';
+import 'package:chat_app/presentation/res/colors.dart';
+import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/chat/take_picture_screen.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -79,8 +79,6 @@ class _ChatInputFieldState extends State<ChatInputField> {
         padding: EdgeInsets.only(right: Dimensions.width14),
         child: InkWell(
           onTap: () async {
-            print('Tap camera');
-              log("Tap camera");
               try {
                 final cameras = await availableCameras();
                 final firstCamera = cameras.first;

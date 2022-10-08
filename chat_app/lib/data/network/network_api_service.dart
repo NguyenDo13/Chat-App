@@ -12,16 +12,17 @@ class NetworkApiService extends BaseApiServices {
     dynamic responseJson;
 
     try {
-      final response = await http.post(
-        Uri.parse(url),
-        body: jsonEncode(data),
-        headers: headers,
-      ).timeout(
-        const Duration(seconds: 10),
-      );
+      final response = await http
+          .post(
+            Uri.parse(url),
+            body: jsonEncode(data),
+            headers: headers,
+          )
+          .timeout(
+            const Duration(seconds: 10),
+          );
 
-      responseJson =  returnResponse(response);
-      
+      responseJson = returnResponse(response);
     } on SocketException {
       log("No Internet Connection");
       throw FetchDataException('No Internet Connection');
@@ -35,21 +36,17 @@ class NetworkApiService extends BaseApiServices {
         final responseJson = jsonDecode(response.body);
         return responseJson;
       case 400:
-        log("error 400: ${response.body}");
-        throw BadRequestException(
-          response.body.toString(),
-        );
+        final responseJson = jsonDecode(response.body);
+        return responseJson;
+
       case 404:
       case 500:
-        log("error 404 || 500: ${response.body}");
-        throw UnauthorisedException(
-          response.body.toString(),
-        );
+        final responseJson = jsonDecode(response.body);
+        return responseJson;
+
       default:
-        log("lỗi không tìm thấy dữ liệu");
-        throw FetchDataException(
-          'Lỗi xảy ra khi đang giao tiếp với server với trạng thái code:${response.statusCode}',
-        );
+        final responseJson = jsonDecode(response.body);
+        return responseJson;
     }
   }
 }

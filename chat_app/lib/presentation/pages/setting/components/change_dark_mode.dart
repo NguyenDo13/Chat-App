@@ -1,23 +1,21 @@
 import 'package:chat_app/presentation/res/dimentions.dart';
+import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class FeatureSetting extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Color color;
-  final Function() onTap;
-  const FeatureSetting({
+class ChangeDarkMode extends StatelessWidget {
+  final bool isDarkMode;
+  final Function(bool) onchange;
+  const ChangeDarkMode({
     super.key,
-    required this.icon,
-    required this.title,
-    required this.color,
-    required this.onTap,
+    required this.isDarkMode,
+    required this.onchange,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: onTap,
       leading: Container(
         margin: EdgeInsets.fromLTRB(
           Dimensions.width14,
@@ -29,19 +27,27 @@ class FeatureSetting extends StatelessWidget {
         height: Dimensions.height10 * 5,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.double40),
-          color: color,
+          color: Colors.blue[400],
         ),
         child: Center(
           child: Icon(
-            icon,
+            CupertinoIcons.circle_lefthalf_fill,
             color: Colors.white,
             size: Dimensions.double14 * 2,
           ),
         ),
       ),
       title: Text(
-        title,
+        'Chế độ tối',
         style: Theme.of(context).textTheme.bodyLarge,
+      ),
+      trailing: Container(
+        margin: EdgeInsets.only(right: Dimensions.width16),
+        child: Switch(
+          activeColor: Colors.blue[400],
+          value: isDarkMode,
+          onChanged: (value) => onchange(value),
+        ),
       ),
     );
   }

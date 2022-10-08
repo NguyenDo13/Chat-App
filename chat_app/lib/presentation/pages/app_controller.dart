@@ -1,7 +1,9 @@
 import 'package:chat_app/presentation/pages/home/home_page.dart';
 import 'package:chat_app/presentation/pages/login/login_screen.dart';
+import 'package:chat_app/presentation/pages/signup/signup_screen.dart';
 import 'package:chat_app/presentation/pages/splash/splash_screen.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
+import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +23,10 @@ class _AppControllerState extends State<AppController> {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
-         if (state is LoginLoadingState) {
+        if (state is AuthLoadingState) {
+          Future.delayed(const Duration(seconds: 1), () {
+            context.read<AuthBloc>().add(LoginWithAccessTokenEvent());
+          });
           return const SplashScreen();
         }
         if (state is LoggedState) {
@@ -29,6 +34,9 @@ class _AppControllerState extends State<AppController> {
         }
         if (state is LoginState) {
           return const LoginScreen();
+        }
+        if (state is RegisterState) {
+          return const SignUpScreen();
         }
         return const Center(child: Text('Error 500'));
       },

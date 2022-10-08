@@ -1,7 +1,5 @@
-import 'dart:async';
-
-import 'package:chat_app/presentation/UIData/colors.dart';
-import 'package:chat_app/presentation/UIData/dimentions.dart';
+import 'package:chat_app/presentation/res/colors.dart';
+import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -26,11 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
             colors: [
-              // Colors.deepOrangeAccent,
               redAccent,
               deepPurple,
-              // Colors.orangeAccent,
-              // Colors.deepPurpleAccent,
               deepPurpleAccent,
             ],
           ),

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -48,7 +49,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
+        onPressed: () async {
           try {
             await _initializeControllerFuture;
 
@@ -64,7 +65,7 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
               ),
             );
           } catch (e) {
-            print(e);
+            log(e.toString());
           }
         },
         child: const Icon(Icons.camera_alt),
