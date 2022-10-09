@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/repository/auth_repository.dart';
 import 'package:chat_app/presentation/res/theme.dart';

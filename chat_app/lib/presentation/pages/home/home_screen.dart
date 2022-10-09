@@ -25,24 +25,40 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late IO.Socket _socket;
   late Environment environment;
+  late IO.Socket _socket;
+
   @override
   void initState() {
     environment = Environment(isServerDev: true);
-    _initSocket();
+    _socket = IO.io(
+      environment.urlServer,
+      IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+          // disable auto-connection
+          .build(),
+    );
+    _connectSocket();
     super.initState();
   }
 
-  _initSocket() {
-    _socket = IO.io(environment.baseURL, <String, dynamic>{
-      'autoConnect': false,
-      'transports': ['websocket'],
-    });
-    _socket.connect();
-    _socket.onConnect((context) {
-      log('Connection established');
-    });
+  _connectSocket() {
+    _socket.onConnect(
+      (data) => log("Connection established"),
+    );
+    _socket.onConnectError(
+      (data) => log(
+        "connection failed + $data",
+      ),
+    );
+    _socket.onDisconnect(
+      (data) => log(
+        "socketio Server disconnected",
+      ),
+    );
+    _socket.on(
+      "message",
+      (data) => log(data),
+    );
   }
 
   @override
