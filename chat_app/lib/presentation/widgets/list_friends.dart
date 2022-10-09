@@ -7,15 +7,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ListFriends extends StatelessWidget {
+class ListChats extends StatefulWidget {
   final List<dynamic> listUsers;
-  final bool isChat;
-  const ListFriends({
+  final bool isGroup;
+  final bool? isCall;
+  const ListChats({
     super.key,
     required this.listUsers,
-    this.isChat = false,
+    required this.isGroup,
+    this.isCall,
   });
 
+  @override
+  State<ListChats> createState() => _ListChatsState();
+}
+
+class _ListChatsState extends State<ListChats> {
   @override
   Widget build(BuildContext context) {
     AppStateProvider appState = context.watch<AppStateProvider>();
@@ -25,96 +32,108 @@ class ListFriends extends StatelessWidget {
       ),
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: listUsers.length,
+        itemCount: widget.listUsers.length,
         itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            onTap: (){
-              if (isChat) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ChatScreen(),
-                  ),
-                );
-              }
-            },
-            visualDensity: const VisualDensity(vertical: 0.7),
-            leading: StateAvatar(
-              avatar: "assets/avatars/${listUsers[index][0].avatar}", //* avatar
-              isStatus: listUsers[index][0].state, //* state
-              radius: Dimensions.double30 * 2,
+          return _itemChat(context, index, appState);
+        },
+      ),
+    );
+  }
+
+  Widget _itemChat(BuildContext context, int index, AppStateProvider appState) {
+    final styleNotView = index < 2
+        ? Theme.of(context).textTheme.headlineSmall!.copyWith(
+              color: lightBlue,
+              fontWeight: FontWeight.w400,
+            )
+        : Theme.of(context).textTheme.headlineSmall;
+    return ListTile(
+      onTap: () {
+        if (!widget.isGroup) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ChatScreen(),
             ),
-            title: Container(
+          );
+        }
+
+        // TODO: change state item chat to viewed
+      },
+      visualDensity: const VisualDensity(vertical: 0.7),
+      leading: StateAvatar(
+        avatar:
+            "assets/avatars/${widget.listUsers[index][0].avatar}", //* avatar
+        isStatus: widget.listUsers[index][0].state, //* state
+        radius: Dimensions.double30 * 2,
+      ),
+      title: Container(
+        margin: EdgeInsets.fromLTRB(
+          0,
+          Dimensions.height10,
+          0,
+          Dimensions.height8,
+        ),
+        child: Text(
+          widget.listUsers[index][0].username, //* Name
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+      ),
+      subtitle: Container(
+        margin: EdgeInsets.only(
+          bottom: Dimensions.height4,
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: Dimensions.width152,
+              child: Text(
+                widget.listUsers[index][1], //* Content
+                overflow: TextOverflow.ellipsis,
+                style: styleNotView,
+              ),
+            ),
+            SizedBox(
+              width: Dimensions.width8 / 2,
+            ),
+            Text(
+              '|',
+              style: styleNotView,
+            ),
+            SizedBox(
+              width: Dimensions.width8 / 2,
+            ),
+            Text(
+              widget.listUsers[index][2], //* time
+              style: styleNotView,
+            ),
+          ],
+        ),
+      ),
+      trailing: widget.isCall != null
+          ? Container(
               margin: EdgeInsets.fromLTRB(
                 0,
                 Dimensions.height10,
                 0,
                 Dimensions.height8,
               ),
-              child: Text(
-                listUsers[index][0].username, //* Name
-                style: Theme.of(context).textTheme.titleLarge,
+              constraints: BoxConstraints(
+                maxWidth: Dimensions.height40,
+                maxHeight: Dimensions.height40,
               ),
-            ),
-            subtitle: Container(
-              margin: EdgeInsets.only(
-                bottom: Dimensions.height4,
+              decoration: BoxDecoration(
+                color:
+                    appState.darkMode ? Colors.grey[800] : lightGreyLightMode,
+                borderRadius: BorderRadius.circular(Dimensions.double40),
               ),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: Dimensions.width152,
-                    child: Text(
-                      listUsers[index][1], //* Content
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                  ),
-                  SizedBox(
-                    width: Dimensions.width8 / 2,
-                  ),
-                  Text(
-                    '|',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  SizedBox(
-                    width: Dimensions.width8 / 2,
-                  ),
-                  Text(
-                    listUsers[index][2], //* time
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ],
-              ),
-            ),
-            trailing: !isChat
-                ? Container(
-                    margin: EdgeInsets.fromLTRB(
-                      0,
-                      Dimensions.height10,
-                      0,
-                      Dimensions.height8,
-                    ),
-                    constraints: BoxConstraints(
-                      maxWidth: Dimensions.height40,
-                      maxHeight: Dimensions.height40,
-                    ),
-                    decoration: BoxDecoration(
-                      color: appState.darkMode
-                          ? Colors.grey[800]
-                          : lightGreyLightMode,
-                      borderRadius: BorderRadius.circular(Dimensions.double40),
-                    ),
-                    child: Center(
-                        child: Icon(
-                      CupertinoIcons.phone_solid,
-                      size: Dimensions.double40 / 2,
-                    )),
-                  )
-                : null,
-          );
-        },
-      ),
+              child: Center(
+                  child: Icon(
+                CupertinoIcons.phone_solid,
+                size: Dimensions.double40 / 2,
+              )),
+            )
+          : null,
     );
   }
 }

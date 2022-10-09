@@ -13,37 +13,57 @@ class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
   @override
   Widget build(BuildContext context) {
+    // Size
+    final sizedBox20 = SizedBox(height: Dimensions.height20);
+    final sizedBox50 = SizedBox(height: Dimensions.height10 * 5);
+    final sizedBox10 = SizedBox(height: Dimensions.height10);
+    // Provider state app
     AppStateProvider appStateProvider = context.watch<AppStateProvider>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(height: Dimensions.height20),
+        sizedBox10,
         _avatar(),
-        SizedBox(height: Dimensions.height20),
+        sizedBox10,
         _nameOfUser(context),
-        SizedBox(height: Dimensions.height10 * 5),
-        ChangeDarkMode(
-          isDarkMode: appStateProvider.darkMode,
-          onchange: (value) {
-            Provider.of<AppStateProvider>(context, listen: false).darkMode =
-                value;
-          },
-        ),
-        SizedBox(height: Dimensions.height10),
-        _userInfo(),
-        SizedBox(height: Dimensions.height10),
-        _bannedUser(),
-        SizedBox(height: Dimensions.height10),
-        // Logout
+        sizedBox20,
+        _changeDarkMode(appStateProvider, context),
+        sizedBox10,
         FeatureSetting(
-          icon: Icons.logout,
-          title: 'Chuyển tài khoản',
-          color: Colors.pink[400]!,
-          onTap: () {
-            context.read<AuthBloc>().add(LogoutEvent());
-          },
+          icon: CupertinoIcons.textformat,
+          title: 'Ngôn ngữ',
+          color: Colors.green[400]!,
+          onTap: () {},
         ),
+        sizedBox10,
+        _userInfo(),
+        sizedBox10,
+        _bannedUser(),
+        sizedBox10,
+        _logout(context),
       ],
+    );
+  }
+
+  ChangeDarkMode _changeDarkMode(
+      AppStateProvider appStateProvider, BuildContext context) {
+    return ChangeDarkMode(
+      isDarkMode: appStateProvider.darkMode,
+      onchange: (value) {
+        Provider.of<AppStateProvider>(context, listen: false).darkMode = value;
+      },
+    );
+  }
+
+  FeatureSetting _logout(BuildContext context) {
+    return FeatureSetting(
+      icon: Icons.logout,
+      title: 'Chuyển tài khoản',
+      color: Colors.pink[400]!,
+      onTap: () {
+        context.read<AuthBloc>().add(LogoutEvent());
+      },
     );
   }
 

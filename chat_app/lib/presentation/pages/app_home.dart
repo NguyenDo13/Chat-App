@@ -1,8 +1,12 @@
+import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
+import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
+import 'package:chat_app/presentation/widgets/state_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppHome extends StatefulWidget {
   const AppHome({super.key});
@@ -35,26 +39,26 @@ class _AppHomeState extends State<AppHome> {
               Theme.of(context).textSelectionTheme.selectionColor,
           items: [
             BottomNavigationBarItem(
-              icon: _buildStateNavigationItem(
+              icon: const StateBottomNavigationBar(
                 icon: CupertinoIcons.chat_bubble_fill,
                 valueState: '1',
               ),
               label: TITLES_PAGE[0],
             ),
             BottomNavigationBarItem(
-              icon: _buildStateNavigationItem(
+              icon: const StateBottomNavigationBar(
                 icon: CupertinoIcons.group_solid,
               ),
               label: TITLES_PAGE[1],
             ),
             BottomNavigationBarItem(
-              icon: _buildStateNavigationItem(
-                icon: CupertinoIcons.bell_fill,
+              icon: const StateBottomNavigationBar(
+                icon: CupertinoIcons.phone_solid,
               ),
               label: TITLES_PAGE[2],
             ),
             BottomNavigationBarItem(
-              icon: _buildStateNavigationItem(
+              icon: const StateBottomNavigationBar(
                 icon: Icons.settings,
               ),
               label: TITLES_PAGE[3],
@@ -70,6 +74,7 @@ class _AppHomeState extends State<AppHome> {
     BuildContext context,
     String img,
   ) {
+    AppStateProvider appState = context.watch<AppStateProvider>();
     return AppBar(
       toolbarHeight: Dimensions.height72,
       title: Row(
@@ -90,75 +95,44 @@ class _AppHomeState extends State<AppHome> {
           ),
         ],
       ),
-      actions: currentPage == 0
-          ? [
-              _actionButton(
-                () {},
-                Icons.camera_alt,
+      actions: [
+        Stack(children: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              CupertinoIcons.person_add_solid,
+              color: appState.darkMode ? lightGreyDarkMode : darkGreyDarkMode,
+              size: Dimensions.double30,
+            ),
+          ),
+          Positioned(
+            top: Dimensions.height8,
+            right: -Dimensions.height2,
+            child: Container(
+              constraints: BoxConstraints(maxWidth: Dimensions.height20),
+              width: Dimensions.height20,
+              height: Dimensions.height20,
+              padding: EdgeInsets.symmetric(
+                horizontal: Dimensions.height2,
+                vertical: Dimensions.height2,
               ),
-              _actionButton(
-                () {},
-                CupertinoIcons.pencil,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(Dimensions.double40),
               ),
-              SizedBox(width: Dimensions.width14),
-            ]
-          : [],
-    );
-  }
-
-  IconButton _actionButton(Function() action, IconData icon) {
-    return IconButton(
-      onPressed: action,
-      icon: Icon(
-        icon,
-        size: Dimensions.double30,
-      ),
-    );
-  }
-
-  Widget _buildStateNavigationItem({
-    required IconData icon,
-    String? valueState,
-  }) {
-    return Stack(
-      children: valueState != null
-          ? [
-              Icon(
-                icon,
-                size: Dimensions.height14 * 2,
-              ),
-              Positioned(
-                top: -Dimensions.height2,
-                right: -Dimensions.height2,
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: Dimensions.height20),
-                  width: Dimensions.height20,
-                  height: Dimensions.height20,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.height2,
-                    vertical: Dimensions.height2,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Dimensions.double40),
-                  ),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.red,
-                    child: Text(
-                      valueState,
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                            color: Colors.white,
-                          ),
-                    ),
-                  ),
+              child: CircleAvatar(
+                backgroundColor: Colors.red,
+                child: Text(
+                  '1',
+                  style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                        color: Colors.white,
+                      ),
                 ),
               ),
-            ]
-          : [
-              Icon(
-                icon,
-                size: Dimensions.height14 * 2,
-              ),
-            ],
+            ),
+          ),
+        ]),
+        SizedBox(width: Dimensions.width14),
+      ],
     );
   }
 }

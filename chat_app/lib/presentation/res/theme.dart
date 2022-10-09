@@ -166,6 +166,7 @@ class AppTheme {
         selectedLabelStyle: TextStyle(fontSize: 14),
         unselectedItemColor: lightGreyDarkMode,
       ),
+      fontFamily: 'openSans',
       textTheme: lightTextTheme,
     );
   }

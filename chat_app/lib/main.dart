@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/repository/auth_repository.dart';
+import 'package:chat_app/presentation/pages/app_home.dart';
 import 'package:chat_app/presentation/res/theme.dart';
 import 'package:chat_app/presentation/app_controller.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
@@ -15,25 +14,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Set Orientation of the application
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  // Hide status bar
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ),
   );
-  runApp(const MyApp());
+
+  // Run the "Chit Chat" application
+  runApp(const ChitChatApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class ChitChatApp extends StatefulWidget {
+  const ChitChatApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<ChitChatApp> createState() => _ChitChatAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _ChitChatAppState extends State<ChitChatApp> {
+  // Initialize SharedPreferences to get tokenUser
   late Future<SharedPreferences> shared;
-
   _initshared() async {
     shared = SharedPreferences.getInstance();
   }
@@ -61,7 +66,7 @@ class _MyAppState extends State<MyApp> {
               title: 'Chat App',
               debugShowCheckedModeBanner: false,
               theme: appState.darkMode ? AppTheme.dark() : AppTheme.light(),
-              home: const AppController(),
+              home: const AppHome(),
             ),
           );
         },

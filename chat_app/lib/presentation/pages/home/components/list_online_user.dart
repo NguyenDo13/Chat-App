@@ -50,24 +50,26 @@ class ListOnlineUser extends StatelessWidget {
                 ),
               );
             },
-            child: Container(
-              margin: EdgeInsets.only(right: Dimensions.width12),
-              constraints: BoxConstraints(maxWidth: Dimensions.width62),
-              child: Column(
-                children: [
-                  StateAvatar(
-                    avatar: "assets/avatars/${listUsers[index]}",
-                    isStatus: true,
-                    radius: Dimensions.double30 * 2,
-                  ),
-                  SizedBox(height: Dimensions.height4),
-                  Text(
-                    'Bắt đầu cuộc gọi',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
+            child: Center(
+              child: Container(
+                margin: EdgeInsets.only(right: Dimensions.width12),
+                constraints: BoxConstraints(maxWidth: Dimensions.width62),
+                child: Column(
+                  children: [
+                    StateAvatar(
+                      avatar: "assets/avatars/${listUsers[index]}",
+                      isStatus: true,
+                      radius: Dimensions.double30 * 2,
+                    ),
+                    SizedBox(height: Dimensions.height4),
+                    Text(
+                      'Nhóm mới',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
               ),
             ),
           );

@@ -2,10 +2,10 @@ import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
 
-class LagreButtonRound extends StatelessWidget {
+class LargeRoundButton extends StatelessWidget {
   final String textButton;
   final VoidCallback onTap;
-  const LagreButtonRound({
+  const LargeRoundButton({
     super.key,
     required this.textButton,
     required this.onTap,

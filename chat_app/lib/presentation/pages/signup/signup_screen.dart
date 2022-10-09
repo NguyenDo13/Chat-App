@@ -6,9 +6,9 @@ import 'package:chat_app/presentation/res/style.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
-import 'package:chat_app/presentation/widgets/button_round_white.dart';
 import 'package:chat_app/presentation/widgets/input_text_field.dart';
-import 'package:chat_app/presentation/widgets/warning_message.dart';
+import 'package:chat_app/presentation/widgets/large_round_button.dart';
+import 'package:chat_app/presentation/widgets/warning_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -89,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     message: _messageVerified,
                   ),
                   SizedBox(height: Dimensions.height20),
-                  LagreButtonRound(
+                  LargeRoundButton(
                     textButton: 'Sign Up',
                     onTap: () => _signupApp(context),
                   ),
