@@ -22,7 +22,7 @@ class AuthRepository extends IServiceAPI {
     urlEndPointLogin = environment.baseURL + urlEndPointLogin;
     urlEndPointLoginTokenAccess =
         environment.baseURL + urlEndPointLoginTokenAccess;
-        urlEndPointLogout = environment.baseURL + urlEndPointLogout;
+    urlEndPointLogout = environment.baseURL + urlEndPointLogout;
   }
 
   @override
@@ -71,8 +71,10 @@ class AuthRepository extends IServiceAPI {
   }
 
   @override
-  Future<BaseResponse?> getDataRegister(
-      {required data, required header}) async {
+  Future<BaseResponse?> getDataRegister({
+    required data,
+    required header,
+  }) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointRegister,
@@ -85,8 +87,7 @@ class AuthRepository extends IServiceAPI {
     }
   }
 
-  Future<BaseResponse?> getDataLogout(
-      {required data, required header}) async {
+  Future<BaseResponse?> getDataLogout({required data, required header}) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointLogout,
