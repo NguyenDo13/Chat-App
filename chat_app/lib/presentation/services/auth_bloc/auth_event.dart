@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 abstract class AuthEvent {
   // Events for user authentication
   const AuthEvent();
@@ -5,9 +6,11 @@ abstract class AuthEvent {
 
 // Register a new account
 class RegisterEvent extends AuthEvent {
+  final String name;
   final String email;
   final String password;
   RegisterEvent({
+    required this.name,
     required this.email,
     required this.password,
   });

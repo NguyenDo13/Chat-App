@@ -1,14 +1,17 @@
+import 'dart:developer';
+
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/repository/auth_repository.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   late final AuthRepository authRepository;
   late final Future<SharedPreferences> sharedPreferences;
-  late final AuthUser? _authUser;
+  late AuthUser? _authUser;
 
   AuthUser get authUser => _authUser!;
   // Constructor BloC
@@ -68,7 +71,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // * Register
     // Post request (email, password) to server, receive response value
     final valueRegister = await authRepository.getDataRegister(
-      data: {'email': event.email, 'password': event.password},
+      data: {
+        'name': event.name,
+        'email': event.email,
+        'password': event.password,
+      },
       header: {'Content-Type': 'application/json'},
     );
 
@@ -100,14 +107,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _authUser = authRepository.convertDynamicToObject(
       valueLogin.data[0],
     );
-    final shared = await sharedPreferences;
-    shared.setString('auth_token', _authUser!.accessToken!.accessToken ?? '');
+
+    // Check accessToken before store
+    if (_authUser!.accessToken != null &&
+        _authUser!.accessToken!.accessToken != null) {
+      // Store accessToken to login
+      final shared = await sharedPreferences;
+      shared.setString('auth_token', _authUser!.accessToken!.accessToken ?? '');
+    }
 
     // Close loading popup
     emit(RegisterState(loading: false));
 
     // Login success
-    emit(LoggedState(loading:false));
+    emit(LoggedState(loading: false));
   }
 
   _normalLogin(NormalLoginEvent event, Emitter<AuthState> emit) async {
@@ -122,26 +135,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     // Check correct value data
     if (value == null || value.result != 1) {
-      return emit(LoginState(loading: false));
+      return emit(LoginState(loading: false, message: 'Đăng nhập thất bại'));
     }
 
     // Get data of the user
     _authUser = authRepository.convertDynamicToObject(value.data[0]);
-
-    // // Check accessToken before store
-    // if (_authUser!.accessToken == null) {
-    //   return emit(LoginState(loading: false));
-    // }
-
-    // Store accessToken to login
-    final shared = await sharedPreferences;
-    shared.setString('auth_token', _authUser!.accessToken!.accessToken ?? '');
-
     // Close loading popup
     emit(LoginState(loading: false));
 
     // Login success
-    emit(LoggedState(loading:false));
+    emit(LoggedState(loading: false));
+    // Check accessToken before store
+    if (_authUser != null && _authUser?.accessToken != null) {
+      // Store accessToken to login
+      final shared = await sharedPreferences;
+      shared.setString('auth_token', _authUser!.accessToken!.accessToken ?? '');
+    }
   }
 
   _loginWithAccessToken(
@@ -175,6 +184,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _authUser = authRepository.convertDynamicToObject(value.data[0]);
 
     // Login success
-    emit(LoggedState(loading:false));
+    emit(LoggedState(loading: false));
   }
+
 }

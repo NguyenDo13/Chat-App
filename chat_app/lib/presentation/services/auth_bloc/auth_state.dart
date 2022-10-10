@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 abstract class AuthState {
   // Authenticate to use the application.
   const AuthState();
@@ -19,8 +20,10 @@ class RegisterState extends AuthState {
 // That is state when the user has not logged in to the application yet.
 class LoginState extends AuthState {
   bool loading;
+  String? message;
   LoginState({
     required this.loading,
+    this.message,
   });
 }
 

@@ -1,8 +1,7 @@
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/repository/auth_repository.dart';
-import 'package:chat_app/presentation/pages/app_home.dart';
-import 'package:chat_app/presentation/res/theme.dart';
 import 'package:chat_app/presentation/app_controller.dart';
+import 'package:chat_app/presentation/res/theme.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +65,7 @@ class _ChitChatAppState extends State<ChitChatApp> {
               title: 'Chat App',
               debugShowCheckedModeBanner: false,
               theme: appState.darkMode ? AppTheme.dark() : AppTheme.light(),
-              home: const AppHome(),
+              home: const AppController(),
             ),
           );
         },

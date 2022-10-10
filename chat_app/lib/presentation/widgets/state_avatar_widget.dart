@@ -1,18 +1,23 @@
-import 'package:chat_app/presentation/res/dimentions.dart';
-import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app/presentation/res/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:chat_app/presentation/res/dimentions.dart';
+import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 
 class StateAvatar extends StatefulWidget {
   final String avatar;
   final bool isStatus;
   final double radius;
+  final String? text;
   const StateAvatar({
-    super.key,
+    Key? key,
     required this.avatar,
     required this.isStatus,
     required this.radius,
-  });
+    this.text,
+  }) : super(key: key);
 
   @override
   State<StateAvatar> createState() => _StateAvatarState();
@@ -32,10 +37,19 @@ class _StateAvatarState extends State<StateAvatar> {
               SizedBox(
                 width: widget.radius,
                 height: widget.radius,
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey.shade800,
-                  backgroundImage: AssetImage(widget.avatar),
-                ),
+                child: widget.avatar == ''
+                    ? CircleAvatar(
+                        backgroundColor: appState.darkMode
+                            ? darkGreyLightMode
+                            : lightGreyDarkMode,
+                        child: Text(
+                          widget.text ?? '',
+                        ),
+                      )
+                    : CircleAvatar(
+                        backgroundColor: Colors.grey.shade800,
+                        backgroundImage: AssetImage(widget.avatar),
+                      ),
               ),
               Positioned(
                 bottom: widget.radius == Dimensions.double40
@@ -70,10 +84,17 @@ class _StateAvatarState extends State<StateAvatar> {
               SizedBox(
                 width: widget.radius,
                 height: widget.radius,
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey.shade800,
-                  backgroundImage: AssetImage(widget.avatar),
-                ),
+                child: widget.avatar == ''
+                    ? CircleAvatar(
+                        backgroundColor: appState.darkMode
+                            ? darkGreyLightMode
+                            : lightGreyDarkMode,
+                        child: Text(widget.text ?? ''),
+                      )
+                    : CircleAvatar(
+                        backgroundColor: Colors.grey.shade800,
+                        backgroundImage: AssetImage(widget.avatar),
+                      ),
               ),
             ],
     );

@@ -1,22 +1,24 @@
-import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
-import 'package:chat_app/presentation/pages/chat/chat_screen.dart';
-import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
-import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:chat_app/presentation/pages/chat/chat_screen.dart';
+import 'package:chat_app/presentation/res/colors.dart';
+import 'package:chat_app/presentation/res/dimentions.dart';
+import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
+import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 
 class ListChats extends StatefulWidget {
   final List<dynamic> listUsers;
   final bool isGroup;
   final bool? isCall;
   const ListChats({
-    super.key,
+    Key? key,
     required this.listUsers,
     required this.isGroup,
     this.isCall,
-  });
+  }) : super(key: key);
 
   @override
   State<ListChats> createState() => _ListChatsState();

@@ -1,19 +1,29 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
-import 'package:flutter/material.dart';
 
 class InputTextField extends StatefulWidget {
   final Function(String)? onSubmitted;
   final Function(String) onChanged;
-  final bool isEmail;
-  final bool isPassword;
+  final String title;
+  final IconData icon;
+  final String hint;
+  final TextInputType type;
+  final bool obscure;
+  final String keyInput;
 
   const InputTextField({
     Key? key,
-    this.isEmail = false,
-    this.isPassword = false,
     this.onSubmitted,
     required this.onChanged,
+    required this.title,
+    required this.icon,
+    required this.hint,
+    required this.type,
+    required this.obscure,
+    required this.keyInput,
   }) : super(key: key);
 
   @override
@@ -22,27 +32,9 @@ class InputTextField extends StatefulWidget {
 
 class _InputTextFieldState extends State<InputTextField> {
   late final TextEditingController _controller;
-  late String _textTitle;
-  late String _hintText;
-  late Icon _iconField;
 
   @override
   void initState() {
-    _iconField = const Icon(Icons.error);
-    if (widget.isEmail) {
-      _textTitle = 'Email';
-      _iconField = const Icon(Icons.email, color: Colors.white);
-      _hintText = 'Enter your Email';
-    } else if (widget.isPassword) {
-      _textTitle = 'Password';
-      _iconField = const Icon(Icons.lock, color: Colors.white);
-      _hintText = 'Enter your Password';
-    } else {
-      _textTitle = 'Verify';
-      _iconField =
-          const Icon(Icons.verified_user_outlined, color: Colors.white);
-      _hintText = 'Re-enter your Password';
-    }
     _controller = TextEditingController();
     _controller.addListener(() {
       setState(() {});
@@ -56,7 +48,7 @@ class _InputTextFieldState extends State<InputTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Text(
-          _textTitle,
+          widget.title,
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 color: Colors.white70,
                 fontWeight: FontWeight.bold,
@@ -78,21 +70,20 @@ class _InputTextFieldState extends State<InputTextField> {
           ),
           height: Dimensions.height60,
           child: TextField(
+            key: Key(widget.keyInput),
             onChanged: (value) => widget.onChanged(value),
             onSubmitted: widget.onSubmitted,
             controller: _controller,
-            keyboardType: widget.isEmail
-                ? TextInputType.emailAddress
-                : TextInputType.multiline,
-            obscureText: !widget.isEmail ? true : false,
+            keyboardType: widget.type,
+            obscureText: widget.obscure ? true : false,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Colors.white,
                 ),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: Dimensions.height14),
-              prefixIcon: _iconField,
-              hintText: _hintText,
+              prefixIcon: Icon(widget.icon, color: Colors.white),
+              hintText: widget.hint,
               hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Colors.white70,
                   ),

@@ -1,4 +1,5 @@
 import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
+import 'package:chat_app/presentation/helper/notify/alert_error.dart';
 import 'package:chat_app/presentation/pages/login/components/signin_other_ways.dart';
 import 'package:chat_app/presentation/pages/login/components/signin_title.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
@@ -41,6 +42,16 @@ class _LoginScreenState extends State<LoginScreen> {
           } else {
             LoadingScreen().hide();
           }
+          if (state.message != null) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertError(
+                title: "error",
+                content: state.message ?? 'Cannot connect to server',
+                nameBtn: 'Oke',
+              ),
+            );
+          }
         }
       },
       child: Scaffold(
@@ -58,7 +69,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SignInTitle(),
                   SizedBox(height: Dimensions.height20),
                   InputTextField(
-                    isEmail: true,
+                    title: 'Email',
+                    hint: 'Enter your email',
+                    icon: Icons.email,
+                    keyInput: 'email',
+                    obscure: false,
+                    type: TextInputType.emailAddress,
+                    onSubmitted: null,
                     onChanged: (email) => _formatEmail(email),
                   ),
                   WarningMessage(
@@ -67,7 +84,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   SizedBox(height: Dimensions.height20),
                   InputTextField(
-                    isPassword: true,
+                    title: 'Password',
+                    hint: 'Enter your password',
+                    icon: Icons.lock,
+                    keyInput: 'password',
+                    obscure: true,
+                    type: TextInputType.multiline,
+                    onSubmitted: null,
                     onChanged: (password) => _formatPassword(password),
                   ),
                   WarningMessage(

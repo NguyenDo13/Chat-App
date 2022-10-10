@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/models/user.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
+import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
@@ -36,27 +37,35 @@ class _HomeScreenState extends State<HomeScreen> {
           .build(),
     );
     _connectSocket();
+
     super.initState();
   }
 
   _connectSocket() {
-    _socket.onConnect(
-      (data) => log("Connection established"),
-    );
-    _socket.onConnectError(
-      (data) => log(
-        "connection failed + $data",
-      ),
-    );
-    _socket.onDisconnect(
-      (data) => log(
-        "socketio Server disconnected",
-      ),
-    );
-    _socket.on(
-      "message",
-      (data) => log(data),
-    );
+    // _socket.onConnect(
+    //   (data) {
+    //     log("Connection established");
+    //     _socket.emit('message', 'test');
+    //   },
+    // );
+    // _socket.on('fromServer', (data) {
+    //   log('data from default => $data');
+    //   // _socket.emit('fromServer', 'ok');
+    // });
+    // _socket.onConnectError(
+    //   (data) => log(
+    //     "connection failed + $data",
+    //   ),
+    // );
+    // _socket.onDisconnect(
+    //   (data) => log(
+    //     "socketio Server disconnected",
+    //   ),
+    // );
+    // _socket.on(
+    //   "message",
+    //   (data) => log(data),
+    // );
   }
 
   @override

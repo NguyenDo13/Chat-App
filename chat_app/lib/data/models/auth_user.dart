@@ -36,6 +36,7 @@ class AuthUser {
 class User {
   String? sId;
   String? email;
+  String? name;
   String? password;
   bool? isDarkMode;
   String? urlImage;
@@ -44,6 +45,7 @@ class User {
   User(
       {this.sId,
       this.email,
+      this.name,
       this.password,
       this.isDarkMode,
       this.urlImage,
@@ -52,6 +54,7 @@ class User {
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     email = json['email'];
+    name = json['name'];
     password = json['password'];
     isDarkMode = json['isDarkMode'];
     urlImage = json['urlImage'];
@@ -63,6 +66,7 @@ class User {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['_id'] = sId;
     data['email'] = email;
+    data['name'] = name;
     data['password'] = password;
     data['isDarkMode'] = isDarkMode;
     data['urlImage'] = urlImage;

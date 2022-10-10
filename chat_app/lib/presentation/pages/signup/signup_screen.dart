@@ -9,6 +9,7 @@ import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
 import 'package:chat_app/presentation/widgets/input_text_field.dart';
 import 'package:chat_app/presentation/widgets/large_round_button.dart';
 import 'package:chat_app/presentation/widgets/warning_message_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,8 +21,10 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  String _name = "";
   String _email = "";
   String _password = "";
+  bool _isValidName = false;
   bool _isValidEmail = false;
   bool _isValidPassword = false;
   bool _isValidVerified = false;
@@ -29,6 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _messageVerified = "";
   @override
   Widget build(BuildContext context) {
+    var sizedBox16 = SizedBox(height: Dimensions.height16);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is RegisterState) {
@@ -62,33 +66,67 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   _buildSignUpTitle(context),
-                  SizedBox(height: Dimensions.height20),
+                  sizedBox16,
                   InputTextField(
-                    isEmail: true,
+                    title: 'Name',
+                    hint: 'Enter your name',
+                    icon: CupertinoIcons.person,
+                    keyInput: 'name',
+                    obscure: false,
+                    type: TextInputType.name,
+                    onSubmitted: null,
+                    onChanged: (name) => _formatName(name),
+                  ),
+                  WarningMessage(
+                    isDataValid: _isValidEmail,
+                    message: 'Name is required!',
+                  ),
+                  sizedBox16,
+                  InputTextField(
+                    title: 'Email',
+                    hint: 'Enter your email',
+                    icon: Icons.email,
+                    keyInput: 'email',
+                    obscure: false,
+                    type: TextInputType.emailAddress,
+                    onSubmitted: null,
                     onChanged: (email) => _formatEmail(email),
                   ),
                   WarningMessage(
                     isDataValid: _isValidEmail,
                     message: 'Email is required!',
                   ),
-                  SizedBox(height: Dimensions.height20),
+                  sizedBox16,
                   InputTextField(
-                    isPassword: true,
+                    title: 'Password',
+                    hint: 'Enter your password',
+                    icon: Icons.lock,
+                    keyInput: 'password',
+                    obscure: true,
+                    type: TextInputType.multiline,
+                    onSubmitted: null,
                     onChanged: (password) => _formatPassword(password),
                   ),
                   WarningMessage(
                     isDataValid: _isValidPassword,
                     message: _messagePassword,
                   ),
-                  SizedBox(height: Dimensions.height20),
+                  sizedBox16,
                   InputTextField(
+                    title: 'Verify',
+                    hint: 'Re-enter your password',
+                    icon: Icons.verified_user_outlined,
+                    keyInput: 'password',
+                    obscure: true,
+                    type: TextInputType.multiline,
+                    onSubmitted: null,
                     onChanged: (password) => _verifyPassword(password),
                   ),
                   WarningMessage(
                     isDataValid: _isValidVerified,
                     message: _messageVerified,
                   ),
-                  SizedBox(height: Dimensions.height20),
+                  sizedBox16,
                   LargeRoundButton(
                     textButton: 'Sign Up',
                     onTap: () => _signupApp(context),
@@ -104,9 +142,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   _signupApp(BuildContext context) {
-    if (_isValidEmail || _isValidPassword || _isValidVerified) return;
+    if (_isValidName || _isValidEmail || _isValidPassword || _isValidVerified) return;
     context.read<AuthBloc>().add(
           RegisterEvent(
+            name: _name,
             email: _email,
             password: _password,
           ),
@@ -122,6 +161,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
             fontWeight: FontWeight.bold,
           ),
     );
+  }
+
+  _formatName(String name) {
+    if (name.isEmpty) {
+      setState(() {
+        _isValidName = true;
+      });
+    } else {
+      setState(() {
+        _isValidName = false;
+        _name = name;
+      });
+    }
   }
 
   _formatEmail(String email) {
