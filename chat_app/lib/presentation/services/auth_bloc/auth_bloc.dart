@@ -1,19 +1,18 @@
-import 'dart:developer';
-
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/repository/auth_repository.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   late final AuthRepository authRepository;
   late final Future<SharedPreferences> sharedPreferences;
-  late AuthUser? _authUser;
 
-  AuthUser get authUser => _authUser!;
+  // Data user
+  late AuthUser? _authUser;
+  AuthUser get authUser => _authUser ?? AuthUser();
+
   // Constructor BloC
   AuthBloc(
     this.authRepository,

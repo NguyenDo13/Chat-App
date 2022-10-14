@@ -1,5 +1,4 @@
 import 'package:chat_app/presentation/pages/setting/components/change_dark_mode.dart';
-import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/setting/components/feature_setting.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
@@ -31,7 +30,7 @@ class SettingScreen extends StatelessWidget {
         sizedBox20,
         _nameOfUser(context, authUser.user?.name ?? "unknow"),
         sizedBox40,
-        _changeDarkMode(appStateProvider, context),
+        _changeDarkMode(appStateProvider, context, authUser.user!.sId!),
         sizedBox10,
         _changeLaguage(),
         sizedBox10,
@@ -54,11 +53,17 @@ class SettingScreen extends StatelessWidget {
   }
 
   ChangeDarkMode _changeDarkMode(
-      AppStateProvider appStateProvider, BuildContext context) {
+    AppStateProvider appStateProvider,
+    BuildContext context,
+    String userID,
+  ) {
     return ChangeDarkMode(
       isDarkMode: appStateProvider.darkMode,
       onchange: (value) {
-        Provider.of<AppStateProvider>(context, listen: false).darkMode = value;
+        Provider.of<AppStateProvider>(context, listen: false).changeDarkMode(
+          value,
+          userID,
+        );
       },
     );
   }

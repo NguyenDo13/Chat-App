@@ -1,6 +1,6 @@
 import 'package:chat_app/data/models/user.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
-import 'package:chat_app/presentation/widgets/list_friends.dart';
+import 'package:chat_app/presentation/widgets/list_chat_room.dart';
 import 'package:flutter/material.dart';
 
 class CallsScreen extends StatelessWidget {
@@ -25,7 +25,7 @@ class CallsScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall,
             ),
           ),
-          ListChats(
+          ListChatRoom(
             listUsers: LIST_USERS,
             isGroup: false,
             isCall: true,

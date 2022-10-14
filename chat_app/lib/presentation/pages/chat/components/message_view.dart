@@ -1,4 +1,4 @@
-import 'package:chat_app/data/models/message.dart';
+import 'package:chat_app/data/models/message_ui.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';

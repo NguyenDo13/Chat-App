@@ -1,13 +1,18 @@
+import 'dart:developer';
+
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/chat/chat_screen.dart';
+import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListOnlineUser extends StatelessWidget {
   const ListOnlineUser({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AppStateProvider appStateProvider = context.watch<AppStateProvider>();
     List<String> listUsers = [
       'user1.jpg',
       'user2.jpg',
@@ -66,7 +71,15 @@ class ListOnlineUser extends StatelessWidget {
                       'Nhóm mới',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: appStateProvider.darkMode
+                          ? Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(color: Colors.white)
+                          : Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(color: Colors.black),
                     ),
                   ],
                 ),

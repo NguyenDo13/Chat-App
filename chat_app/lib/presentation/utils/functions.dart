@@ -2,7 +2,7 @@
 String takeLetters(String name) {
   String letterA = '';
   String letterB = '';
-  //+ Kiểm tra khoảng trắng
+  // Kiểm tra khoảng trắng
   final words = name.split(' ');
   //* lấy 2 từ cuối cùng
   if (words.length == 1) {

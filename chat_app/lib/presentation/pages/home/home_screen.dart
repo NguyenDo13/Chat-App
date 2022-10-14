@@ -1,18 +1,14 @@
-import 'dart:developer';
-
 import 'package:chat_app/data/environment.dart';
-import 'package:chat_app/data/models/user.dart';
+import 'package:chat_app/data/models/chat_room.dart';
+import 'package:chat_app/data/repository/chat_repository.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
-import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
-import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
-import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
-import 'package:chat_app/presentation/widgets/list_friends.dart';
+import 'package:chat_app/presentation/services/socketio_provider/chat_provider.dart';
 import 'package:chat_app/presentation/pages/home/components/list_online_user.dart';
+import 'package:chat_app/presentation/widgets/new_list_chat_room.dart';
 import 'package:chat_app/presentation/widgets/search_bar_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart'
     as IO; // ignore: library_prefixes
 
@@ -24,62 +20,38 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Environment environment;
+  late final ChatRepository _chatRepository;
+  late Environment _environment;
   late IO.Socket _socket;
 
   @override
   void initState() {
-    environment = Environment(isServerDev: true);
+    _environment = Environment(isServerDev: true);
+    _chatRepository = ChatRepository(
+      environment: _environment,
+    );
     _socket = IO.io(
-      environment.urlServer,
-      IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
-          // disable auto-connection
+      _environment.urlServer,
+      IO.OptionBuilder().setTransports(['websocket']) // For Flutter or Dart VM
+          // Disable auto-connection
           .build(),
     );
-    _connectSocket();
-
     super.initState();
-  }
-
-  _connectSocket() {
-    // _socket.onConnect(
-    //   (data) {
-    //     log("Connection established");
-    //     _socket.emit('message', 'test');
-    //   },
-    // );
-    // _socket.on('fromServer', (data) {
-    //   log('data from default => $data');
-    //   // _socket.emit('fromServer', 'ok');
-    // });
-    // _socket.onConnectError(
-    //   (data) => log(
-    //     "connection failed + $data",
-    //   ),
-    // );
-    // _socket.onDisconnect(
-    //   (data) => log(
-    //     "socketio Server disconnected",
-    //   ),
-    // );
-    // _socket.on(
-    //   "message",
-    //   (data) => log(data),
-    // );
   }
 
   @override
   Widget build(BuildContext context) {
-    AppStateProvider appState = context.watch<AppStateProvider>();
-    return BlocProvider<ChatBloc>(
-      create: (context) => ChatBloc(_socket),
-      child: BlocConsumer<ChatBloc, ChatState>(
-        listener: (context, state) {
-          if (state is InitChatState) {
-            context.read<ChatBloc>().add(ConnectToServer());
-          }
-        },
-        builder: (context, state) {
+    // init data of the user
+    final authUser = Provider.of<AuthBloc>(context, listen: false).authUser;
+
+    return ChangeNotifierProvider(
+      create: (_) => ChatProvider(
+        socket: _socket,
+        currentUser: authUser.user!,
+        chatRepository: _chatRepository,
+      ),
+      child: Consumer2<ChatProvider, AppStateProvider>(
+        builder: (context, chat, appState, child) {
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
@@ -87,10 +59,29 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 SearchBar(theme: appState.darkMode),
                 const ListOnlineUser(),
-                ListChats(
-                  listUsers: LIST_USERS,
-                  isGroup: false,
-                ),
+                StreamBuilder<List<ChatRoom>>(
+                    initialData: listChatRoomSample,
+                    stream: chat.chatRooms,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      if (snapshot.data != null) {
+                        return NewListChatRoom(
+                          listRoom: snapshot.data ?? [],
+                          isGroup: false,
+                          currentUserID: authUser.user!.sId!,
+                        );
+                      }
+                      // if (snapshot.hasData) {
+                      //   return NewListChatRoom(
+                      //     listRoom: snapshot.data ?? [],
+                      //     isGroup: false,
+                      //     currentUserID: authUser.user!.sId!,
+                      //   );
+                      // }
+                      return const Center(child: Text("error 500"));
+                    }),
               ],
             ),
           );
