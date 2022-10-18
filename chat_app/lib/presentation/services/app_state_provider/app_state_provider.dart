@@ -52,12 +52,12 @@ class AppStateProvider extends ChangeNotifier {
   // Check connect network
   Future checkConnectionStatus(ConnectivityResult result) async {
     if (result == ConnectivityResult.none) {
+      log('Không có mạng!');
       _hasConnect = false;
-      log('del co mang!');
       notifyListeners();
     } else {
+      log('Có mạng!');
       _hasConnect = true;
-      log('co del mang!');
       notifyListeners();
     }
   }

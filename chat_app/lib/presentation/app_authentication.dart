@@ -1,8 +1,6 @@
-import 'dart:developer';
-
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/repository/auth_repository.dart';
-import 'package:chat_app/presentation/pages/app_home.dart';
+import 'package:chat_app/presentation/pages/app_manager.dart';
 import 'package:chat_app/presentation/pages/login/login_screen.dart';
 import 'package:chat_app/presentation/pages/signup/signup_screen.dart';
 import 'package:chat_app/presentation/pages/splash/splash_screen.dart';
@@ -12,19 +10,18 @@ import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AppController extends StatefulWidget {
-  const AppController({
+class AppAuthentication extends StatefulWidget {
+  const AppAuthentication({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<AppController> createState() => _AppControllerState();
+  State<AppAuthentication> createState() => _AppAuthenticationState();
 }
 
-class _AppControllerState extends State<AppController> {
+class _AppAuthenticationState extends State<AppAuthentication> {
   // Initialize SharedPreferences to get tokenUser
   late Future<SharedPreferences> shared;
   _initshared() async {
@@ -51,13 +48,8 @@ class _AppControllerState extends State<AppController> {
           // Check dark mode
           if (state is LoggedState) {
             // app states
-            AppStateProvider appStateProvider =
-                context.read<AppStateProvider>();
-            final authUser =
-                Provider.of<AuthBloc>(context, listen: false).authUser;
-
-            if (authUser.user == null) return;
-            appStateProvider.darkMode = authUser.user!.isDarkMode!;
+            AppStateProvider appState = context.read<AppStateProvider>();
+            appState.darkMode = state.authUser!.user!.isDarkMode!;
           }
         },
         builder: (context, state) {
@@ -81,7 +73,9 @@ class _AppControllerState extends State<AppController> {
 
           // Home page
           if (state is LoggedState) {
-            return const AppHome();
+            return AppManager(
+              authUser: state.authUser!,
+            );
           }
 
           // Error app

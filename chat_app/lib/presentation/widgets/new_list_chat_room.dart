@@ -1,7 +1,7 @@
-import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/chat_room.dart';
-import 'package:chat_app/data/repository/chat_repository.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,16 +14,14 @@ import 'package:chat_app/presentation/services/app_state_provider/app_state_prov
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 
 class NewListChatRoom extends StatefulWidget {
-  final List<ChatRoom> listRoom;
+  final List<dynamic> listRoom;
   final bool isGroup;
   final bool? isCall;
-  final String currentUserID;
   const NewListChatRoom({
     Key? key,
     required this.listRoom,
     required this.isGroup,
     this.isCall,
-    required this.currentUserID,
   }) : super(key: key);
 
   @override
@@ -42,12 +40,16 @@ class _NewListChatRoomState extends State<NewListChatRoom> {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: widget.listRoom.length,
         itemBuilder: (BuildContext context, int index) {
+          // parse here
+          final roomData = widget.listRoom[index];
+          final room = ChatRoom.fromJson(roomData['room']);
+          final user = User.fromJson(roomData['user']);
           return ChatRoomWidget(
-            chatRoom: widget.listRoom[index],
+            chatRoom: room,
             isDarkMode: appState.darkMode,
             isGroup: widget.isGroup,
             isCall: widget.isCall,
-            currentUserID: widget.currentUserID,
+            user: user,
           );
         },
       ),
@@ -60,14 +62,14 @@ class ChatRoomWidget extends StatefulWidget {
   final bool isDarkMode;
   final bool isGroup;
   final bool? isCall;
-  final String currentUserID;
+  final User user;
   const ChatRoomWidget({
     super.key,
     required this.chatRoom,
     required this.isDarkMode,
     required this.isGroup,
     this.isCall,
-    required this.currentUserID,
+    required this.user,
   });
 
   @override
@@ -75,56 +77,6 @@ class ChatRoomWidget extends StatefulWidget {
 }
 
 class _ChatRoomWidgetState extends State<ChatRoomWidget> {
-  late final ChatRepository _chatRepository;
-  User? _user;
-  String? _userID;
-
-  @override
-  void initState() {
-    _getUserID();
-    _chatRepository = ChatRepository(
-      environment: Environment(isServerDev: true),
-    );
-    _getInfoUserbyId();
-
-    super.initState();
-  }
-
-  _getUserID() {
-    if (widget.chatRoom.users == null) return;
-    final arrayID = widget.chatRoom.users!; // [id1, id2]
-    if (widget.currentUserID == arrayID[0]) {
-      setState(() {
-        
-      _userID = arrayID[1];
-      });
-    } else {
-      setState(() {
-      _userID = arrayID[0];
-        
-      });
-    }
-  }
-
-  // get user infomation in a room
-  _getInfoUserbyId() async {
-    // Post request (email, password) to server, receive response value
-    final value = await _chatRepository.getInfoUserById(
-      data: {'userID': _userID},
-      header: {'Content-Type': 'application/json'},
-    );
-
-    // Check correct value data
-    if (value == null || value.result != 1) {
-      return;
-    }
-
-    // fetch data
-    setState(() {
-    _user = _chatRepository.convertDynamicToObject(value.data[0]);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // State text style which show notify that is not view
@@ -138,10 +90,10 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
     return ListTile(
       onTap: () {
         if (!widget.isGroup) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ChatScreen(),
+          Provider.of<ChatBloc>(context, listen: false).add(
+            OnRoomEvent(
+              roomID: widget.chatRoom.sId!,
+              friend: widget.user,
             ),
           );
         }
@@ -150,8 +102,8 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
       },
       visualDensity: const VisualDensity(vertical: 0.7),
       leading: StateAvatar(
-        avatar: _user?.urlImage ?? '',
-        text: takeLetters(_user?.name ?? 'Unknow'),
+        avatar: widget.user.urlImage ?? '',
+        text: takeLetters(widget.user.name ?? 'Unknow'),
         isStatus: true,
         radius: Dimensions.double30 * 2,
       ),
@@ -163,7 +115,7 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
           Dimensions.height8,
         ),
         child: Text(
-          _user?.name ?? "Unknow",
+          widget.user.name ?? "Unknow",
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),

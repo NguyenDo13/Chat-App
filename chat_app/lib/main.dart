@@ -1,4 +1,4 @@
-import 'package:chat_app/presentation/app_controller.dart';
+import 'package:chat_app/presentation/app_authentication.dart';
 import 'package:chat_app/presentation/res/theme.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class ChitChatApp extends StatelessWidget {
             title: 'Chat App',
             debugShowCheckedModeBanner: false,
             theme: appState.darkMode ? AppTheme.dark() : AppTheme.light(),
-            home: const AppController(),
+            home: const AppAuthentication(),
           );
         },
       ),

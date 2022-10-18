@@ -11,7 +11,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   // Data user
   late AuthUser? _authUser;
-  AuthUser get authUser => _authUser ?? AuthUser();
 
   // Constructor BloC
   AuthBloc(
@@ -19,13 +18,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     this.sharedPreferences,
   ) : super(AuthLoadingState()) {
     // Event to login by application account
-    on<NormalLoginEvent>(_normalLogin);
+    on<NormalLoginEvent>(normalLogin);
 
     // Event to register a new app account
     on<RegisterEvent>(_registerEvent);
 
     // Event to login with a code that is accessToken. It is allocated when previously logged in.
-    on<LoginWithAccessTokenEvent>(_loginWithAccessToken);
+    on<LoginWithAccessTokenEvent>(loginWithAccessToken);
 
     on<InitRegisterEvent>((event, emit) => emit(RegisterState(loading: false)));
 
@@ -36,10 +35,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<FacebookLoginEvent>((event, emit) {});
 
     //Event to logout application
-    on<LogoutEvent>(_logoutEvent);
+    on<LogoutEvent>(logoutEvent);
   }
 
-  _logoutEvent(LogoutEvent event, Emitter<AuthState> emit) async {
+  logoutEvent(LogoutEvent event, Emitter<AuthState> emit) async {
     //Show loading popup
     emit(LoggedState(loading: true));
 
@@ -118,11 +117,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // Close loading popup
     emit(RegisterState(loading: false));
 
+
     // Login success
-    emit(LoggedState(loading: false));
+    emit(LoggedState(loading: false, authUser: _authUser));
   }
 
-  _normalLogin(NormalLoginEvent event, Emitter<AuthState> emit) async {
+  normalLogin(NormalLoginEvent event, Emitter<AuthState> emit) async {
     // Show loading popup
     emit(LoginState(loading: true));
 
@@ -143,7 +143,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(LoginState(loading: false));
 
     // Login success
-    emit(LoggedState(loading: false));
+    emit(LoggedState(loading: false, authUser: _authUser));
     // Check accessToken before store
     if (_authUser != null && _authUser?.accessToken != null) {
       // Store accessToken to login
@@ -152,7 +152,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  _loginWithAccessToken(
+  loginWithAccessToken(
     LoginWithAccessTokenEvent event,
     Emitter<AuthState> emit,
   ) async {
@@ -183,7 +183,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _authUser = authRepository.convertDynamicToObject(value.data[0]);
 
     // Login success
-    emit(LoggedState(loading: false));
+    emit(LoggedState(loading: false, authUser: _authUser));
   }
 
 }

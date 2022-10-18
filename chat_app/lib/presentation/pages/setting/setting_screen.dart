@@ -1,3 +1,4 @@
+import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/presentation/pages/setting/components/change_dark_mode.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/setting/components/feature_setting.dart';
@@ -11,35 +12,40 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+  final AuthUser authUser;
+  const SettingScreen({super.key, required this.authUser});
   @override
   Widget build(BuildContext context) {
-    final authUser = context.watch<AuthBloc>().authUser;
     // Size
-    final sizedBox20 = SizedBox(height: Dimensions.height20);
-    final sizedBox40 = SizedBox(height: Dimensions.height10 * 4);
-    final sizedBox10 = SizedBox(height: Dimensions.height10);
+    final sizedBox24 = SizedBox(height: Dimensions.height24);
+    final sizedBox50 = SizedBox(height: Dimensions.height10 * 5);
+    final sizedBox12 = SizedBox(height: Dimensions.height12);
     // app states
     AppStateProvider appStateProvider = context.watch<AppStateProvider>();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        sizedBox20,
-        _avatar(authUser.user?.urlImage ?? '', authUser.user?.name ?? "unknow"),
-        sizedBox20,
-        _nameOfUser(context, authUser.user?.name ?? "unknow"),
-        sizedBox40,
-        _changeDarkMode(appStateProvider, context, authUser.user!.sId!),
-        sizedBox10,
-        _changeLaguage(),
-        sizedBox10,
-        _userInfo(),
-        sizedBox10,
-        _bannedUser(),
-        sizedBox10,
-        _logout(context),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          sizedBox24,
+          _avatar(
+            authUser.user?.urlImage ?? '',
+            authUser.user?.name ?? "unknow",
+          ),
+          sizedBox24,
+          _nameOfUser(context, authUser.user?.name ?? "unknow"),
+          sizedBox50,
+          _changeDarkMode(appStateProvider, context, authUser.user!.sId!),
+          sizedBox12,
+          _changeLaguage(),
+          sizedBox12,
+          _userInfo(),
+          sizedBox12,
+          _bannedUser(),
+          sizedBox12,
+          _logout(context),
+        ],
+      ),
     );
   }
 

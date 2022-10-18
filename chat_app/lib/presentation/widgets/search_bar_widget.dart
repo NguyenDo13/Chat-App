@@ -1,4 +1,4 @@
-import 'package:chat_app/presentation/pages/home/search_screen.dart';
+import 'package:chat_app/presentation/pages/search/search_screen.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/cupertino.dart';

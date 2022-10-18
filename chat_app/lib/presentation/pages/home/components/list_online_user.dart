@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/chat/chat_screen.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
@@ -51,7 +49,8 @@ class ListOnlineUser extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const ChatScreen(),
+                  builder: (_) => const ChatScreen(
+                  ),
                 ),
               );
             },

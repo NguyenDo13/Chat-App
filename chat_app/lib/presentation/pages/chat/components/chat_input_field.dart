@@ -11,7 +11,10 @@ import 'package:provider/provider.dart';
 
 class ChatInputField extends StatefulWidget {
   final TextEditingController controllerChat;
-  const ChatInputField({super.key, required this.controllerChat});
+  const ChatInputField({
+    super.key,
+    required this.controllerChat,
+  });
 
   @override
   State<ChatInputField> createState() => _ChatInputFieldState();
@@ -38,12 +41,14 @@ class _ChatInputFieldState extends State<ChatInputField> {
       child: SafeArea(
         child: Row(
           children: [
-            _actionIcon(Icons.camera_alt, () async {
-              
-            }),
+            _actionIcon(Icons.camera_alt, () => _openCamera()),
             _actionIcon(CupertinoIcons.photo, () {}),
             _actionIcon(Icons.mic, () {}),
-            _inputMessage(appState, _onChangeInputMessage, context),
+            _inputMessage(
+              appState,
+              _onChangeInputMessage,
+              context,
+            ),
             SizedBox(width: Dimensions.width14),
             InkWell(
               onTap: () {},
@@ -58,7 +63,22 @@ class _ChatInputFieldState extends State<ChatInputField> {
     );
   }
 
-  _openCamera() async {}
+  Future _openCamera() async {
+    try {
+      final cameras = await availableCameras();
+      final firstCamera = cameras.first;
+      await Future.delayed(const Duration(seconds: 1));
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TakePictureScreen(camera: firstCamera),
+        ),
+      );
+    } catch (e) {
+      log("BUGS:$e");
+    }
+  }
 
   _onChangeInputMessage(String value) {
     if (value.isNotEmpty) {
@@ -78,23 +98,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
       child: Container(
         padding: EdgeInsets.only(right: Dimensions.width14),
         child: InkWell(
-          onTap: () async {
-              try {
-                final cameras = await availableCameras();
-                final firstCamera = cameras.first;
-                await Future.delayed(const Duration(seconds: 1));
-                // ignore: use_build_context_synchronously
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        TakePictureScreen(camera: firstCamera),
-                  ),
-                );
-              } catch (e) {
-                log("BUGS:" + e.toString());
-              }
-          },
+          onTap: onTap,
           child: Icon(
             icon,
             color: Colors.blue,
@@ -129,7 +133,12 @@ class _ChatInputFieldState extends State<ChatInputField> {
               child: TextField(
                 style: Theme.of(context).textTheme.displaySmall,
                 controller: widget.controllerChat,
-                onSubmitted: (value) {},
+                onSubmitted: (value) {
+                  setState(() {
+                    isVisibility = !isVisibility;
+                  });
+                  widget.controllerChat.clear();
+                },
                 onChanged: (value) => onchange(value),
                 decoration: InputDecoration(
                   hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(

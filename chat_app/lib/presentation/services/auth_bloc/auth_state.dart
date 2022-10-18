@@ -1,4 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:chat_app/data/models/auth_user.dart';
+
 abstract class AuthState {
   // Authenticate to use the application.
   const AuthState();
@@ -29,8 +30,10 @@ class LoginState extends AuthState {
 
 // That is state when the user has logged in to the application.
 class LoggedState extends AuthState {
+  final AuthUser? authUser;
   final bool loading;
   LoggedState({
+    this.authUser,
     required this.loading,
   });
 }

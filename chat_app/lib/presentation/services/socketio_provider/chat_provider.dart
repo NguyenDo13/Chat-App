@@ -5,26 +5,24 @@ import 'dart:developer';
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/repository/chat_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:chat_app/data/models/chat_room.dart';
 import 'package:socket_io_client/socket_io_client.dart'
     as IO; // ignore: library_prefixes
 
 class ChatProvider extends ChangeNotifier {
   final IO.Socket socket;
 
-  //* get infomation another user in room
+  // get infomation another user in room
   late final ChatRepository chatRepository;
   late final User _anotherUserInRoom;
   User get anotherUserInRoom => _anotherUserInRoom;
 
-  //* Current user
+  // Current user
   final User currentUser;
 
-  //* Data chat room
-  final StreamController<List<ChatRoom>> _chatRoomsStream = StreamController();
-  Stream<List<ChatRoom>> get chatRooms => _chatRoomsStream.stream;
+  // Data chat room
+  List<dynamic> listDataRoom = [];
 
-  //* To Check connect server
+  // To Check connect server
   bool _isConnect = false;
   bool get isConnect => _isConnect;
 
@@ -33,7 +31,7 @@ class ChatProvider extends ChangeNotifier {
     required this.currentUser,
     required this.chatRepository,
   }) {
-    //* Check connect to server
+    // Check connect to server
     checkConnectSocket();
   }
 
@@ -55,27 +53,6 @@ class ChatProvider extends ChangeNotifier {
     return result;
   }
 
-  // To get all Room of the current user
-  getChatRooms() {
-    //Check connect to server
-    if (!_isConnect) return;
-
-    // Check data(request) not null
-    if (currentUser.sId == null) return;
-
-    // // emit a event to server to get data rooms
-    // socket.emit('getRooms', currentUser.sId!);
-    socket.on('AllRoom', (data) {
-      List<ChatRoom> listRoom = [];
-      //fetch data to RoomStream
-      for (var room in data) {
-        final chatRoom = ChatRoom.fromJson(room);
-        listRoom.add(chatRoom);
-      }
-      _chatRoomsStream.sink.add(listRoom);
-    });
-  }
-
   //TODO: event seen messages of room notification
   seenRoomMessages() {
     if (!_isConnect) return;
@@ -88,9 +65,15 @@ class ChatProvider extends ChangeNotifier {
       (data) {
         log("Connection established");
         _isConnect = true;
-        notifyListeners();
+        // Check data(request) not null
+        if (currentUser.sId == null) return;
+
+        // emit a event to server to get data rooms
         socket.emit("loginSuccess", currentUser.sId);
-        getChatRooms();
+        socket.on('chatRooms', (data) {
+          listDataRoom = data;
+          notifyListeners();
+        });
       },
     );
 
@@ -111,11 +94,5 @@ class ChatProvider extends ChangeNotifier {
         notifyListeners();
       },
     );
-  }
-
-  @override
-  void dispose() {
-    // _chatRoomsStream.close();
-    super.dispose();
   }
 }

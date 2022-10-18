@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:chat_app/presentation/pages/chat/chat_screen.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
@@ -53,14 +52,14 @@ class _ListChatRoomState extends State<ListChatRoom> {
 
     return ListTile(
       onTap: () {
-        if (!widget.isGroup) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ChatScreen(),
-            ),
-          );
-        }
+        // if (!widget.isGroup) {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => const ChatScreen(socket: ),
+        //     ),
+        //   );
+        // }
 
         // TODO: change state item chat to viewed
       },
