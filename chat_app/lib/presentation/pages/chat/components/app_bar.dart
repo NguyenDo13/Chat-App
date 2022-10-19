@@ -31,7 +31,7 @@ AppBar buildAppBar({
             children: [
               StateAvatar(
                 avatar: state.friend.urlImage!,
-                isStatus: true,
+                isStatus: state.isOnl,
                 text: takeLetters(state.friend.name!),
                 radius: Dimensions.double40,
               ),

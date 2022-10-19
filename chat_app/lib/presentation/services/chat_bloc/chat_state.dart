@@ -16,12 +16,16 @@ class HasDataRoomState extends ChatState {
 class GettingSourceChatState extends ChatState {}
 
 class HasSourceChatState extends ChatState {
+  final bool isOnl;
+  final String idRoom;
   final User currentUser;
   final User friend;
-  final List<dynamic> sourceChat;
+  final List<dynamic>? sourceChat;
   HasSourceChatState({
+    required this.isOnl,
+    required this.idRoom,
     required this.currentUser,
     required this.friend,
-    required this.sourceChat,
+    this.sourceChat,
   });
 }

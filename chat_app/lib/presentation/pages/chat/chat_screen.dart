@@ -1,12 +1,15 @@
-import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/presentation/pages/chat/components/app_bar.dart';
 import 'package:chat_app/presentation/pages/chat/components/chat_input_field.dart';
 import 'package:chat_app/presentation/pages/chat/components/message_view.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
+  final String idRoom;
+  final String friendID;
   const ChatScreen({
     super.key,
+    required this.idRoom,
+    required this.friendID,
   });
 
   @override
@@ -26,6 +29,8 @@ class _ChatScreenState extends State<ChatScreen> {
           const MessageView(),
           ChatInputField(
             controllerChat: _controllerChat,
+            idRoom: widget.idRoom,
+            idFriend: widget.friendID,
           ),
         ],
       ),

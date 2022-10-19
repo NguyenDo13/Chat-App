@@ -65,7 +65,10 @@ class _AppManagerState extends State<AppManager> {
       child: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) {
           if (state is HasSourceChatState) {
-            return ChatScreen();
+            return ChatScreen(
+              friendID: state.friend.sId!,
+              idRoom: state.idRoom,
+            );
           }
           return Scaffold(
             appBar: _appBarPage(

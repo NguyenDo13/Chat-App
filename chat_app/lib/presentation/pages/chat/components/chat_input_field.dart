@@ -5,15 +5,21 @@ import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/chat/take_picture_screen.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChatInputField extends StatefulWidget {
   final TextEditingController controllerChat;
+  final String idRoom;
+  final String idFriend;
   const ChatInputField({
     super.key,
     required this.controllerChat,
+    required this.idRoom,
+    required this.idFriend,
   });
 
   @override
@@ -48,6 +54,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
               appState,
               _onChangeInputMessage,
               context,
+              widget.idRoom,
+              widget.idFriend,
             ),
             SizedBox(width: Dimensions.width14),
             InkWell(
@@ -112,6 +120,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
     AppStateProvider appState,
     Function(String) onchange,
     BuildContext context,
+    String idRoom,
+    String idFriend,
   ) {
     return Expanded(
       child: Container(
@@ -134,6 +144,13 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 style: Theme.of(context).textTheme.displaySmall,
                 controller: widget.controllerChat,
                 onSubmitted: (value) {
+                  Provider.of<ChatBloc>(context, listen: false).add(
+                    SendMessageEvent(
+                      message: value,
+                      idRoom: idRoom,
+                      idTarget: idFriend,
+                    ),
+                  );
                   setState(() {
                     isVisibility = !isVisibility;
                   });

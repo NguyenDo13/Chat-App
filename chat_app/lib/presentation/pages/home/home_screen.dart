@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
     AppStateProvider appState = context.watch<AppStateProvider>();
     return BlocBuilder<ChatBloc, ChatState>(
       builder: (context, state) {
-        print(state.toString());
         return SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Column(

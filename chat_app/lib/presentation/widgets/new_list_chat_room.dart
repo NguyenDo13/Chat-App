@@ -1,5 +1,6 @@
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/chat_room.dart';
+import 'package:chat_app/data/models/user_presence.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:chat_app/presentation/pages/chat/chat_screen.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
@@ -44,12 +44,14 @@ class _NewListChatRoomState extends State<NewListChatRoom> {
           final roomData = widget.listRoom[index];
           final room = ChatRoom.fromJson(roomData['room']);
           final user = User.fromJson(roomData['user']);
+          final presence = UserPresence.fromJson(roomData['presence']);
           return ChatRoomWidget(
             chatRoom: room,
             isDarkMode: appState.darkMode,
             isGroup: widget.isGroup,
             isCall: widget.isCall,
             user: user,
+            presence: presence,
           );
         },
       ),
@@ -63,6 +65,7 @@ class ChatRoomWidget extends StatefulWidget {
   final bool isGroup;
   final bool? isCall;
   final User user;
+  final UserPresence presence;
   const ChatRoomWidget({
     super.key,
     required this.chatRoom,
@@ -70,6 +73,7 @@ class ChatRoomWidget extends StatefulWidget {
     required this.isGroup,
     this.isCall,
     required this.user,
+    required this.presence,
   });
 
   @override
@@ -94,6 +98,7 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
             OnRoomEvent(
               roomID: widget.chatRoom.sId!,
               friend: widget.user,
+              isOnl: widget.presence.presence!,
             ),
           );
         }
@@ -104,7 +109,7 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
       leading: StateAvatar(
         avatar: widget.user.urlImage ?? '',
         text: takeLetters(widget.user.name ?? 'Unknow'),
-        isStatus: true,
+        isStatus: widget.presence.presence!,
         radius: Dimensions.double30 * 2,
       ),
       title: Container(

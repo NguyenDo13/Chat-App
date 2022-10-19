@@ -44,6 +44,10 @@ class _StateAvatarState extends State<StateAvatar> {
                             : lightGreyDarkMode,
                         child: Text(
                           widget.text ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium!
+                              .copyWith(fontSize: widget.radius / 2),
                         ),
                       )
                     : CircleAvatar(
@@ -89,7 +93,13 @@ class _StateAvatarState extends State<StateAvatar> {
                         backgroundColor: appState.darkMode
                             ? darkGreyLightMode
                             : lightGreyDarkMode,
-                        child: Text(widget.text ?? ''),
+                        child: Text(
+                          widget.text ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium!
+                              .copyWith(fontSize: widget.radius / 2),
+                        ),
                       )
                     : CircleAvatar(
                         backgroundColor: Colors.grey.shade800,

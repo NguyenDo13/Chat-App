@@ -5,21 +5,30 @@ abstract class ChatEvent {
   const ChatEvent();
 }
 
+// Room
 class GetDataRoomsEvent extends ChatEvent {}
-
-class UpdateRoomsEvent extends ChatEvent {}
-
-class SeenRoomEvent extends ChatEvent {}
-
-class CreateRoomEvent extends ChatEvent {}
 
 class ExitRoomEvent extends ChatEvent {}
 
 class OnRoomEvent extends ChatEvent {
   final String roomID;
   final User friend;
+  final bool isOnl;
   OnRoomEvent({
     required this.roomID,
     required this.friend,
+    required this.isOnl,
+  });
+}
+
+// Message
+class SendMessageEvent extends ChatEvent {
+  final String message;
+  final String idRoom;
+  final String idTarget;
+  SendMessageEvent({
+    required this.message,
+    required this.idRoom,
+    required this.idTarget,
   });
 }
