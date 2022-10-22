@@ -34,7 +34,8 @@ class _AppManagerState extends State<AppManager> {
 
   @override
   void initState() {
-    _chatRepository = ChatRepository(environment: Environment(isServerDev: true));
+    _chatRepository =
+        ChatRepository(environment: Environment(isServerDev: true));
     _socket = IO.io(
       Environment(isServerDev: true).urlServer,
       <String, dynamic>{
@@ -58,16 +59,12 @@ class _AppManagerState extends State<AppManager> {
       )
     ];
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<ChatBloc>(
-          create: (context) => ChatBloc(
-            socket: _socket,
-            currentUser: widget.authUser.user!,
-            chatRepository: _chatRepository
-          ),
-        ),
-      ],
+    return BlocProvider<ChatBloc>(
+      create: (_) => ChatBloc(
+        socket: _socket,
+        currentUser: widget.authUser.user!,
+        chatRepository: _chatRepository,
+      ),
       child: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) {
           if (state is HasSourceChatState) {

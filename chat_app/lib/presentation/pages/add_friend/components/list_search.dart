@@ -1,6 +1,7 @@
 import 'package:chat_app/presentation/helper/notify/alert_actions.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/list_user_widget.dart';
@@ -8,6 +9,7 @@ import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:chat_app/presentation/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class ListSearchUsers extends StatelessWidget {
   const ListSearchUsers({super.key});
@@ -58,7 +60,13 @@ class ListSearchUsers extends StatelessWidget {
                           ),
                         ),
                         nameBtn1: 'Kết bạn',
-                        onTap1: () {},
+                        onTap1: () {
+                          Provider.of<ChatBloc>(context).add(
+                            FriendRequestEvent(
+                              friendID: state.user!.sId!,
+                            ),
+                          );
+                        },
                         nameBtn2: 'Thoát',
                         onTap2: () => Navigator.pop(context),
                       ),

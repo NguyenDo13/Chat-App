@@ -2,6 +2,7 @@
 import 'dart:developer';
 
 import 'package:chat_app/data/models/auth_user.dart';
+import 'package:chat_app/data/models/chat_room.dart';
 import 'package:chat_app/data/models/message.dart';
 import 'package:chat_app/data/repository/chat_repository.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
@@ -29,59 +30,68 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     checkConnectSocket();
 
     //* Room
-    on<GetDataRoomsEvent>((event, emit) async {
-      if (!socket.connected) return;
-      if (currentUser.sId == null) return;
-      await getRoomData();
-    });
-    on<OnRoomEvent>((event, emit) async {
-      if (!socket.connected) return;
-      await getSourceChat(event.isOnl, event.roomID, event.friend);
-    });
+    on<GetDataRoomsEvent>(getDataRoomsEvent);
+    on<JoinRoomEvent>(joinRoomEvent);
+
     //* Message
     on<ExitRoomEvent>((event, emit) {
       emit(HasDataRoomState(listDataRoom));
     });
-    on<SendMessageEvent>((event, emit) async {
-      if (!socket.connected) return;
-      if (currentUser.sId == null) return;
-      await sendMessage(
-        message: event.message,
-        target: event.idTarget,
-        room: event.idRoom,
-      );
-    });
+    on<SendMessageEvent>(sendMessageEvent);
 
     //* Friend
     on<LookingForFriendEvent>((event, emit) {
       emit(LookingForFriendState(init: true));
     });
-    on<FindUserEvent>((event, emit) async {
-      if (!socket.connected) return;
-      emit(LookingForFriendState(finding: true));
-      final user = await chatRepository.findAUser(
-        data: {"email": event.email},
-        header: {'Content-Type': 'application/json'},
-      );
-      if (user == null || user.result == -1) {
-        return emit(LookingForFriendState(failed: true));
-      }
-      emit(LookingForFriendState(
-        user: User.fromJson(user.data),
-        cuccessed: true,
-      ));
-    });
+    on<FindUserEvent>(findUserEvent);
     on<ExitFriendEvent>((event, emit) => emit(HasDataRoomState(listDataRoom)));
-    on<FriendRequestEvent>((event, emit) {
-      socket.emit(
-        'addFriendRequest',
-        {"userID": event.userID, "friendID": event.friendID},
-      );
+    on<FriendRequestEvent>(friendRequestEvent);
+    updateListDataRooms();
+  }
+
+  updateListDataRooms() {
+    socket.on("getRooms", (data) {
+      for (var i = 0; i < listDataRoom.length; i++) {
+        if (listDataRoom[i]['room']['_id'] == data['_id']) {
+          listDataRoom[i]['room'] = data;
+          log(ChatRoom.fromJson(listDataRoom[i]['room']).lastMessage!);
+          break;
+        }
+      }
     });
   }
 
-  Future getFriendRequest() async {
-    socket.on('friendRequest', (friendRequest) => {});
+  friendRequestEvent(FriendRequestEvent event, Emitter<ChatState> emit) {
+    socket.emit(
+      'addFriendRequest',
+      {"userID": currentUser.sId, "friendID": event.friendID},
+    );
+  }
+
+  findUserEvent(FindUserEvent event, Emitter<ChatState> emit) async {
+    if (!socket.connected) return;
+    emit(LookingForFriendState(finding: true));
+    final user = await chatRepository.findAUser(
+      data: {"email": event.email},
+      header: {'Content-Type': 'application/json'},
+    );
+    if (user == null || user.result == -1) {
+      return emit(LookingForFriendState(failed: true));
+    }
+    emit(LookingForFriendState(
+      user: User.fromJson(user.data),
+      cuccessed: true,
+    ));
+  }
+
+  sendMessageEvent(SendMessageEvent event, Emitter<ChatState> emit) async {
+    if (!socket.connected) return;
+    if (currentUser.sId == null) return;
+    await sendMessage(
+      message: event.message,
+      target: event.idTarget,
+      room: event.idRoom,
+    );
   }
 
   Future sendMessage({
@@ -103,6 +113,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       'idTarget': target,
       'idRoom': room,
     });
+  }
+
+  joinRoomEvent(JoinRoomEvent event, Emitter<ChatState> emit) async {
+    if (!socket.connected) return;
+    await getSourceChat(event.isOnl, event.roomID, event.friend);
   }
 
   Future getSourceChat(bool isOnl, String roomID, User friend) async {
@@ -128,12 +143,20 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
   }
 
-  Future getRoomData() async {
+  getDataRoomsEvent(GetDataRoomsEvent event, Emitter<ChatState> emit) async {
     socket.emit("joinApp", currentUser.sId);
-    socket.on('chatRooms', (data) async {
-      listDataRoom = await data;
-      emit(HasDataRoomState(listDataRoom));
-    });
+    if (currentUser.sId == null) return;
+    final rooms = await chatRepository.getRooms(
+      data: {"userID": currentUser.sId},
+      header: {'Content-Type': 'application/json'},
+    );
+    if (rooms == null || rooms.result == -1) return;
+    listDataRoom = rooms.data;
+    emit(HasDataRoomState(listDataRoom));
+  }
+
+  Future getFriendRequest() async {
+    socket.on('friendRequest', (friendRequest) => {});
   }
 
   checkConnectSocket() {

@@ -10,11 +10,11 @@ class GetDataRoomsEvent extends ChatEvent {}
 
 class ExitRoomEvent extends ChatEvent {}
 
-class OnRoomEvent extends ChatEvent {
+class JoinRoomEvent extends ChatEvent {
   final String roomID;
   final User friend;
   final bool isOnl;
-  OnRoomEvent({
+  JoinRoomEvent({
     required this.roomID,
     required this.friend,
     required this.isOnl,
@@ -46,10 +46,8 @@ class FindUserEvent extends ChatEvent {
 }
 
 class FriendRequestEvent extends ChatEvent {
-  final String userID;
   final String friendID;
   FriendRequestEvent({
-    required this.userID,
     required this.friendID,
   });
 }

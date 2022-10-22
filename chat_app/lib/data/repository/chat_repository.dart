@@ -8,12 +8,14 @@ import '../network/network_api_service.dart';
 
 class ChatRepository extends IServiceAPI {
   String urlEndPointFindAUser = "chat/findAUser";
+  String urlEndPointGetRooms = "chat/getRooms";
 
   final BaseApiServices apiServices = NetworkApiService();
   late Environment environment;
 
   ChatRepository({required this.environment}) {
     urlEndPointFindAUser = environment.baseURL + urlEndPointFindAUser;
+    urlEndPointGetRooms = environment.baseURL + urlEndPointGetRooms;
   }
 
   @override
@@ -35,6 +37,19 @@ class ChatRepository extends IServiceAPI {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointFindAUser,
+        data,
+        header,
+      );
+      return BaseResponse.fromJson(response);
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+
+   Future<BaseResponse?> getRooms({required data, required header}) async {
+    try {
+      final response = await apiServices.getPostApiResponse(
+        urlEndPointGetRooms,
         data,
         header,
       );
