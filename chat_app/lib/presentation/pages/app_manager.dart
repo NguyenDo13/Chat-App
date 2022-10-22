@@ -1,18 +1,17 @@
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/models/auth_user.dart';
+import 'package:chat_app/data/repository/chat_repository.dart';
+import 'package:chat_app/presentation/pages/add_friend/add_friend_screen.dart';
 import 'package:chat_app/presentation/pages/calls/calls_screen.dart';
 import 'package:chat_app/presentation/pages/chat/chat_screen.dart';
 import 'package:chat_app/presentation/pages/groups/group_chat.dart';
 import 'package:chat_app/presentation/pages/home/home_screen.dart';
 import 'package:chat_app/presentation/pages/setting/setting_screen.dart';
-import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
-import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
 import 'package:chat_app/presentation/utils/constants.dart';
-import 'package:chat_app/presentation/utils/functions.dart';
-import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
+import 'package:chat_app/presentation/widgets/app_bar_page_managar.dart';
 import 'package:chat_app/presentation/widgets/state_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +28,13 @@ class AppManager extends StatefulWidget {
 }
 
 class _AppManagerState extends State<AppManager> {
+  late ChatRepository _chatRepository;
   int currentPage = 0;
   late IO.Socket _socket;
 
   @override
   void initState() {
+    _chatRepository = ChatRepository(environment: Environment(isServerDev: true));
     _socket = IO.io(
       Environment(isServerDev: true).urlServer,
       <String, dynamic>{
@@ -57,11 +58,16 @@ class _AppManagerState extends State<AppManager> {
       )
     ];
 
-    return BlocProvider<ChatBloc>(
-      create: (context) => ChatBloc(
-        socket: _socket,
-        currentUser: widget.authUser.user!,
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ChatBloc>(
+          create: (context) => ChatBloc(
+            socket: _socket,
+            currentUser: widget.authUser.user!,
+            chatRepository: _chatRepository
+          ),
+        ),
+      ],
       child: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) {
           if (state is HasSourceChatState) {
@@ -70,12 +76,16 @@ class _AppManagerState extends State<AppManager> {
               idRoom: state.idRoom,
             );
           }
+          if (state is LookingForFriendState) {
+            return const AddFriendScreen();
+          }
           return Scaffold(
-            appBar: _appBarPage(
+            appBar: appBarPageManagar(
               currentPage,
               context,
               widget.authUser.user?.urlImage ?? '',
               widget.authUser.user?.name ?? '',
+              _socket,
             ),
             body: SafeArea(child: pages[currentPage]),
             bottomNavigationBar: SizedBox(
@@ -121,79 +131,6 @@ class _AppManagerState extends State<AppManager> {
           );
         },
       ),
-    );
-  }
-
-  AppBar _appBarPage(
-    int currentPage,
-    BuildContext context,
-    String img,
-    String name,
-  ) {
-    AppStateProvider appState = context.watch<AppStateProvider>();
-    return AppBar(
-      toolbarHeight: Dimensions.height72,
-      title: Row(
-        children: [
-          Container(
-            margin: EdgeInsets.only(right: Dimensions.width16),
-            child: Center(
-              child: StateAvatar(
-                avatar: img,
-                isStatus: false,
-                text: takeLetters(name),
-                radius: Dimensions.double40,
-              ),
-            ),
-          ),
-          Text(
-            TITLES_PAGE[currentPage],
-            style: Theme.of(context).textTheme.displayLarge,
-          ),
-        ],
-      ),
-      actions: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                CupertinoIcons.person_add_solid,
-                color: appState.darkMode ? lightGreyDarkMode : darkGreyDarkMode,
-                size: Dimensions.double30,
-              ),
-            ),
-            Positioned(
-              top: Dimensions.height10,
-              right: -Dimensions.height2,
-              child: Container(
-                constraints: BoxConstraints(
-                    maxWidth: Dimensions.height20 + Dimensions.height2),
-                width: Dimensions.height20,
-                height: Dimensions.height20,
-                padding: EdgeInsets.symmetric(
-                  horizontal: Dimensions.height2,
-                  vertical: Dimensions.height2,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimensions.double40),
-                ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.red,
-                  child: Text(
-                    '!',
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          color: Colors.white,
-                        ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(width: Dimensions.width14),
-      ],
     );
   }
 }

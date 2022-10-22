@@ -1,9 +1,10 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 abstract class AuthEvent {
-  // Events for user authentication
+  //) Events for user authentication
   const AuthEvent();
 }
 
-// Register a new account
+//* Register a new account
 class RegisterEvent extends AuthEvent {
   final String name;
   final String email;
@@ -17,7 +18,7 @@ class RegisterEvent extends AuthEvent {
 
 class InitRegisterEvent extends AuthEvent {}
 
-// Login by account app
+//* Login by account app
 class NormalLoginEvent extends AuthEvent {
   final String email;
   final String password;
@@ -27,13 +28,13 @@ class NormalLoginEvent extends AuthEvent {
   });
 }
 
-// Login with a code
+//* Login with a code
 class LoginWithAccessTokenEvent extends AuthEvent {}
 
-// Login by Google account
+//* Login by Google account
 class GoogleLoginEvent extends AuthEvent {}
 
-// Login by Facebook account
+//* Login by Facebook account
 class FacebookLoginEvent extends AuthEvent {}
 
 class LogoutEvent extends AuthEvent {}

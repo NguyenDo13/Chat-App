@@ -6,14 +6,14 @@ import 'package:chat_app/data/models/error.dart';
 import '../network/base_api_service.dart';
 import '../network/network_api_service.dart';
 
-class ChatRepository extends IServiceAPI{
-  String urlEndPointGetInfoUser = "auth/getInfoUserByID";
+class ChatRepository extends IServiceAPI {
+  String urlEndPointFindAUser = "chat/findAUser";
 
   final BaseApiServices apiServices = NetworkApiService();
   late Environment environment;
 
   ChatRepository({required this.environment}) {
-    urlEndPointGetInfoUser = environment.baseURL + urlEndPointGetInfoUser;
+    urlEndPointFindAUser = environment.baseURL + urlEndPointFindAUser;
   }
 
   @override
@@ -31,10 +31,10 @@ class ChatRepository extends IServiceAPI{
     return Error.fromJson(value);
   }
 
-  Future<BaseResponse?> getInfoUserById({required data, required header}) async {
+  Future<BaseResponse?> findAUser({required data, required header}) async {
     try {
       final response = await apiServices.getPostApiResponse(
-        urlEndPointGetInfoUser,
+        urlEndPointFindAUser,
         data,
         header,
       );

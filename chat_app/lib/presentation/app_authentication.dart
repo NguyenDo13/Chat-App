@@ -60,25 +60,21 @@ class _AppAuthenticationState extends State<AppAuthentication> {
             });
             return const SplashScreen();
           }
-
           // Login screen
           if (state is LoginState) {
             return const LoginScreen();
           }
-
           // Register screen
           if (state is RegisterState) {
             return const SignUpScreen();
           }
-
           // Home page
           if (state is LoggedState) {
             return AppManager(
               authUser: state.authUser!,
             );
           }
-
-          // Error app
+          // Error
           return const Center(
               child: Text(
             'Error 500',

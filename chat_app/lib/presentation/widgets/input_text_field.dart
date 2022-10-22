@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/presentation/res/colors.dart';
@@ -6,7 +5,7 @@ import 'package:chat_app/presentation/res/dimentions.dart';
 
 class InputTextField extends StatefulWidget {
   final Function(String)? onSubmitted;
-  final Function(String) onChanged;
+  final Function(String)? onChanged;
   final String title;
   final IconData icon;
   final String hint;
@@ -17,7 +16,7 @@ class InputTextField extends StatefulWidget {
   const InputTextField({
     Key? key,
     this.onSubmitted,
-    required this.onChanged,
+    this.onChanged,
     required this.title,
     required this.icon,
     required this.hint,
@@ -71,23 +70,25 @@ class _InputTextFieldState extends State<InputTextField> {
           height: Dimensions.height60,
           child: TextField(
             key: Key(widget.keyInput),
-            onChanged: (value) => widget.onChanged(value),
+            onChanged: widget.onChanged,
             onSubmitted: widget.onSubmitted,
             controller: _controller,
             keyboardType: widget.type,
             obscureText: widget.obscure ? true : false,
-            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Colors.white,
-                ),
             decoration: InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.only(top: Dimensions.height14),
               prefixIcon: Icon(widget.icon, color: Colors.white),
               hintText: widget.hint,
-              hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    color: Colors.white70,
-                  ),
+              hintStyle: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: Colors.white70),
             ),
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: Colors.white),
           ),
         ),
       ],

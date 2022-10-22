@@ -5,6 +5,7 @@ abstract class ChatState {
   const ChatState();
 }
 
+//* Room
 class InitDataRoomState extends ChatState {}
 
 class HasDataRoomState extends ChatState {
@@ -13,6 +14,7 @@ class HasDataRoomState extends ChatState {
   HasDataRoomState(this.listRoom);
 }
 
+//* Message
 class GettingSourceChatState extends ChatState {}
 
 class HasSourceChatState extends ChatState {
@@ -27,5 +29,21 @@ class HasSourceChatState extends ChatState {
     required this.currentUser,
     required this.friend,
     this.sourceChat,
+  });
+}
+
+//* Friend
+class LookingForFriendState extends ChatState {
+  bool? init;
+  bool? finding;
+  bool? cuccessed;
+  bool? failed;
+  final User? user;
+  LookingForFriendState({
+    this.init = false,
+    this.finding = false,
+    this.cuccessed = false,
+    this.failed = false,
+    this.user,
   });
 }
