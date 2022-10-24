@@ -78,31 +78,10 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
         margin: EdgeInsets.only(
           bottom: Dimensions.height4,
         ),
-        child: Row(
-          children: [
-            SizedBox(
-              width: Dimensions.width152,
-              child: Text(
-                widget.chatRoom.lastMessage ?? 'Error', //* Content
-                overflow: TextOverflow.ellipsis,
-                style: styleNotView,
-              ),
-            ),
-            SizedBox(
-              width: Dimensions.width8 / 2,
-            ),
-            Text(
-              '|',
-              style: styleNotView,
-            ),
-            SizedBox(
-              width: Dimensions.width8 / 2,
-            ),
-            Text(
-              widget.chatRoom.timeLastMessage ?? 'Error', //* time
-              style: styleNotView,
-            ),
-          ],
+        child: Text(
+          widget.chatRoom.lastMessage!, //* Content
+          overflow: TextOverflow.ellipsis,
+          style: styleNotView,
         ),
       ),
       trailing: widget.isCall != null
@@ -128,7 +107,32 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
                 size: Dimensions.double40 / 2,
               )),
             )
-          : null,
+          : Column(
+              children: [
+                Text(
+                  formatTime(widget.chatRoom.timeLastMessage!), //* time
+                  style: styleNotView,
+                ),
+                SizedBox(
+                  height: Dimensions.height14,
+                ),
+                Container(
+                  constraints: BoxConstraints(maxHeight: Dimensions.height20),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: Center(
+                      child: Text(
+                        '1',
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 }

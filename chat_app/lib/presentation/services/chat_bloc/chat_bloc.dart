@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 import 'dart:developer';
-
+import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/chat_room.dart';
 import 'package:chat_app/data/models/message.dart';
@@ -13,27 +13,29 @@ import 'package:socket_io_client/socket_io_client.dart'
     as IO; // ignore: library_prefixes
 
 class ChatBloc extends Bloc<ChatEvent, ChatState> {
+  late ChatRepository chatRepository;
   final IO.Socket socket;
-  final ChatRepository chatRepository;
   final User currentUser;
 
   List<dynamic> listDataRoom = [];
 
   //source chat
-  List<dynamic> sourceChat = [];
+  dynamic sourceChat = [];
 
   ChatBloc({
     required this.socket,
-    required this.chatRepository,
     required this.currentUser,
   }) : super(InitDataRoomState()) {
+    chatRepository = ChatRepository(
+      environment: Environment(isServerDev: true),
+    );
     checkConnectSocket();
 
     //* Room
     on<GetDataRoomsEvent>(getDataRoomsEvent);
-    on<JoinRoomEvent>(joinRoomEvent);
 
     //* Message
+    on<JoinRoomEvent>(joinRoomEvent);
     on<ExitRoomEvent>((event, emit) {
       emit(HasDataRoomState(listDataRoom));
     });
@@ -106,6 +108,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       type: 'text',
       time: date,
       state: 'notView',
+      isLast: true,
     );
     socket.emit('message', {
       'message': msg,
@@ -132,7 +135,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ));
       }
       sourceChat = await data['sourceChat'];
-      if (sourceChat.isEmpty) return;
       emit(HasSourceChatState(
         isOnl: isOnl,
         idRoom: roomID,

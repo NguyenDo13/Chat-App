@@ -7,8 +7,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 class AppStateProvider extends ChangeNotifier {
-
-
   // Check connect Network
   late Connectivity _connectivity;
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -38,15 +36,12 @@ class AppStateProvider extends ChangeNotifier {
 
   // post request change darkmode to server
   changeDarkMode(bool darkMode, String userID) async {
-    final value = await userRepository.changeDarkMode(
+    _darkMode = darkMode;
+    notifyListeners();
+    await userRepository.changeDarkMode(
       data: {'userID': userID, 'isDarkMode': darkMode},
       header: {'Content-Type': 'application/json'},
     );
-
-    // Check correct value data
-    if (value == null || value.result != 1) return;
-    _darkMode = darkMode;
-    notifyListeners();
   }
 
   // Check connect network

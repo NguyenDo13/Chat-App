@@ -22,7 +22,7 @@ class HasSourceChatState extends ChatState {
   final String idRoom;
   final User currentUser;
   final User friend;
-  final List<dynamic>? sourceChat;
+  final dynamic sourceChat;
   HasSourceChatState({
     required this.isOnl,
     required this.idRoom,

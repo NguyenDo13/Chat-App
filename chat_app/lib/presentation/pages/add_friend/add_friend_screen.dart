@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 import 'package:chat_app/presentation/pages/add_friend/components/list_search.dart';
 import 'package:chat_app/presentation/pages/add_friend/components/requests_new_friend.dart';
 import 'package:chat_app/presentation/res/colors.dart';
@@ -10,8 +12,6 @@ import 'package:chat_app/presentation/widgets/input_text_field_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-
-import 'components/app_bar.dart';
 
 class AddFriendScreen extends StatefulWidget {
   const AddFriendScreen({super.key});
@@ -67,5 +67,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
 
   _onDelete() {
     FocusScope.of(context).unfocus();
+    Provider.of<ChatBloc>(context, listen: false)
+        .emit(LookingForFriendState(init: true));
   }
 }

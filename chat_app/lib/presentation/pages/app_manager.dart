@@ -1,6 +1,5 @@
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/models/auth_user.dart';
-import 'package:chat_app/data/repository/chat_repository.dart';
 import 'package:chat_app/presentation/pages/add_friend/add_friend_screen.dart';
 import 'package:chat_app/presentation/pages/calls/calls_screen.dart';
 import 'package:chat_app/presentation/pages/chat/chat_screen.dart';
@@ -28,14 +27,12 @@ class AppManager extends StatefulWidget {
 }
 
 class _AppManagerState extends State<AppManager> {
-  late ChatRepository _chatRepository;
   int currentPage = 0;
   late IO.Socket _socket;
 
   @override
   void initState() {
-    _chatRepository =
-        ChatRepository(environment: Environment(isServerDev: true));
+        
     _socket = IO.io(
       Environment(isServerDev: true).urlServer,
       <String, dynamic>{
@@ -63,7 +60,6 @@ class _AppManagerState extends State<AppManager> {
       create: (_) => ChatBloc(
         socket: _socket,
         currentUser: widget.authUser.user!,
-        chatRepository: _chatRepository,
       ),
       child: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) {

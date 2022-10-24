@@ -9,34 +9,37 @@ Message messageFromJson(String str) => Message.fromJson(json.decode(str));
 String messageToJson(Message data) => json.encode(data.toJson());
 
 class Message {
-    Message({
-        required this.idSender,
-        required this.content,
-        required this.type,
-        required this.time,
-        required this.state,
-    });
+  Message({
+    required this.idSender,
+    required this.content,
+    required this.type,
+    required this.time,
+    required this.state,
+    required this.isLast,
+  });
 
-    String idSender;
-    String content;
-    String type;
-    String time;
-    String state;
+  String idSender;
+  String content;
+  String type;
+  String time;
+  String state;
+  bool isLast;
 
-    factory Message.fromJson(Map<String, dynamic> json) => Message(
+  factory Message.fromJson(Map<String, dynamic> json) => Message(
         idSender: json["idSender"],
         content: json["content"],
         type: json["type"],
         time: json["time"],
         state: json["state"],
-    );
+        isLast: json["isLast"] ?? false,
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "idSender": idSender,
         "content": content,
         "type": type,
         "time": time,
         "state": state,
-    };
+        "isLast": isLast,
+      };
 }
-
