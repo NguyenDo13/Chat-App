@@ -9,6 +9,7 @@ import '../network/network_api_service.dart';
 class ChatRepository extends IServiceAPI {
   String urlEndPointFindAUser = "chat/findAUser";
   String urlEndPointGetRooms = "chat/getRooms";
+  String urlEndPointGetFriendRequests = "chat/getFriendRequests";
 
   final BaseApiServices apiServices = NetworkApiService();
   late Environment environment;
@@ -16,6 +17,7 @@ class ChatRepository extends IServiceAPI {
   ChatRepository({required this.environment}) {
     urlEndPointFindAUser = environment.baseURL + urlEndPointFindAUser;
     urlEndPointGetRooms = environment.baseURL + urlEndPointGetRooms;
+    urlEndPointGetFriendRequests = environment.baseURL + urlEndPointGetFriendRequests;
   }
 
   @override
@@ -33,12 +35,12 @@ class ChatRepository extends IServiceAPI {
     return Error.fromJson(value);
   }
 
-  Future<BaseResponse?> findAUser({required data, required header}) async {
+  Future<BaseResponse?> findAUser({required data}) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointFindAUser,
         data,
-        header,
+        {'Content-Type': 'application/json'},
       );
       return BaseResponse.fromJson(response);
     } on Exception catch (_) {
@@ -46,12 +48,24 @@ class ChatRepository extends IServiceAPI {
     }
   }
 
-   Future<BaseResponse?> getRooms({required data, required header}) async {
+   Future<BaseResponse?> getRooms({required data}) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointGetRooms,
         data,
-        header,
+        {'Content-Type': 'application/json'},
+      );
+      return BaseResponse.fromJson(response);
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+  Future<BaseResponse?> getFriendRequests({required data}) async {
+    try {
+      final response = await apiServices.getPostApiResponse(
+        urlEndPointGetFriendRequests,
+        data,
+        {'Content-Type': 'application/json'},
       );
       return BaseResponse.fromJson(response);
     } on Exception catch (_) {

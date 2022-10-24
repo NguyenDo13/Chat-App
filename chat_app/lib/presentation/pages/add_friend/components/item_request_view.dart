@@ -1,11 +1,20 @@
+import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
+import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/custom_button_widget.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ItemRequestUser extends StatelessWidget {
-  const ItemRequestUser({super.key});
+class ItemRequestView extends StatelessWidget {
+  final User user;
+  final String time;
+  final int index;
+  const ItemRequestView(
+      {super.key, required this.user, required this.time, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +28,10 @@ class ItemRequestUser extends StatelessWidget {
       width: Dimensions.screenWidth,
       child: Row(
         children: [
-          const StateAvatar(
-            avatar: 'assets/avatars/user1.jpg',
+          StateAvatar(
+            avatar: user.urlImage ?? '',
             isStatus: false,
+            text: takeLetters(user.name!),
             radius: 80,
           ),
           SizedBox(width: Dimensions.width10 * 2),
@@ -29,26 +39,35 @@ class ItemRequestUser extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Trường Sinh",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  SizedBox(width: Dimensions.width44),
-                  Text(
-                    "1 ngày trước",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                ],
+              Container(
+                constraints: BoxConstraints(maxWidth: 250),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      user.name!,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    Text(
+                      formatDay(time),
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomBtnWidget(
                     title: 'Xác nhận',
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<ChatBloc>(context, listen: false).add(
+                        AcceptFriendRequestEvent(
+                          friendID: user.sId!,
+                          index: index,
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(
                     width: Dimensions.width12,

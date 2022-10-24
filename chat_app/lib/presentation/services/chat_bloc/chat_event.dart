@@ -51,3 +51,14 @@ class FriendRequestEvent extends ChatEvent {
     required this.friendID,
   });
 }
+
+class BackToFriendRequestEvent extends ChatEvent {}
+
+class AcceptFriendRequestEvent extends ChatEvent {
+  final String friendID;
+  final int index;
+  AcceptFriendRequestEvent({
+    required this.friendID,
+    required this.index,
+  });
+}

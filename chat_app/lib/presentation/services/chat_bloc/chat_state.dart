@@ -38,12 +38,14 @@ class LookingForFriendState extends ChatState {
   bool? finding;
   bool? cuccessed;
   bool? failed;
+  List<dynamic>? requests;
   final User? user;
   LookingForFriendState({
     this.init = false,
     this.finding = false,
     this.cuccessed = false,
     this.failed = false,
+    this.requests,
     this.user,
   });
 }

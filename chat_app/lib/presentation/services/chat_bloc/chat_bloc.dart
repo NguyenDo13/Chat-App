@@ -22,6 +22,8 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   //source chat
   dynamic sourceChat = [];
 
+  List<dynamic>? requests = [];
+
   ChatBloc({
     required this.socket,
     required this.currentUser,
@@ -42,13 +44,32 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendMessageEvent>(sendMessageEvent);
 
     //* Friend
-    on<LookingForFriendEvent>((event, emit) {
-      emit(LookingForFriendState(init: true));
+    on<LookingForFriendEvent>((event, emit) async {
+      final friendRequests = await chatRepository.getFriendRequests(
+        data: {'userID': currentUser.sId},
+      );
+      if (friendRequests == null || friendRequests.result == -1) {
+        return;
+      }
+      requests = friendRequests.data!;
+      emit(LookingForFriendState(init: true, requests: requests));
     });
     on<FindUserEvent>(findUserEvent);
     on<ExitFriendEvent>((event, emit) => emit(HasDataRoomState(listDataRoom)));
     on<FriendRequestEvent>(friendRequestEvent);
+    on<BackToFriendRequestEvent>((event, emit) {
+      emit(LookingForFriendState(init: true, requests: requests));
+    });
+    on<AcceptFriendRequestEvent>((event, emit) {
+      socket.emit(
+        'acceptFriendRequest',
+        {"userID": currentUser.sId, "friendID": event.friendID},
+      );
+      requests!.removeAt(event.index);
+      emit(LookingForFriendState(init: true, requests: requests));
+    });
     updateListDataRooms();
+    getFriendRequest();
   }
 
   updateListDataRooms() {
@@ -64,9 +85,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   friendRequestEvent(FriendRequestEvent event, Emitter<ChatState> emit) {
+    final time = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
     socket.emit(
       'addFriendRequest',
-      {"userID": currentUser.sId, "friendID": event.friendID},
+      {"userID": currentUser.sId, "friendID": event.friendID, "time": time},
     );
   }
 
@@ -75,7 +97,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     emit(LookingForFriendState(finding: true));
     final user = await chatRepository.findAUser(
       data: {"email": event.email},
-      header: {'Content-Type': 'application/json'},
     );
     if (user == null || user.result == -1) {
       return emit(LookingForFriendState(failed: true));
@@ -150,7 +171,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (currentUser.sId == null) return;
     final rooms = await chatRepository.getRooms(
       data: {"userID": currentUser.sId},
-      header: {'Content-Type': 'application/json'},
     );
     if (rooms == null || rooms.result == -1) return;
     listDataRoom = rooms.data;
@@ -158,7 +178,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   Future getFriendRequest() async {
-    socket.on('friendRequest', (friendRequest) => {});
+    socket.on('friendRequest', (newRequest) {
+      if (requests!.isNotEmpty) {
+        requests!.add(newRequest);
+      } else {
+        requests = [newRequest];
+      }
+    });
   }
 
   checkConnectSocket() {

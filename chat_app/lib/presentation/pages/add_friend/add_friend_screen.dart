@@ -1,7 +1,7 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 
 import 'package:chat_app/presentation/pages/add_friend/components/list_search.dart';
-import 'package:chat_app/presentation/pages/add_friend/components/requests_new_friend.dart';
+import 'package:chat_app/presentation/pages/add_friend/components/friend_requests.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
@@ -57,7 +57,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
             physics: const BouncingScrollPhysics(),
             padding: EdgeInsets.all(Dimensions.height14),
             child: state is LookingForFriendState && state.init!
-                ? const RequestNewFriend()
+                ? FriendRequestView(friendRequests: state.requests!,)
                 : const ListSearchUsers(),
           ),
         );
@@ -67,7 +67,8 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
 
   _onDelete() {
     FocusScope.of(context).unfocus();
-    Provider.of<ChatBloc>(context, listen: false)
-        .emit(LookingForFriendState(init: true));
+    Provider.of<ChatBloc>(context, listen: false).add(
+      BackToFriendRequestEvent(),
+    );
   }
 }
