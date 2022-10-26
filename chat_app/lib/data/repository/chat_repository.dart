@@ -10,6 +10,7 @@ class ChatRepository extends IServiceAPI {
   String urlEndPointFindAUser = "chat/findAUser";
   String urlEndPointGetRooms = "chat/getRooms";
   String urlEndPointGetFriendRequests = "chat/getFriendRequests";
+  String urlEndPointRemoveRequest= "chat/removeRequest";
 
   final BaseApiServices apiServices = NetworkApiService();
   late Environment environment;
@@ -18,6 +19,7 @@ class ChatRepository extends IServiceAPI {
     urlEndPointFindAUser = environment.baseURL + urlEndPointFindAUser;
     urlEndPointGetRooms = environment.baseURL + urlEndPointGetRooms;
     urlEndPointGetFriendRequests = environment.baseURL + urlEndPointGetFriendRequests;
+    urlEndPointRemoveRequest = environment.baseURL + urlEndPointRemoveRequest;
   }
 
   @override
@@ -64,6 +66,18 @@ class ChatRepository extends IServiceAPI {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointGetFriendRequests,
+        data,
+        {'Content-Type': 'application/json'},
+      );
+      return BaseResponse.fromJson(response);
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+    Future<BaseResponse?> removeRequest({required data}) async {
+    try {
+      final response = await apiServices.getPostApiResponse(
+        urlEndPointRemoveRequest,
         data,
         {'Content-Type': 'application/json'},
       );

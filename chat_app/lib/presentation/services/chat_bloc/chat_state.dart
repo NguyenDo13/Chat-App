@@ -6,7 +6,7 @@ abstract class ChatState {
 }
 
 //* Room
-class InitDataRoomState extends ChatState {}
+class InitDataAppState extends ChatState {}
 
 class HasDataRoomState extends ChatState {
   final List<dynamic> listRoom;
@@ -40,6 +40,8 @@ class LookingForFriendState extends ChatState {
   bool? failed;
   List<dynamic>? requests;
   final User? user;
+  bool? addFriendloading;
+  bool? addFriendSuccess;
   LookingForFriendState({
     this.init = false,
     this.finding = false,
@@ -47,5 +49,7 @@ class LookingForFriendState extends ChatState {
     this.failed = false,
     this.requests,
     this.user,
+    this.addFriendloading,
+    this.addFriendSuccess,
   });
 }

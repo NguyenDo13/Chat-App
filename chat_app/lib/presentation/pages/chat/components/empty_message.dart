@@ -1,7 +1,6 @@
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/constants.dart';
-import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +29,6 @@ class EmptyMessage extends StatelessWidget {
               avatar: friend.urlImage!,
               isStatus: false,
               radius: 200,
-              text: takeLetters(friend.name!),
             ),
             SizedBox(height: Dimensions.height20),
             Text(

@@ -6,7 +6,7 @@ abstract class ChatEvent {
 }
 
 //* Room
-class GetDataRoomsEvent extends ChatEvent {}
+class GetDataAppEvent extends ChatEvent {}
 
 class ExitRoomEvent extends ChatEvent {}
 
@@ -46,9 +46,9 @@ class FindUserEvent extends ChatEvent {
 }
 
 class FriendRequestEvent extends ChatEvent {
-  final String friendID;
+  final User friend;
   FriendRequestEvent({
-    required this.friendID,
+    required this.friend,
   });
 }
 
@@ -60,5 +60,12 @@ class AcceptFriendRequestEvent extends ChatEvent {
   AcceptFriendRequestEvent({
     required this.friendID,
     required this.index,
+  });
+}
+
+class RemoveFriendRequest extends ChatEvent {
+  final String friendID;
+  RemoveFriendRequest({
+    required this.friendID,
   });
 }

@@ -37,4 +37,9 @@ class GoogleLoginEvent extends AuthEvent {}
 //* Login by Facebook account
 class FacebookLoginEvent extends AuthEvent {}
 
-class LogoutEvent extends AuthEvent {}
+class LogoutEvent extends AuthEvent {
+  final dynamic socket;
+  LogoutEvent({
+    required this.socket,
+  });
+}

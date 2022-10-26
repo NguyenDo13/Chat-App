@@ -5,15 +5,17 @@ import 'package:chat_app/presentation/pages/setting/components/feature_setting.d
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
-import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart'
+    as IO; // ignore: library_prefixes
 
 class SettingScreen extends StatelessWidget {
+  final IO.Socket socket;
   final AuthUser authUser;
-  const SettingScreen({super.key, required this.authUser});
+  const SettingScreen({super.key, required this.authUser, required this.socket});
   @override
   Widget build(BuildContext context) {
     // Size
@@ -80,7 +82,7 @@ class SettingScreen extends StatelessWidget {
       title: 'Chuyển tài khoản',
       color: Colors.pink[400]!,
       onTap: () {
-        context.read<AuthBloc>().add(LogoutEvent());
+        context.read<AuthBloc>().add(LogoutEvent(socket: socket));
       },
     );
   }
@@ -124,7 +126,6 @@ class SettingScreen extends StatelessWidget {
       child: StateAvatar(
         avatar: avatar,
         isStatus: false,
-        text: takeLetters(name),
         radius: Dimensions.double40 * 5,
       ),
     );

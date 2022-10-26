@@ -60,7 +60,6 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
       visualDensity: const VisualDensity(vertical: 0.7),
       leading: StateAvatar(
         avatar: widget.user.urlImage ?? '',
-        text: takeLetters(widget.user.name ?? 'Unknow'),
         isStatus: widget.presence.presence!,
         radius: Dimensions.double30 * 2,
       ),

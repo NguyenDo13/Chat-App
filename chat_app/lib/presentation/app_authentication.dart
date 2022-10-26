@@ -1,6 +1,6 @@
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/repository/auth_repository.dart';
-import 'package:chat_app/presentation/pages/app_manager.dart';
+import 'package:chat_app/presentation/pages/page_controller.dart';
 import 'package:chat_app/presentation/pages/login/login_screen.dart';
 import 'package:chat_app/presentation/pages/signup/signup_screen.dart';
 import 'package:chat_app/presentation/pages/splash/splash_screen.dart';
@@ -70,7 +70,7 @@ class _AppAuthenticationState extends State<AppAuthentication> {
           }
           // Home page
           if (state is LoggedState) {
-            return AppManager(
+            return AppPageController(
               authUser: state.authUser!,
             );
           }

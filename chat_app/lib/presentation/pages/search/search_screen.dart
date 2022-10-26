@@ -27,7 +27,11 @@ class SearchScreen extends StatelessWidget {
             children: [
               const TitleWidget(title: 'gợi ý', isUpper: true),
               SizedBox(height: Dimensions.height20),
-              ListUserWidget(listUser: [], onTap: (){},),
+              ListUserWidget(
+                listUser: const [],
+                onTapItem: () {},
+                isAddFriend: false,
+              ),
             ],
           ),
         ),

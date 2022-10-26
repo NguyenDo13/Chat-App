@@ -1,5 +1,4 @@
 import 'package:chat_app/data/models/user.dart';
-import 'package:chat_app/presentation/pages/home/components/list_online_user.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
@@ -35,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SearchBar(theme: appState.darkMode),
-              const ListOnlineUser(),
+              // const ListOnlineUser(),
               state is HasDataRoomState
                   ? NewListChatRoom(
                       listRoom: state.listRoom,

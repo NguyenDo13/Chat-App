@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:chat_app/presentation/res/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,13 +11,11 @@ class StateAvatar extends StatefulWidget {
   final String avatar;
   final bool isStatus;
   final double radius;
-  final String? text;
   const StateAvatar({
     Key? key,
     required this.avatar,
     required this.isStatus,
     required this.radius,
-    this.text,
   }) : super(key: key);
 
   @override
@@ -42,12 +41,10 @@ class _StateAvatarState extends State<StateAvatar> {
                         backgroundColor: appState.darkMode
                             ? darkGreyLightMode
                             : lightGreyDarkMode,
-                        child: Text(
-                          widget.text ?? '',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium!
-                              .copyWith(fontSize: widget.radius / 2),
+                        child: Icon(
+                          CupertinoIcons.person_fill,
+                          color: Colors.black,
+                          size: widget.radius / 2,
                         ),
                       )
                     : CircleAvatar(
@@ -93,12 +90,10 @@ class _StateAvatarState extends State<StateAvatar> {
                         backgroundColor: appState.darkMode
                             ? darkGreyLightMode
                             : lightGreyDarkMode,
-                        child: Text(
-                          widget.text ?? '',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium!
-                              .copyWith(fontSize: widget.radius / 2),
+                        child: Icon(
+                          CupertinoIcons.person_fill,
+                          color: Colors.black,
+                          size: widget.radius / 2,
                         ),
                       )
                     : CircleAvatar(

@@ -10,6 +10,7 @@ class FriendRequestView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("data: " + friendRequests.length.toString());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -27,14 +27,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc({
     required this.socket,
     required this.currentUser,
-  }) : super(InitDataRoomState()) {
+  }) : super(InitDataAppState()) {
     chatRepository = ChatRepository(
       environment: Environment(isServerDev: true),
     );
     checkConnectSocket();
 
     //* Room
-    on<GetDataRoomsEvent>(getDataRoomsEvent);
+    on<GetDataAppEvent>(getDataRoomsEvent);
 
     //* Message
     on<JoinRoomEvent>(joinRoomEvent);
@@ -44,32 +44,58 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<SendMessageEvent>(sendMessageEvent);
 
     //* Friend
-    on<LookingForFriendEvent>((event, emit) async {
-      final friendRequests = await chatRepository.getFriendRequests(
-        data: {'userID': currentUser.sId},
-      );
-      if (friendRequests == null || friendRequests.result == -1) {
-        return;
-      }
-      requests = friendRequests.data!;
-      emit(LookingForFriendState(init: true, requests: requests));
-    });
+    on<LookingForFriendEvent>(lookingForFriend);
     on<FindUserEvent>(findUserEvent);
     on<ExitFriendEvent>((event, emit) => emit(HasDataRoomState(listDataRoom)));
     on<FriendRequestEvent>(friendRequestEvent);
     on<BackToFriendRequestEvent>((event, emit) {
       emit(LookingForFriendState(init: true, requests: requests));
     });
-    on<AcceptFriendRequestEvent>((event, emit) {
-      socket.emit(
-        'acceptFriendRequest',
-        {"userID": currentUser.sId, "friendID": event.friendID},
-      );
-      requests!.removeAt(event.index);
-      emit(LookingForFriendState(init: true, requests: requests));
-    });
+    on<AcceptFriendRequestEvent>(acceptFriendRequestEvent);
+    on<RemoveFriendRequest>(removeFriendRequest);
+
     updateListDataRooms();
     getFriendRequest();
+  }
+
+  removeFriendRequest(
+    RemoveFriendRequest event,
+    Emitter<ChatState> emit,
+  ) async {
+    final result = await chatRepository.removeRequest(data: {
+      "userID": currentUser.sId,
+      "friendID": event.friendID,
+    });
+
+    if (result == null || result.result == -1) {
+      return;
+    }
+
+    requests = result.data!;
+    emit(LookingForFriendState(init: true, requests: requests));
+  }
+
+  acceptFriendRequestEvent(
+    AcceptFriendRequestEvent event,
+    Emitter<ChatState> emit,
+  ) async {
+    socket.emit(
+      'acceptFriendRequest',
+      {"userID": currentUser.sId, "friendID": event.friendID},
+    );
+    requests!.removeAt(event.index);
+    emit(LookingForFriendState(init: true, requests: requests));
+  }
+
+  lookingForFriend(LookingForFriendEvent event, Emitter<ChatState> emit) async {
+    final friendRequests = await chatRepository.getFriendRequests(
+      data: {'userID': currentUser.sId},
+    );
+    if (friendRequests == null || friendRequests.result == -1) {
+      requests = [];
+    }
+    requests = friendRequests!.data!;
+    emit(LookingForFriendState(init: true, requests: requests));
   }
 
   updateListDataRooms() {
@@ -85,11 +111,29 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   friendRequestEvent(FriendRequestEvent event, Emitter<ChatState> emit) {
+    emit(LookingForFriendState(
+      cuccessed: true,
+      user: event.friend,
+      addFriendSuccess: true,
+    ));
+
     final time = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
     socket.emit(
       'addFriendRequest',
-      {"userID": currentUser.sId, "friendID": event.friendID, "time": time},
+      {"userID": currentUser.sId, "friendID": event.friend.sId, "time": time},
     );
+  }
+
+  Future listenResponseRequestSuccess(user) async {
+    socket.on('addFriendRequestSuccess', (data) {
+      if (data) {
+        emit(LookingForFriendState(
+          cuccessed: true,
+          user: user,
+          addFriendSuccess: true,
+        ));
+      }
+    });
   }
 
   findUserEvent(FindUserEvent event, Emitter<ChatState> emit) async {
@@ -166,7 +210,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
   }
 
-  getDataRoomsEvent(GetDataRoomsEvent event, Emitter<ChatState> emit) async {
+  getDataRoomsEvent(GetDataAppEvent event, Emitter<ChatState> emit) async {
     socket.emit("joinApp", currentUser.sId);
     if (currentUser.sId == null) return;
     final rooms = await chatRepository.getRooms(
@@ -174,6 +218,14 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     );
     if (rooms == null || rooms.result == -1) return;
     listDataRoom = rooms.data;
+
+    final friendRequests = await chatRepository.getFriendRequests(
+      data: {'userID': currentUser.sId},
+    );
+    if (friendRequests == null || friendRequests.result == -1) {
+      requests = [];
+    }
+    requests = friendRequests!.data!;
     emit(HasDataRoomState(listDataRoom));
   }
 
@@ -192,7 +244,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     socket.onConnect(
       (data) {
         log("Connection established");
-        add(GetDataRoomsEvent());
+        add(GetDataAppEvent());
       },
     );
 

@@ -13,8 +13,12 @@ class ItemRequestView extends StatelessWidget {
   final User user;
   final String time;
   final int index;
-  const ItemRequestView(
-      {super.key, required this.user, required this.time, required this.index});
+  const ItemRequestView({
+    super.key,
+    required this.user,
+    required this.time,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,6 @@ class ItemRequestView extends StatelessWidget {
           StateAvatar(
             avatar: user.urlImage ?? '',
             isStatus: false,
-            text: takeLetters(user.name!),
             radius: 80,
           ),
           SizedBox(width: Dimensions.width10 * 2),
@@ -45,7 +48,9 @@ class ItemRequestView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      user.name!,
+                      formatName(name: user.name!),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     Text(
@@ -74,7 +79,13 @@ class ItemRequestView extends StatelessWidget {
                   ),
                   CustomBtnWidget(
                     title: 'Xóa',
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<ChatBloc>(context, listen: false).add(
+                        RemoveFriendRequest(
+                          friendID: user.sId!,
+                        ),
+                      );
+                    },
                     backgroundColor: darkGreyLightMode,
                   ),
                 ],

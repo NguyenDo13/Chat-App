@@ -1,6 +1,8 @@
+import 'package:chat_app/presentation/pages/login/login_screen.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
+import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -28,7 +30,8 @@ class SignInBtn extends StatelessWidget {
           SizedBox(width: Dimensions.width8),
           InkWell(
             onTap: () {
-              context.read<AuthBloc>().add(LogoutEvent());
+              // ignore: invalid_use_of_visible_for_testing_member
+              context.read<AuthBloc>().emit(LoginState(loading: false));
             },
             child: Text(
               'Login',

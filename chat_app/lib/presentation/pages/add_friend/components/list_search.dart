@@ -1,11 +1,8 @@
-import 'package:chat_app/presentation/helper/notify/alert_actions.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
-import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/list_user_widget.dart';
-import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:chat_app/presentation/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,40 +32,14 @@ class ListSearchUsers extends StatelessWidget {
               if (state.cuccessed! && state.user != null) {
                 return ListUserWidget(
                   listUser: [state.user!],
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertActions(
-                        content: Container(
-                          constraints: const BoxConstraints(maxHeight: 224),
-                          child: Column(
-                            children: [
-                              Center(
-                                child: StateAvatar(
-                                  avatar: state.user!.urlImage ?? '',
-                                  isStatus: false,
-                                  text: takeLetters(state.user!.name!),
-                                  radius: 180,
-                                ),
-                              ),
-                              SizedBox(height: Dimensions.height14),
-                              Text(
-                                state.user!.name!,
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                            ],
-                          ),
-                        ),
-                        nameBtn1: 'Kết bạn',
-                        onTap1: () {
-                          Provider.of<ChatBloc>(context).add(
-                            FriendRequestEvent(
-                              friendID: state.user!.sId!,
-                            ),
-                          );
-                        },
-                        nameBtn2: 'Thoát',
-                        onTap2: () => Navigator.pop(context),
+                  onTapItem: () {},
+                  isAddFriend: true,
+                  loadding: state.addFriendloading ?? false,
+                  success: state.addFriendSuccess ?? false,
+                  addFriend: () {
+                    Provider.of<ChatBloc>(context, listen: false).add(
+                      FriendRequestEvent(
+                        friend: state.user!,
                       ),
                     );
                   },

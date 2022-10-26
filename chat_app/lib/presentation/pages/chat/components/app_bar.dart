@@ -32,7 +32,6 @@ AppBar buildAppBar({
               StateAvatar(
                 avatar: state.friend.urlImage!,
                 isStatus: state.isOnl,
-                text: takeLetters(state.friend.name!),
                 radius: Dimensions.double40,
               ),
               SizedBox(
@@ -42,7 +41,7 @@ AppBar buildAppBar({
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    state.friend.name!,
+                    formatName(name: state.friend.name!),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   Text(

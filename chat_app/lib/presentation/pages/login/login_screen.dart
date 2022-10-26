@@ -1,7 +1,7 @@
 import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
-import 'package:chat_app/presentation/helper/notify/alert_error.dart';
 import 'package:chat_app/presentation/pages/login/components/signin_other_ways.dart';
 import 'package:chat_app/presentation/pages/login/components/signin_title.dart';
+import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/login/components/forgot_password_btn.dart';
 import 'package:chat_app/presentation/pages/login/components/remember_me_checkbox.dart';
@@ -43,12 +43,21 @@ class _LoginScreenState extends State<LoginScreen> {
             LoadingScreen().hide();
           }
           if (state.message != null) {
-            showDialog(
-              context: context,
-              builder: (context) => AlertError(
-                title: "error",
-                content: state.message ?? 'Cannot connect to server',
-                nameBtn: 'Oke',
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: lightGreyDarkMode,
+                content: SizedBox(
+                  height: 32,
+                  child: Center(
+                    child: Text(
+                      state.message ?? 'Cannot connect to server',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: redAccent,
+                          ),
+                    ),
+                  ),
+                ),
+                duration: const Duration(seconds: 2),
               ),
             );
           }

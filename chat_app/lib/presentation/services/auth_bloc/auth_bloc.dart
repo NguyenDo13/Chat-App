@@ -39,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   logoutEvent(LogoutEvent event, Emitter<AuthState> emit) async {
+    event.socket.close();
     //* Show loading popup
     emit(LoggedState(loading: true));
 
@@ -117,7 +118,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     //* Close loading popup
     emit(RegisterState(loading: false));
-
   }
 
   normalLogin(NormalLoginEvent event, Emitter<AuthState> emit) async {

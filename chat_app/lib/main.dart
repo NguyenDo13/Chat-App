@@ -10,7 +10,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Set Orientation of the application
-  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   // Hide status bar
   SystemChrome.setSystemUIOverlayStyle(

@@ -1,25 +1,19 @@
-//Setting screen
 import 'package:intl/intl.dart';
 
-String takeLetters(String name) {
-  String letterA = '';
-  String letterB = '';
-
-  final words = name.split(' ');
-
-  if (words.length == 1) {
-    letterA = words[0][0];
-  } else if (words.length == 2) {
-    letterA = words[0][0];
-    letterB = words[1][0];
-  } else {
-    letterA = words[words.length - 3][0];
-    letterB = words[words.length - 2][0];
+String formatName({required String name}) {
+  final arrayName = name.split(" ");
+  if (arrayName.length > 1) {
+    return "${arrayName[arrayName.length - 2]} ${arrayName[arrayName.length - 1]}";
   }
-  return '$letterA$letterB'.toUpperCase();
+  return arrayName[0];
 }
 
-// Home screen
+/*
+Functional: format time from '12:00 01/10/2000' to
+      Date: 01/10 (if month equal now)
+     Month: 01/2000 (if year equal now)
+      Hour: 12:00 (if date equal now)
+*/
 String formatTime(String time) {
   final currentTime = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
 
@@ -81,10 +75,10 @@ String formatDay(String time) {
 
   final checkArrayHour = checkArrayDate[0].split(":"); // hh, min
   final currentArrayHour = currentArrayDate[0].split(":");
-  final checkHour = int.parse(checkArrayHour[1]);
-  final checkMin = int.parse(checkArrayHour[0]);
-  final currentHour = int.parse(currentArrayHour[1]);
-  final currentMin = int.parse(currentArrayHour[0]);
+  final checkHour = int.parse(checkArrayHour[0]);
+  final checkMin = int.parse(checkArrayHour[1]);
+  final currentHour = int.parse(currentArrayHour[0]);
+  final currentMin = int.parse(currentArrayHour[1]);
 
   if (checkHour < currentHour) {
     return customTimeResult(checkHour, currentHour, "giờ trước");
