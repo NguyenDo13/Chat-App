@@ -20,7 +20,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   List<dynamic> listDataRoom = [];
 
   //source chat
-  dynamic sourceChat = [];
+  List<dynamic> sourceChat = [];
 
   List<dynamic>? requests = [];
 
@@ -137,10 +137,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   findUserEvent(FindUserEvent event, Emitter<ChatState> emit) async {
-    if (!socket.connected) return;
     emit(LookingForFriendState(finding: true));
+    if (event.email == currentUser.email) {
+      return emit(LookingForFriendState(failed: true));
+    }
     final user = await chatRepository.findAUser(
-      data: {"email": event.email},
+      data: {"email": event.email, "userID": currentUser.sId},
     );
     if (user == null || user.result == -1) {
       return emit(LookingForFriendState(failed: true));
@@ -199,11 +201,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           friend: friend,
         ));
       }
-      sourceChat = await data['sourceChat'];
+      final objectSourceChat = await data['sourceChat'];
+      final listTime = data['sourceChat'].keys.toList();
+      List<dynamic> listSourceChat = [];
+      for (var element in listTime) {
+        listSourceChat.add(objectSourceChat[element]);
+      }
+      sourceChat = listSourceChat;
       emit(HasSourceChatState(
         isOnl: isOnl,
         idRoom: roomID,
-        sourceChat: sourceChat,
+        sourceChat: listSourceChat,
+        listTime: listTime,
         currentUser: currentUser,
         friend: friend,
       ));

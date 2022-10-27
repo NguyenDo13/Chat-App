@@ -39,59 +39,66 @@ class _MessageViewState extends State<MessageView> {
                   friend: state.friend,
                 );
               }
-              final listTime = state.sourceChat.keys.toList();
-              for (var time in listTime) {
-                bool isShowTime = true;
-                final listChat = state.sourceChat[time];
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: listChat.length,
-                  itemBuilder: (context, index) {
-                    isShowTime = index > 0 ? false : true;
-                    bool stateLastMsg = false;
-                    bool islastItem = false;
-                    if (index == listChat.length - 1) {
-                      islastItem = true;
-                      stateLastMsg = Message.fromJson(
-                                listChat[index].last,
-                              ).state ==
-                              'viewed'
-                          ? true
-                          : false;
-                    }
-                    final messages = listChat[index] as List<dynamic>;
-                    final idSender = Message.fromJson(messages[0]).idSender;
-                    final isSender =
-                        idSender == state.currentUser.sId ? true : false;
-                    final timeMessageItem =
-                        Message.fromJson(messages.last).time;
-                    return Column(
-                      children: [
-                        if (isShowTime) ...[
-                          CluterMessagesTime(
+
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: state.sourceChat!.length,
+                itemBuilder: (context, index) {
+                  int indexShowTime = 0;
+                  bool isLastClusterTime = _checkIsLastCluster(
+                    index,
+                    state.sourceChat!.length - 1,
+                  );
+                  List<dynamic> sourceChatItem = state.sourceChat![index];
+                  return Column(
+                    children: sourceChatItem.map((clusterMessage) {
+                      final isSender = _checkIsSender(
+                        clusterMessage,
+                        state.currentUser.sId,
+                      );
+                      bool isLastClusterMessage = false;
+                      if (isLastClusterTime) {
+                        isLastClusterMessage = _checkIsLastCluster(
+                          indexShowTime,
+                          sourceChatItem.length - 1,
+                        );
+                      }
+                      indexShowTime++;
+                      return Column(
+                        children: [
+                          if (indexShowTime == 1) ...[
+                            CluterMessagesTime(
+                              theme: appState.darkMode,
+                              time: state.listTime![index],
+                            ),
+                          ],
+                          ClusterMessages(
+                            avatarFriend: state.friend.urlImage!,
                             theme: appState.darkMode,
-                            time: time,
+                            isSender: isSender,
+                            messages: clusterMessage,
+                            isLastCluster: isLastClusterMessage,
                           ),
                         ],
-                        ClusterMessages(
-                          theme: appState.darkMode,
-                          isSender: isSender,
-                          timeMessageItem: timeMessageItem,
-                          islastItem: islastItem,
-                          messages: messages,
-                          stateLastMsg: stateLastMsg,
-                        ),
-                      ],
-                    );
-                  },
-                );
-              }
+                      );
+                    }).toList(),
+                  );
+                },
+              );
             }
             return const Text('Error 500');
           }),
         ),
       ),
     );
+  }
+
+  bool _checkIsSender(clusterMessage, id) {
+    return Message.fromJson(clusterMessage[0]).idSender == id ? true : false;
+  }
+
+  bool _checkIsLastCluster(index, check) {
+    return index == check ? true : false;
   }
 }

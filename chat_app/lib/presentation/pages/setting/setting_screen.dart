@@ -1,4 +1,5 @@
 import 'package:chat_app/data/models/auth_user.dart';
+import 'package:chat_app/presentation/pages/personal_information/personal_information.dart';
 import 'package:chat_app/presentation/pages/setting/components/change_dark_mode.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/setting/components/feature_setting.dart';
@@ -15,7 +16,8 @@ import 'package:socket_io_client/socket_io_client.dart'
 class SettingScreen extends StatelessWidget {
   final IO.Socket socket;
   final AuthUser authUser;
-  const SettingScreen({super.key, required this.authUser, required this.socket});
+  const SettingScreen(
+      {super.key, required this.authUser, required this.socket});
   @override
   Widget build(BuildContext context) {
     // Size
@@ -41,7 +43,7 @@ class SettingScreen extends StatelessWidget {
           sizedBox12,
           _changeLaguage(),
           sizedBox12,
-          _userInfo(),
+          _userInfo(context),
           sizedBox12,
           _bannedUser(),
           sizedBox12,
@@ -96,12 +98,21 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  FeatureSetting _userInfo() {
+  FeatureSetting _userInfo(BuildContext context) {
     return FeatureSetting(
       icon: CupertinoIcons.person_circle,
       title: 'Thông tin cá nhân',
       color: Colors.deepPurple[400]!,
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PersonalInformation(
+              avatar: authUser.user?.urlImage ?? '',
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -124,7 +135,7 @@ class SettingScreen extends StatelessWidget {
   Center _avatar(String avatar, String name) {
     return Center(
       child: StateAvatar(
-        avatar: avatar,
+        avatar: "sds",
         isStatus: false,
         radius: Dimensions.double40 * 5,
       ),

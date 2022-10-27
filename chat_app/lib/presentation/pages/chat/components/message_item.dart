@@ -8,11 +8,13 @@ class MessageItem extends StatelessWidget {
   final Message message;
   final bool theme;
   final bool isSender;
+  final bool isLastItem;
   const MessageItem({
     super.key,
     required this.message,
     required this.theme,
     required this.isSender,
+    required this.isLastItem,
   });
 
   @override

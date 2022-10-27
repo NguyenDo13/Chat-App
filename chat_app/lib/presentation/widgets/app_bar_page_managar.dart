@@ -24,13 +24,16 @@ AppBar appBarPageManagar(
     toolbarHeight: Dimensions.height72,
     title: Row(
       children: [
-        Container(
-          margin: EdgeInsets.only(right: Dimensions.width16),
-          child: Center(
-            child: StateAvatar(
-              avatar: img,
-              isStatus: false,
-              radius: Dimensions.double40,
+        InkWell(
+          onTap: (){},
+          child: Container(
+            margin: EdgeInsets.only(right: Dimensions.width16),
+            child: Center(
+              child: StateAvatar(
+                avatar: img,
+                isStatus: false,
+                radius: Dimensions.double40,
+              ),
             ),
           ),
         ),

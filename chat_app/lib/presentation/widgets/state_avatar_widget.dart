@@ -49,7 +49,7 @@ class _StateAvatarState extends State<StateAvatar> {
                       )
                     : CircleAvatar(
                         backgroundColor: Colors.grey.shade800,
-                        backgroundImage: AssetImage(widget.avatar),
+                        backgroundImage: NetworkImage(widget.avatar),
                       ),
               ),
               Positioned(
@@ -98,7 +98,7 @@ class _StateAvatarState extends State<StateAvatar> {
                       )
                     : CircleAvatar(
                         backgroundColor: Colors.grey.shade800,
-                        backgroundImage: AssetImage(widget.avatar),
+                        backgroundImage: NetworkImage(widget.avatar),
                       ),
               ),
             ],

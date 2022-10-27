@@ -35,7 +35,7 @@ class ItemRequestView extends StatelessWidget {
           StateAvatar(
             avatar: user.urlImage ?? '',
             isStatus: false,
-            radius: 80,
+            radius: 68,
           ),
           SizedBox(width: Dimensions.width10 * 2),
           Column(

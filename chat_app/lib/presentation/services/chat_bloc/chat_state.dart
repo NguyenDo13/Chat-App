@@ -22,13 +22,15 @@ class HasSourceChatState extends ChatState {
   final String idRoom;
   final User currentUser;
   final User friend;
-  final dynamic sourceChat;
+  final List<dynamic>? sourceChat;
+  final List<String>? listTime;
   HasSourceChatState({
     required this.isOnl,
     required this.idRoom,
     required this.currentUser,
     required this.friend,
     this.sourceChat,
+    this.listTime,
   });
 }
 

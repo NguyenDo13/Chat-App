@@ -7,25 +7,41 @@ import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ClusterMessages extends StatelessWidget {
+class ClusterMessages extends StatefulWidget {
+  final String avatarFriend;
   final bool theme;
   final bool isSender;
   final List<dynamic> messages;
-  final String timeMessageItem;
-  final bool stateLastMsg;
-  final bool islastItem;
+  final bool isLastCluster;
   const ClusterMessages({
     super.key,
     required this.theme,
     required this.isSender,
     required this.messages,
-    required this.timeMessageItem,
-    required this.stateLastMsg,
-    required this.islastItem,
+    required this.avatarFriend,
+    required this.isLastCluster,
   });
 
   @override
+  State<ClusterMessages> createState() => _ClusterMessagesState();
+}
+
+class _ClusterMessagesState extends State<ClusterMessages> {
+  late bool _stateLastMsg;
+  late bool _islastItem;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    _stateLastMsg = false;
+    _islastItem = false;
+    _currentIndex = 0;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final timeMessageItem = Message.fromJson(widget.messages.last).time;
     return Padding(
       padding: EdgeInsets.only(
         top: Dimensions.height10,
@@ -33,23 +49,31 @@ class ClusterMessages extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment:
-            isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+            widget.isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Column(
-            crossAxisAlignment:
-                isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            crossAxisAlignment: widget.isSender
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
             children: [
               Column(
-                crossAxisAlignment: isSender
+                crossAxisAlignment: widget.isSender
                     ? CrossAxisAlignment.end
                     : CrossAxisAlignment.start,
-                children: messages.map((item) {
+                children: widget.messages.map((item) {
+                  if (widget.isLastCluster) {
+                    setState(() {
+                      _currentIndex++;
+                    });
+                    _changeStateLastMsg();
+                  }
                   final msg = Message.fromJson(item);
                   return MessageItem(
                     message: msg,
-                    theme: theme,
-                    isSender: isSender,
+                    theme: widget.theme,
+                    isSender: widget.isSender,
+                    isLastItem: _islastItem,
                   );
                 }).toList(),
               ),
@@ -65,21 +89,45 @@ class ClusterMessages extends StatelessWidget {
                         .labelSmall!
                         .copyWith(color: lightGreyDarkMode),
                   ),
-                  if (!stateLastMsg && islastItem && isSender) ...[
-                    SizedBox(
-                      width: Dimensions.height4,
-                    ),
-                    Icon(
-                      CupertinoIcons.check_mark_circled_solid,
+                  if (!_stateLastMsg && _islastItem && widget.isSender) ...[
+                    SizedBox(width: Dimensions.height4),
+                    const Icon(
+                      Icons.check,
                       size: 16,
-                      color: theme ? darkBlue : lightBlue,
+                      color: darkGreyLightMode,
                     ),
+                    //     Container(
+                    //       padding: EdgeInsets.symmetric(
+                    //         vertical: Dimensions.height2,
+                    //         horizontal: Dimensions.width10 / 2,
+                    //       ),
+                    //       decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         color: widget.theme
+                    //             ? darkGreyDarkMode
+                    //             : lightGreyLightMode,
+                    //       ),
+                    //       child: Row(
+                    //         children: [
+                    //           Icon(
+                    //             Icons.check,
+                    //             size: 16,
+                    //             color: widget.theme ? Colors.white : Colors.black,
+                    //           ),
+                    //           Text(
+                    //             "đã nhận",
+                    //             style: Theme.of(context).textTheme.labelSmall,
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
                   ],
                 ],
               ),
-              if (stateLastMsg && islastItem && isSender) ...[
-                const StateAvatar(
-                  avatar: 'assets/avatars/user1.jpg',
+              if (_stateLastMsg && _islastItem && widget.isSender) ...[
+                SizedBox(height: Dimensions.height4),
+                StateAvatar(
+                  avatar: widget.avatarFriend,
                   isStatus: false,
                   radius: 16,
                 ),
@@ -89,5 +137,22 @@ class ClusterMessages extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _changeStateLastMsg() {
+    if (_currentIndex == widget.messages.length) {
+      setState(() {
+        _islastItem = true;
+      });
+    }
+    if (Message.fromJson(widget.messages.last).state == 'viewed') {
+      setState(() {
+        _stateLastMsg = true;
+      });
+    } else {
+      setState(() {
+        _stateLastMsg = false;
+      });
+    }
   }
 }
