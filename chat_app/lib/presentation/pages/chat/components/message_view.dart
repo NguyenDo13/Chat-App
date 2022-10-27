@@ -39,7 +39,6 @@ class _MessageViewState extends State<MessageView> {
                   friend: state.friend,
                 );
               }
-
               return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),

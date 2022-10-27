@@ -6,11 +6,15 @@ class AuthUser {
   AccessToken? accessToken;
   User? user;
   UserPresence? userPresence;
+  List<dynamic>? chatRooms;
+  List<dynamic>? friendRequests;
 
   AuthUser({
     this.accessToken,
     this.user,
     this.userPresence,
+    this.chatRooms,
+    this.friendRequests,
   });
 
   AuthUser.fromJson(Map<String, dynamic> json) {
@@ -21,15 +25,8 @@ class AuthUser {
     userPresence = json['userPresence'] != null
         ? UserPresence.fromJson(json['userPresence'])
         : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['accessToken'] = accessToken;
-    if (user != null) {
-      data['user'] = user!.toJson();
-    }
-    return data;
+    chatRooms = json['chatRooms'];
+    friendRequests = json['friendRequests'];
   }
 }
 

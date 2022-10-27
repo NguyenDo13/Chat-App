@@ -142,7 +142,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(LoginState(loading: false));
 
     //* Login success
-    emit(LoggedState(loading: false, authUser: _authUser));
+    emit(LoggedState(
+      loading: false,
+      authUser: _authUser,
+      chatRooms: _authUser!.chatRooms,
+      friendRequests: _authUser!.friendRequests,
+    ));
+
     //* Check accessToken before store
     if (_authUser != null && _authUser?.accessToken != null) {
       //* Store accessToken to login
@@ -182,6 +188,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _authUser = authRepository.convertDynamicToObject(value.data[0]);
 
     //* Login success
-    emit(LoggedState(loading: false, authUser: _authUser));
+    emit(LoggedState(
+      loading: false,
+      authUser: _authUser,
+      chatRooms: _authUser!.chatRooms,
+      friendRequests: _authUser!.friendRequests,
+    ));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:chat_app/data/models/user.dart';
+import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
@@ -26,7 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // app states
     AppStateProvider appState = context.watch<AppStateProvider>();
-    return BlocBuilder<ChatBloc, ChatState>(
+    return BlocConsumer<ChatBloc, ChatState>(
+      listener: (context, state) {
+        if (state is WaitingForUpdateDataState) {
+          print("this is correct state 😚");
+          LoadingScreen().show(context: context);
+        } else {
+          LoadingScreen().hide();
+        }
+      },
       builder: (context, state) {
         return SingleChildScrollView(
           physics: const BouncingScrollPhysics(),

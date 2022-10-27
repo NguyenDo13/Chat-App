@@ -59,7 +59,14 @@ class _ChatInputFieldState extends State<ChatInputField> {
             ),
             SizedBox(width: Dimensions.width14),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                // add a message
+                _sendMessage(
+                  widget.controllerChat.text,
+                  widget.idRoom,
+                  widget.idFriend,
+                );
+              },
               child: const Icon(
                 CupertinoIcons.heart_fill,
                 color: Colors.red,
@@ -144,17 +151,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 style: Theme.of(context).textTheme.displaySmall,
                 controller: widget.controllerChat,
                 onSubmitted: (value) {
-                  Provider.of<ChatBloc>(context, listen: false).add(
-                    SendMessageEvent(
-                      message: value,
-                      idRoom: idRoom,
-                      idTarget: idFriend,
-                    ),
-                  );
-                  setState(() {
-                    isVisibility = !isVisibility;
-                  });
-                  widget.controllerChat.clear();
+                  _sendMessage(value, idRoom, idFriend);
                 },
                 onChanged: (value) => onchange(value),
                 decoration: InputDecoration(
@@ -192,5 +189,21 @@ class _ChatInputFieldState extends State<ChatInputField> {
         ),
       ],
     );
+  }
+
+  _sendMessage(String value, idRoom, idFriend) {
+    if (value.isNotEmpty) {
+      Provider.of<ChatBloc>(context, listen: false).add(
+        SendMessageEvent(
+          message: value,
+          idRoom: idRoom,
+          idTarget: idFriend,
+        ),
+      );
+      setState(() {
+        isVisibility = !isVisibility;
+      });
+      widget.controllerChat.clear();
+    }
   }
 }

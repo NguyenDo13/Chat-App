@@ -7,6 +7,7 @@ import 'package:chat_app/data/models/message.dart';
 import 'package:chat_app/data/repository/chat_repository.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
+import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart'
@@ -21,20 +22,20 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   //source chat
   List<dynamic> sourceChat = [];
-
+  List<String> listTime = [];
   List<dynamic>? requests = [];
+  User? friend;
 
   ChatBloc({
     required this.socket,
+    required this.listDataRoom,
+    required this.requests,
     required this.currentUser,
-  }) : super(InitDataAppState()) {
+  }) : super(HasDataRoomState(listDataRoom)) {
+    checkConnectSocket();
     chatRepository = ChatRepository(
       environment: Environment(isServerDev: true),
     );
-    checkConnectSocket();
-
-    //* Room
-    on<GetDataAppEvent>(getDataRoomsEvent);
 
     //* Message
     on<JoinRoomEvent>(joinRoomEvent);
@@ -66,11 +67,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       "userID": currentUser.sId,
       "friendID": event.friendID,
     });
-
     if (result == null || result.result == -1) {
       return;
     }
-
     requests = result.data!;
     emit(LookingForFriendState(init: true, requests: requests));
   }
@@ -154,38 +153,50 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   sendMessageEvent(SendMessageEvent event, Emitter<ChatState> emit) async {
-    if (!socket.connected) return;
     if (currentUser.sId == null) return;
-    await sendMessage(
-      message: event.message,
-      target: event.idTarget,
-      room: event.idRoom,
-    );
-  }
 
-  Future sendMessage({
-    required String message,
-    required String target,
-    required String room,
-  }) async {
+    // prepare message data
     String date = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
     final msg = Message(
       idSender: currentUser.sId!,
-      content: message,
+      content: event.message,
       type: 'text',
       time: date,
-      state: 'notView',
+      state: socket.connected ? 'loading' : 'failed',
       isLast: true,
     );
+
+    // push message into source chat with state loading
+    final data = addNewMessageWhileSocketSorking(
+      msg: msg,
+      date: date,
+      currentUser: currentUser,
+      listTime: listTime,
+      sourceChat: sourceChat,
+    );
+    sourceChat = data[0];
+    listTime = data[1];
+
+    emit(HasSourceChatState(
+      isOnl: true,
+      idRoom: event.idRoom,
+      sourceChat: sourceChat,
+      listTime: listTime,
+      currentUser: currentUser,
+      friend: friend!,
+    ));
+
+    if (!socket.connected) return;
     socket.emit('message', {
       'message': msg,
       'idUser': currentUser.sId,
-      'idTarget': target,
-      'idRoom': room,
+      'idTarget': event.idTarget,
+      'idRoom': event.idRoom,
     });
   }
 
   joinRoomEvent(JoinRoomEvent event, Emitter<ChatState> emit) async {
+    friend = event.friend;
     if (!socket.connected) return;
     await getSourceChat(event.isOnl, event.roomID, event.friend);
   }
@@ -202,40 +213,22 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         ));
       }
       final objectSourceChat = await data['sourceChat'];
-      final listTime = data['sourceChat'].keys.toList();
+      final listKeyTime = data['sourceChat'].keys.toList();
       List<dynamic> listSourceChat = [];
-      for (var element in listTime) {
+      for (var element in listKeyTime) {
         listSourceChat.add(objectSourceChat[element]);
       }
       sourceChat = listSourceChat;
+      listTime = listKeyTime;
       emit(HasSourceChatState(
         isOnl: isOnl,
         idRoom: roomID,
         sourceChat: listSourceChat,
-        listTime: listTime,
+        listTime: listKeyTime,
         currentUser: currentUser,
         friend: friend,
       ));
     });
-  }
-
-  getDataRoomsEvent(GetDataAppEvent event, Emitter<ChatState> emit) async {
-    socket.emit("joinApp", currentUser.sId);
-    if (currentUser.sId == null) return;
-    final rooms = await chatRepository.getRooms(
-      data: {"userID": currentUser.sId},
-    );
-    if (rooms == null || rooms.result == -1) return;
-    listDataRoom = rooms.data;
-
-    final friendRequests = await chatRepository.getFriendRequests(
-      data: {'userID': currentUser.sId},
-    );
-    if (friendRequests == null || friendRequests.result == -1) {
-      requests = [];
-    }
-    requests = friendRequests!.data!;
-    emit(HasDataRoomState(listDataRoom));
   }
 
   Future getFriendRequest() async {
@@ -253,7 +246,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     socket.onConnect(
       (data) {
         log("Connection established");
-        add(GetDataAppEvent());
+        socket.emit("joinApp", currentUser.sId);
       },
     );
 

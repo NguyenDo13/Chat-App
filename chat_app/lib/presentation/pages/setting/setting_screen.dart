@@ -135,7 +135,7 @@ class SettingScreen extends StatelessWidget {
   Center _avatar(String avatar, String name) {
     return Center(
       child: StateAvatar(
-        avatar: "sds",
+        avatar: avatar,
         isStatus: false,
         radius: Dimensions.double40 * 5,
       ),

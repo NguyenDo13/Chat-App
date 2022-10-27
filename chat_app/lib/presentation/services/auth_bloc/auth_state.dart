@@ -31,9 +31,13 @@ class LoginState extends AuthState {
 //* That is state when the user has logged in to the application.
 class LoggedState extends AuthState {
   final AuthUser? authUser;
+  final List<dynamic>? chatRooms;
+  final List<dynamic>? friendRequests;
   final bool loading;
   LoggedState({
     this.authUser,
     required this.loading,
+    this.chatRooms,
+    this.friendRequests,
   });
 }

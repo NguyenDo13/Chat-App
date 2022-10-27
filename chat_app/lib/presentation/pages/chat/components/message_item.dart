@@ -8,13 +8,11 @@ class MessageItem extends StatelessWidget {
   final Message message;
   final bool theme;
   final bool isSender;
-  final bool isLastItem;
   const MessageItem({
     super.key,
     required this.message,
     required this.theme,
     required this.isSender,
-    required this.isLastItem,
   });
 
   @override
@@ -23,47 +21,72 @@ class MessageItem extends StatelessWidget {
     final colorSenderBG = theme ? darkBlue : lightBlue;
     final radius15 = Radius.circular(Dimensions.double12);
 
-    return Container(
-      constraints: BoxConstraints(maxWidth: Dimensions.screenWidth * 4 / 5),
-      margin: EdgeInsets.only(top: Dimensions.height10 / 2),
-      padding: EdgeInsets.fromLTRB(
-        Dimensions.height12,
-        Dimensions.height12,
-        Dimensions.height12,
-        Dimensions.height12,
-      ),
-      decoration: BoxDecoration(
-        color: isSender ? colorSenderBG : colorBG,
-        borderRadius: BorderRadius.only(
-          bottomLeft: isSender ? radius15 : const Radius.circular(0),
-          bottomRight: isSender ? const Radius.circular(0) : radius15,
-          topLeft: radius15,
-          topRight: radius15,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
+          constraints: BoxConstraints(maxWidth: Dimensions.screenWidth * 4 / 5),
+          margin: EdgeInsets.only(top: Dimensions.height10 / 2),
+          padding: EdgeInsets.fromLTRB(
+            Dimensions.height12,
+            Dimensions.height12,
+            Dimensions.height12,
+            Dimensions.height12,
+          ),
+          decoration: BoxDecoration(
+            color: isSender ? colorSenderBG : colorBG,
+            borderRadius: BorderRadius.only(
+              bottomLeft: isSender ? radius15 : const Radius.circular(0),
+              bottomRight: isSender ? const Radius.circular(0) : radius15,
+              topLeft: radius15,
+              topRight: radius15,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: isSender ? Colors.black45 : Colors.black12,
+                offset: const Offset(1, 1),
+                blurRadius: 2,
+              ),
+            ],
+          ),
+          child: isSender
+              ? Text(
+                  message.content,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: maxValueInteger,
+                  style: Theme.of(context)
+                      .textTheme
+                      .displaySmall!
+                      .copyWith(color: Colors.white),
+                )
+              : Text(
+                  message.content,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: maxValueInteger,
+                  style: Theme.of(context).textTheme.displaySmall,
+                ),
         ),
-        boxShadow: [
-          BoxShadow(
-            color: isSender ? Colors.black45 : Colors.black12,
-            offset: const Offset(1, 1),
-            blurRadius: 2,
+        if (message.state == 'failed') ...[
+          SizedBox(height: Dimensions.height4),
+          Row(
+            children: [
+              Text(
+                "Không gửi được",
+                style: Theme.of(context)
+                    .textTheme
+                    .labelSmall!
+                    .copyWith(color: Colors.red),
+              ),
+              SizedBox(width: Dimensions.height4),
+              const Icon(
+                Icons.error,
+                size: 16,
+                color: Colors.red,
+              ),
+            ],
           ),
         ],
-      ),
-      child: isSender
-          ? Text(
-              message.content,
-              overflow: TextOverflow.ellipsis,
-              maxLines: maxValueInteger,
-              style: Theme.of(context)
-                  .textTheme
-                  .displaySmall!
-                  .copyWith(color: Colors.white),
-            )
-          : Text(
-              message.content,
-              overflow: TextOverflow.ellipsis,
-              maxLines: maxValueInteger,
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
+      ],
     );
   }
 }

@@ -55,9 +55,10 @@ class _AppAuthenticationState extends State<AppAuthentication> {
         builder: (context, state) {
           // Splash screen
           if (state is AuthLoadingState) {
-            Future.delayed(const Duration(milliseconds: 500), () {
-              context.read<AuthBloc>().add(LoginWithAccessTokenEvent());
-            });
+            // Future.delayed(const Duration(milliseconds: 100), () {
+            //   context.read<AuthBloc>().add(LoginWithAccessTokenEvent());
+            // });
+            context.read<AuthBloc>().add(LoginWithAccessTokenEvent());
             return const SplashScreen();
           }
           // Login screen
@@ -71,6 +72,8 @@ class _AppAuthenticationState extends State<AppAuthentication> {
           // Home page
           if (state is LoggedState) {
             return AppPageController(
+              friendRequests: state.friendRequests,
+              chatRooms: state.chatRooms!,
               authUser: state.authUser!,
             );
           }

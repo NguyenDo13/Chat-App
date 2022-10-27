@@ -4,7 +4,6 @@ import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ClusterMessages extends StatefulWidget {
@@ -27,21 +26,27 @@ class ClusterMessages extends StatefulWidget {
 }
 
 class _ClusterMessagesState extends State<ClusterMessages> {
-  late bool _stateLastMsg;
-  late bool _islastItem;
-  late int _currentIndex;
+  late bool _loading;
+  late bool _sended;
+  late bool _seen;
 
   @override
   void initState() {
-    _stateLastMsg = false;
-    _islastItem = false;
-    _currentIndex = 0;
+    _loading = false;
+    _sended = false;
+    _seen = false;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // size
+    final width4 = SizedBox(width: Dimensions.height4);
+    final height4 = SizedBox(height: Dimensions.height4);
+
+    int currentIndex = 0;
     final timeMessageItem = Message.fromJson(widget.messages.last).time;
+
     return Padding(
       padding: EdgeInsets.only(
         top: Dimensions.height10,
@@ -64,22 +69,19 @@ class _ClusterMessagesState extends State<ClusterMessages> {
                 children: widget.messages.map((item) {
                   if (widget.isLastCluster) {
                     setState(() {
-                      _currentIndex++;
+                      currentIndex++;
                     });
-                    _changeStateLastMsg();
+                    _changeStateLastMsg(currentIndex);
                   }
                   final msg = Message.fromJson(item);
                   return MessageItem(
                     message: msg,
                     theme: widget.theme,
                     isSender: widget.isSender,
-                    isLastItem: _islastItem,
                   );
                 }).toList(),
               ),
-              SizedBox(
-                height: Dimensions.height4,
-              ),
+              height4,
               Row(
                 children: [
                   Text(
@@ -89,43 +91,29 @@ class _ClusterMessagesState extends State<ClusterMessages> {
                         .labelSmall!
                         .copyWith(color: lightGreyDarkMode),
                   ),
-                  if (!_stateLastMsg && _islastItem && widget.isSender) ...[
-                    SizedBox(width: Dimensions.height4),
+                  if (_sended && widget.isSender) ...[
+                    width4,
                     const Icon(
                       Icons.check,
                       size: 16,
                       color: darkGreyLightMode,
                     ),
-                    //     Container(
-                    //       padding: EdgeInsets.symmetric(
-                    //         vertical: Dimensions.height2,
-                    //         horizontal: Dimensions.width10 / 2,
-                    //       ),
-                    //       decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(10),
-                    //         color: widget.theme
-                    //             ? darkGreyDarkMode
-                    //             : lightGreyLightMode,
-                    //       ),
-                    //       child: Row(
-                    //         children: [
-                    //           Icon(
-                    //             Icons.check,
-                    //             size: 16,
-                    //             color: widget.theme ? Colors.white : Colors.black,
-                    //           ),
-                    //           Text(
-                    //             "đã nhận",
-                    //             style: Theme.of(context).textTheme.labelSmall,
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
+                  ],
+                  if (_loading && widget.isSender) ...[
+                    width4,
+                    SizedBox(
+                      height: Dimensions.height12,
+                      width: Dimensions.height12,
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 1.3,
+                        color: darkGreyLightMode,
+                      ),
+                    ),
                   ],
                 ],
               ),
-              if (_stateLastMsg && _islastItem && widget.isSender) ...[
-                SizedBox(height: Dimensions.height4),
+              if (_seen && widget.isSender) ...[
+                height4,
                 StateAvatar(
                   avatar: widget.avatarFriend,
                   isStatus: false,
@@ -139,20 +127,25 @@ class _ClusterMessagesState extends State<ClusterMessages> {
     );
   }
 
-  _changeStateLastMsg() {
-    if (_currentIndex == widget.messages.length) {
-      setState(() {
-        _islastItem = true;
-      });
-    }
-    if (Message.fromJson(widget.messages.last).state == 'viewed') {
-      setState(() {
-        _stateLastMsg = true;
-      });
-    } else {
-      setState(() {
-        _stateLastMsg = false;
-      });
+  _changeStateLastMsg(index) {
+    if (index == widget.messages.length) {
+      _loading = false;
+      _sended = false;
+      _seen = false;
+      final stateLastMsg = Message.fromJson(widget.messages.last).state;
+      if (stateLastMsg == 'viewed') {
+        setState(() {
+          _seen = true;
+        });
+      } else if (stateLastMsg == 'loading') {
+        setState(() {
+          _loading = true;
+        });
+      } else if (stateLastMsg == 'sended') {
+        setState(() {
+          _sended = true;
+        });
+      }
     }
   }
 }

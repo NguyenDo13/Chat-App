@@ -109,7 +109,7 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
           : Column(
               children: [
                 Text(
-                  formatTime(widget.chatRoom.timeLastMessage!), //* time
+                  formatTimeRoom(widget.chatRoom.timeLastMessage!), //* time
                   style: styleNotView,
                 ),
                 SizedBox(

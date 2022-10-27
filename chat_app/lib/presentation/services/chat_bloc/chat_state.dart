@@ -6,7 +6,7 @@ abstract class ChatState {
 }
 
 //* Room
-class InitDataAppState extends ChatState {}
+class WaitingForUpdateDataState extends ChatState {}
 
 class HasDataRoomState extends ChatState {
   final List<dynamic> listRoom;

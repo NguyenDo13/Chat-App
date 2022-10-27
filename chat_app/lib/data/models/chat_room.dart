@@ -6,13 +6,14 @@ class ChatRoom {
   String? timeLastMessage;
   int? iV;
 
-  ChatRoom(
-      {this.sId,
-      this.users,
-      this.lastMessage,
-      this.typeLastMessage,
-      this.timeLastMessage,
-      this.iV});
+  ChatRoom({
+    this.sId,
+    this.users,
+    this.lastMessage,
+    this.typeLastMessage,
+    this.timeLastMessage,
+    this.iV,
+  });
 
   ChatRoom.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
