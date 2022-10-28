@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:chat_app/data/models/auth_user.dart';
 
 abstract class AuthState {
@@ -33,11 +34,13 @@ class LoggedState extends AuthState {
   final AuthUser? authUser;
   final List<dynamic>? chatRooms;
   final List<dynamic>? friendRequests;
+  final List<dynamic>? listFriend;
   final bool loading;
   LoggedState({
     this.authUser,
-    required this.loading,
     this.chatRooms,
     this.friendRequests,
+    this.listFriend,
+    required this.loading,
   });
 }

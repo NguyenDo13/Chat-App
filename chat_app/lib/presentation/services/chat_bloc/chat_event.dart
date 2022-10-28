@@ -7,9 +7,7 @@ abstract class ChatEvent {
 
 //* Room
 class GetDataAppEvent extends ChatEvent {}
-
 class ExitRoomEvent extends ChatEvent {}
-
 class JoinRoomEvent extends ChatEvent {
   final String roomID;
   final User friend;
@@ -20,40 +18,45 @@ class JoinRoomEvent extends ChatEvent {
     required this.isOnl,
   });
 }
+class CheckHasRoomEvent extends ChatEvent {
+  final String userID;
+  final User friend;
+  final bool isOnl;
+  CheckHasRoomEvent({
+    required this.isOnl,
+    required this.userID,
+    required this.friend,
+  });
+}
 
 //* Message
 class SendMessageEvent extends ChatEvent {
   final String message;
   final String idRoom;
-  final String idTarget;
+  final String friendID;
   SendMessageEvent({
     required this.message,
     required this.idRoom,
-    required this.idTarget,
+    required this.friendID,
   });
 }
 
 //* Friend
 class LookingForFriendEvent extends ChatEvent {}
-
 class ExitFriendEvent extends ChatEvent {}
-
 class FindUserEvent extends ChatEvent {
   final String email;
   FindUserEvent({
     required this.email,
   });
 }
-
 class FriendRequestEvent extends ChatEvent {
   final User friend;
   FriendRequestEvent({
     required this.friend,
   });
 }
-
 class BackToFriendRequestEvent extends ChatEvent {}
-
 class AcceptFriendRequestEvent extends ChatEvent {
   final String friendID;
   final int index;
@@ -62,10 +65,13 @@ class AcceptFriendRequestEvent extends ChatEvent {
     required this.index,
   });
 }
-
 class RemoveFriendRequest extends ChatEvent {
   final String friendID;
   RemoveFriendRequest({
     required this.friendID,
   });
 }
+
+//* Search
+class InitLookingForChatEvent extends ChatEvent{}
+class ExitSearchEvent extends ChatEvent{}

@@ -1,3 +1,4 @@
+import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
@@ -32,17 +33,9 @@ class ListSearchUsers extends StatelessWidget {
               if (state.cuccessed! && state.user != null) {
                 return ListUserWidget(
                   listUser: [state.user!],
-                  onTapItem: () {},
                   isAddFriend: true,
                   loadding: state.addFriendloading ?? false,
                   success: state.addFriendSuccess ?? false,
-                  addFriend: () {
-                    Provider.of<ChatBloc>(context, listen: false).add(
-                      FriendRequestEvent(
-                        friend: state.user!,
-                      ),
-                    );
-                  },
                 );
               }
             }

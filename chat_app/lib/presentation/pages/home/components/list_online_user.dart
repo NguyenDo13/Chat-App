@@ -1,3 +1,4 @@
+import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
@@ -5,29 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ListOnlineUser extends StatelessWidget {
-  const ListOnlineUser({super.key});
+  final List<User> listOnlineFriend;
+  const ListOnlineUser({super.key, required this.listOnlineFriend});
 
   @override
   Widget build(BuildContext context) {
     AppStateProvider appStateProvider = context.watch<AppStateProvider>();
-    List<String> listUsers = [
-      'user1.jpg',
-      'user2.jpg',
-      'user3.jpg',
-      'user4.jpeg',
-      'user1.jpg',
-      'user2.jpg',
-      'user3.jpg',
-      'user4.jpeg',
-      'user1.jpg',
-      'user2.jpg',
-      'user3.jpg',
-      'user4.jpeg',
-      'user1.jpg',
-      'user2.jpg',
-      'user3.jpg',
-      'user4.jpeg'
-    ];
     return Container(
       padding: EdgeInsets.fromLTRB(
         Dimensions.width14,
@@ -41,12 +25,10 @@ class ListOnlineUser extends StatelessWidget {
       child: ListView.builder(
         physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
-        itemCount: 13,
+        itemCount: listOnlineFriend.length,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            onTap: () {
-  
-            },
+            onTap: () {},
             child: Center(
               child: Container(
                 margin: EdgeInsets.only(right: Dimensions.width12),
@@ -54,7 +36,7 @@ class ListOnlineUser extends StatelessWidget {
                 child: Column(
                   children: [
                     StateAvatar(
-                      avatar: "assets/avatars/${listUsers[index]}",
+                      avatar: "",
                       isStatus: true,
                       radius: Dimensions.double30 * 2,
                     ),

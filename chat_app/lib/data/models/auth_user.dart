@@ -8,6 +8,7 @@ class AuthUser {
   UserPresence? userPresence;
   List<dynamic>? chatRooms;
   List<dynamic>? friendRequests;
+  List<dynamic>? listFriend;
 
   AuthUser({
     this.accessToken,
@@ -15,6 +16,7 @@ class AuthUser {
     this.userPresence,
     this.chatRooms,
     this.friendRequests,
+    this.listFriend,
   });
 
   AuthUser.fromJson(Map<String, dynamic> json) {
@@ -27,6 +29,7 @@ class AuthUser {
         : null;
     chatRooms = json['chatRooms'];
     friendRequests = json['friendRequests'];
+    listFriend = json['listFriend'];
   }
 }
 

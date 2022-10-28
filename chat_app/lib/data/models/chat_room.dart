@@ -1,26 +1,33 @@
+import 'package:chat_app/data/models/message.dart';
+
 class ChatRoom {
   String? sId;
   List<String>? users;
-  String? lastMessage;
-  String? typeLastMessage;
-  String? timeLastMessage;
+  Message? lastMessage;
+  int? state;
+  String? createdAt;
+  String? updatedAt;
   int? iV;
 
   ChatRoom({
     this.sId,
     this.users,
     this.lastMessage,
-    this.typeLastMessage,
-    this.timeLastMessage,
+    this.state,
+    this.createdAt,
+    this.updatedAt,
     this.iV,
   });
 
   ChatRoom.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     users = json['users'].cast<String>();
-    lastMessage = json['lastMessage'];
-    typeLastMessage = json['typeLastMessage'];
-    timeLastMessage = json['timeLastMessage'];
+    lastMessage = json['lastMessage'] != null
+        ? Message.fromJson(json['lastMessage'])
+        : null;
+    state = json['state'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
     iV = json['__v'];
   }
 
@@ -28,9 +35,12 @@ class ChatRoom {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
     data['users'] = users;
-    data['lastMessage'] = lastMessage;
-    data['typeLastMessage'] = typeLastMessage;
-    data['timeLastMessage'] = timeLastMessage;
+    if (lastMessage != null) {
+      data['lastMessage'] = lastMessage!.toJson();
+    }
+    data['state'] = state;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     data['__v'] = iV;
     return data;
   }

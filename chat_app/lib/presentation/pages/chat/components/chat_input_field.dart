@@ -197,7 +197,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
         SendMessageEvent(
           message: value,
           idRoom: idRoom,
-          idTarget: idFriend,
+          friendID: idFriend,
         ),
       );
       setState(() {

@@ -1,9 +1,7 @@
-import 'package:chat_app/data/models/user.dart';
-import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
+import 'package:chat_app/presentation/pages/home/components/list_online_user.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
-import 'package:chat_app/presentation/widgets/list_chat_room.dart';
 import 'package:chat_app/presentation/widgets/new_list_chat_room.dart';
 import 'package:chat_app/presentation/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
@@ -27,33 +25,27 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // app states
     AppStateProvider appState = context.watch<AppStateProvider>();
-    return BlocConsumer<ChatBloc, ChatState>(
-      listener: (context, state) {
-        if (state is WaitingForUpdateDataState) {
-          print("this is correct state 😚");
-          LoadingScreen().show(context: context);
-        } else {
-          LoadingScreen().hide();
-        }
-      },
-      builder: (context, state) {
-        return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: BlocBuilder<ChatBloc, ChatState>(
+        builder: (context, state) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SearchBar(theme: appState.darkMode),
-              // const ListOnlineUser(),
-              state is HasDataRoomState
-                  ? NewListChatRoom(
-                      listRoom: state.listRoom,
-                      isGroup: false,
-                    )
-                  : ListChatRoom(listUsers: LIST_USERS, isGroup: false),
-            ],
-          ),
-        );
-      },
+            children: state is JoinAppState
+                ? [
+                    SearchBar(theme: appState.darkMode),
+                    // const ListOnlineUser(listOnlineFriend: []),
+                    state.listRoom.isNotEmpty
+                        ? NewListChatRoom(
+                            listRoom: state.listRoom,
+                            isGroup: false,
+                          )
+                        : const Center(child: Text("Không có gì!")),
+                  ]
+                : [],
+          );
+        },
+      ),
     );
   }
 }

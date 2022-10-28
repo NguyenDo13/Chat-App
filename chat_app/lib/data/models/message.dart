@@ -15,7 +15,6 @@ class Message {
     required this.type,
     required this.time,
     required this.state,
-    required this.isLast,
   });
 
   String idSender;
@@ -23,7 +22,6 @@ class Message {
   String type;
   String time;
   String state;
-  bool isLast;
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
         idSender: json["idSender"],
@@ -31,7 +29,6 @@ class Message {
         type: json["type"],
         time: json["time"],
         state: json["state"],
-        isLast: json["isLast"] ?? false,
       );
 
   Map<String, dynamic> toJson() => {
@@ -40,6 +37,5 @@ class Message {
         "type": type,
         "time": time,
         "state": state,
-        "isLast": isLast,
       };
 }

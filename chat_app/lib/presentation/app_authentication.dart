@@ -49,15 +49,14 @@ class _AppAuthenticationState extends State<AppAuthentication> {
           if (state is LoggedState) {
             // app states
             AppStateProvider appState = context.read<AppStateProvider>();
-            appState.darkMode = state.authUser!.user!.isDarkMode!;
+            if (state.authUser != null) {
+              appState.darkMode = state.authUser!.user!.isDarkMode!;
+            }
           }
         },
         builder: (context, state) {
           // Splash screen
           if (state is AuthLoadingState) {
-            // Future.delayed(const Duration(milliseconds: 100), () {
-            //   context.read<AuthBloc>().add(LoginWithAccessTokenEvent());
-            // });
             context.read<AuthBloc>().add(LoginWithAccessTokenEvent());
             return const SplashScreen();
           }
@@ -75,6 +74,7 @@ class _AppAuthenticationState extends State<AppAuthentication> {
               friendRequests: state.friendRequests,
               chatRooms: state.chatRooms!,
               authUser: state.authUser!,
+              listFriend: state.listFriend,
             );
           }
           // Error

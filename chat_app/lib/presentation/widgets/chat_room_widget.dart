@@ -35,14 +35,14 @@ class ChatRoomWidget extends StatefulWidget {
 class _ChatRoomWidgetState extends State<ChatRoomWidget> {
   @override
   Widget build(BuildContext context) {
+    final currentUserID = context.watch<ChatBloc>().currentUser.sId;
     // State text style which show notify that is not view
-    final styleNotView = widget.isDarkMode
+    final styleNotView = widget.chatRoom.lastMessage!.idSender != currentUserID
         ? Theme.of(context)
             .textTheme
             .headlineSmall!
             .copyWith(color: lightBlue, fontWeight: FontWeight.w400)
         : Theme.of(context).textTheme.headlineSmall;
-
     return ListTile(
       onTap: () {
         if (!widget.isGroup) {
@@ -78,7 +78,7 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
           bottom: Dimensions.height4,
         ),
         child: Text(
-          widget.chatRoom.lastMessage!, //* Content
+          widget.chatRoom.lastMessage!.content, //* Content
           overflow: TextOverflow.ellipsis,
           style: styleNotView,
         ),
@@ -107,29 +107,31 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
               )),
             )
           : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  formatTimeRoom(widget.chatRoom.timeLastMessage!), //* time
-                  style: styleNotView,
+                  formatTimeRoom(widget.chatRoom.lastMessage!.time), //* time
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
-                SizedBox(
-                  height: Dimensions.height14,
-                ),
-                Container(
-                  constraints: BoxConstraints(maxHeight: Dimensions.height20),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.blue,
-                    child: Center(
-                      child: Text(
-                        '1',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
+                if (widget.chatRoom.lastMessage!.idSender != currentUserID) ...[
+                  SizedBox(height: Dimensions.height14),
+                  Container(
+                    constraints: BoxConstraints(maxHeight: Dimensions.height20),
+                    child: CircleAvatar(
+                      backgroundColor: Colors.blue,
+                      child: Center(
+                        child: Text(
+                          "${widget.chatRoom.state}",
+                          style:
+                              Theme.of(context).textTheme.labelSmall!.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ],
             ),
     );

@@ -40,8 +40,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   logoutEvent(LogoutEvent event, Emitter<AuthState> emit) async {
     event.socket.close();
-    //* Show loading popup
-    emit(LoggedState(loading: true));
 
     //* Check data User not null
     if (_authUser == null) return;
@@ -55,12 +53,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     //* Check reponse data of api
     if (value == null || value.result != 1) return;
 
+    //* Logout App
+    emit(LoginState(loading: false));
+    
     //* Clear data of the user
     final shared = await sharedPreferences;
     shared.setString('auth_token', '');
-
-    //* Logout App
-    emit(LoginState(loading: false));
   }
 
   _registerEvent(RegisterEvent event, Emitter<AuthState> emit) async {
@@ -147,6 +145,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       authUser: _authUser,
       chatRooms: _authUser!.chatRooms,
       friendRequests: _authUser!.friendRequests,
+      listFriend: _authUser!.listFriend,
     ));
 
     //* Check accessToken before store
@@ -193,6 +192,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       authUser: _authUser,
       chatRooms: _authUser!.chatRooms,
       friendRequests: _authUser!.friendRequests,
+      listFriend: _authUser!.listFriend,
     ));
   }
 }

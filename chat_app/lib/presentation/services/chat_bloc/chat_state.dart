@@ -8,10 +8,13 @@ abstract class ChatState {
 //* Room
 class WaitingForUpdateDataState extends ChatState {}
 
-class HasDataRoomState extends ChatState {
+class JoinAppState extends ChatState {
   final List<dynamic> listRoom;
-
-  HasDataRoomState(this.listRoom);
+  final List<dynamic>? listFriend;
+  JoinAppState(
+    this.listRoom,
+    this.listFriend,
+  );
 }
 
 //* Message
@@ -41,7 +44,7 @@ class LookingForFriendState extends ChatState {
   bool? cuccessed;
   bool? failed;
   List<dynamic>? requests;
-  final User? user;
+  dynamic user;
   bool? addFriendloading;
   bool? addFriendSuccess;
   LookingForFriendState({
@@ -53,5 +56,22 @@ class LookingForFriendState extends ChatState {
     this.user,
     this.addFriendloading,
     this.addFriendSuccess,
+  });
+}
+
+class LookingForChatState extends ChatState {
+  bool? init;
+  bool? finding;
+  bool? cuccessed;
+  bool? failed;
+  List<dynamic>? results;
+  List<dynamic> listFriend;
+  LookingForChatState({
+    this.init,
+    this.finding,
+    this.cuccessed,
+    this.failed,
+    this.results,
+    required this.listFriend,
   });
 }

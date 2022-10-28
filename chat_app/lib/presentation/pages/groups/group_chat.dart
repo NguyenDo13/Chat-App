@@ -24,7 +24,7 @@ class GroupChatScreen extends StatelessWidget {
               Dimensions.height14,
               Dimensions.width14,
               0,
-            ), 
+            ),
             child: Text(
               "Nhóm",
               style: Theme.of(context).textTheme.titleSmall,

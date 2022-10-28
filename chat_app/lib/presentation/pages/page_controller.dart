@@ -1,9 +1,9 @@
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/models/auth_user.dart';
-import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
 import 'package:chat_app/presentation/pages/add_friend/add_friend_screen.dart';
 import 'package:chat_app/presentation/pages/app_manager/app_manager.dart';
 import 'package:chat_app/presentation/pages/chat/chat_screen.dart';
+import 'package:chat_app/presentation/pages/search/search_screen.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,13 +14,15 @@ import 'package:socket_io_client/socket_io_client.dart'
 
 class AppPageController extends StatefulWidget {
   final AuthUser authUser;
-  final List<dynamic> chatRooms;
+  final List<dynamic>? chatRooms;
   final List<dynamic>? friendRequests;
+  final List<dynamic>? listFriend;
   const AppPageController({
     super.key,
     required this.authUser,
     required this.chatRooms,
     this.friendRequests,
+    required this.listFriend,
   });
 
   @override
@@ -47,9 +49,10 @@ class _AppPageControllerState extends State<AppPageController> {
     return BlocProvider<ChatBloc>(
       create: (_) => ChatBloc(
         socket: _socket,
-        listDataRoom: widget.chatRooms,
+        listDataRoom: widget.chatRooms!,
         requests: widget.friendRequests,
         currentUser: widget.authUser.user!,
+        listFriend: widget.listFriend,
       ),
       child: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) {
@@ -58,6 +61,9 @@ class _AppPageControllerState extends State<AppPageController> {
               friendID: state.friend.sId!,
               idRoom: state.idRoom,
             );
+          }
+          if (state is LookingForChatState) {
+            return SearchScreen(listFriend: state.listFriend);
           }
           if (state is LookingForFriendState) {
             return const AddFriendScreen();
