@@ -1,4 +1,5 @@
-import 'package:chat_app/presentation/pages/home/components/list_online_user.dart';
+import 'package:chat_app/presentation/helper/error/no_internet.dart';
+import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
@@ -23,26 +24,29 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    // app states
     AppStateProvider appState = context.watch<AppStateProvider>();
     return SingleChildScrollView(
+      padding: EdgeInsets.only(top: Dimensions.height14),
       physics: const BouncingScrollPhysics(),
       child: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: state is JoinAppState
-                ? [
-                    SearchBar(theme: appState.darkMode),
-                    // const ListOnlineUser(listOnlineFriend: []),
-                    state.listRoom.isNotEmpty
-                        ? NewListChatRoom(
-                            listRoom: state.listRoom,
-                            isGroup: false,
-                          )
-                        : const Center(child: Text("Không có gì!")),
-                  ]
-                : [],
+            children: [
+              if (state is JoinAppState) ...[
+                if (!appState.hasConnect) ...[
+                  const NoInternetText(),
+                ],
+                SearchBar(theme: appState.darkMode),
+                // const ListOnlineUser(listOnlineFriend: []),
+                state.listRoom.isNotEmpty
+                    ? NewListChatRoom(
+                        listRoom: state.listRoom,
+                        isGroup: false,
+                      )
+                    : const Center(child: Text("Không có gì!")),
+              ],
+            ],
           );
         },
       ),

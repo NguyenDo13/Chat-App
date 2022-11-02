@@ -24,8 +24,8 @@ class NetworkApiService extends BaseApiServices {
 
       responseJson = returnResponse(response);
     } on SocketException {
-      log("No Internet Connection");
-      throw FetchDataException('No Internet Connection');
+      log("Can't post request to server!");
+      // throw FetchDataException('No Internet Connection');
     }
     return responseJson;
   }
@@ -48,5 +48,37 @@ class NetworkApiService extends BaseApiServices {
         final responseJson = jsonDecode(response.body);
         return responseJson;
     }
+  }
+
+  @override
+  Future postMultipartApiResponse(
+    String url,
+    String field,
+    String path,
+  ) async {
+    dynamic responseJson;
+
+    try {
+      final request = http.MultipartRequest("POST", Uri.parse(url));
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          field,
+          path,
+        ),
+      );
+
+      request.headers.addAll({
+        "Content-type": "multipart/form-data",
+      });
+
+      http.StreamedResponse streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      responseJson = returnResponse(response);
+    } on SocketException {
+      log("Can't post request to server!");
+      // throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
   }
 }

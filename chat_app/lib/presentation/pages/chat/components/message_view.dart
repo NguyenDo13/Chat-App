@@ -23,7 +23,7 @@ class _MessageViewState extends State<MessageView> {
   Widget build(BuildContext context) {
     AppStateProvider appState = context.watch<AppStateProvider>();
     return Expanded(
-      child: InkWell(
+      child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           reverse: true,

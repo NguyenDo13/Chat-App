@@ -1,4 +1,5 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member
+import 'dart:convert';
 import 'dart:developer';
 import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/models/auth_user.dart';
@@ -10,6 +11,7 @@ import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import 'package:socket_io_client/socket_io_client.dart'
     as IO; // ignore: library_prefixes
 
@@ -18,15 +20,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final IO.Socket socket;
   final User currentUser;
 
-  // Init data
   List<dynamic>? listDataRoom = [];
   List<dynamic>? listFriend = [];
 
-  //source chat
+  // Chat room
   List<dynamic> sourceChat = [];
   List<String> listTime = [];
-  List<dynamic>? requests = [];
   User? friend;
+
+  // Friend
+  List<dynamic>? requests = [];
 
   ChatBloc({
     required this.socket,
@@ -43,33 +46,44 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     //* Room
     on<JoinRoomEvent>(joinRoomEvent);
     on<CheckHasRoomEvent>(checkHasRoomEvent);
-
+    on<ExitRoomEvent>(exitChatRoom);
     //* Message
-    on<ExitRoomEvent>((event, emit) {
-      emit(JoinAppState(listDataRoom!, listFriend));
-    });
     on<SendMessageEvent>(sendMessageEvent);
-
+    on<SendImageEvent>(sendImageEvent);
     //* Friend
     on<LookingForFriendEvent>(lookingForFriend);
     on<FindUserEvent>(findUserEvent);
-    on<ExitFriendEvent>(
-      (event, emit) => emit(JoinAppState(listDataRoom!, listFriend)),
-    );
+    on<ExitFriendEvent>(exitLookingForFriend);
     on<FriendRequestEvent>(friendRequestEvent);
-    on<BackToFriendRequestEvent>((event, emit) {
-      emit(LookingForFriendState(init: true, requests: requests));
-    });
+    on<BackToFriendRequestEvent>(backToFriendRequest);
     on<AcceptFriendRequestEvent>(acceptFriendRequestEvent);
     on<RemoveFriendRequest>(removeFriendRequest);
-    on<InitLookingForChatEvent>((event, emit) {
-      emit(LookingForChatState(listFriend: listFriend!, init: true));
-    });
-    on<ExitSearchEvent>((event, emit) {
-      emit(JoinAppState(listDataRoom!, listFriend));
-    });
+    //* Search
+    on<InitLookingForChatEvent>(initLookingForChat);
+    on<ExitSearchEvent>(exitSearchFriend);
+
     updateListDataRooms();
     getFriendRequest();
+  }
+
+  exitSearchFriend(ExitSearchEvent event, Emitter<ChatState> emit) {
+    emit(JoinAppState(listDataRoom!, listFriend));
+  }
+
+  backToFriendRequest(BackToFriendRequestEvent event, Emitter<ChatState> emit) {
+    emit(LookingForFriendState(init: true, requests: requests));
+  }
+
+  initLookingForChat(InitLookingForChatEvent event, Emitter<ChatState> emit) {
+    emit(LookingForChatState(listFriend: listFriend!, init: true));
+  }
+
+  exitChatRoom(ExitRoomEvent event, Emitter<ChatState> emit) {
+    emit(JoinAppState(listDataRoom!, listFriend));
+  }
+
+  exitLookingForFriend(ExitFriendEvent event, Emitter<ChatState> emit) {
+    emit(JoinAppState(listDataRoom!, listFriend));
   }
 
   removeFriendRequest(
@@ -119,12 +133,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   updateListDataRooms() {
     socket.on("getRooms", (data) {
+      bool existedRoom = false;
+
       for (var i = 0; i < listDataRoom!.length; i++) {
-        if (listDataRoom![i]['room']['_id'] == data['_id']) {
-          listDataRoom![i]['room'] = data;
-          log(ChatRoom.fromJson(listDataRoom![i]['room']).lastMessage!.content);
-          return;
+        if (listDataRoom![i]['room']['_id'] == data['room']['_id']) {
+          existedRoom = true;
+          listDataRoom![i]['room'] = data['room'];
+          break;
         }
+      }
+
+      if (existedRoom == false) {
+        listDataRoom!.add(data);
       }
     });
   }
@@ -172,30 +192,51 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     ));
   }
 
-  sendMessageEvent(SendMessageEvent event, Emitter<ChatState> emit) async {
-    if (currentUser.sId == null) return;
+  sendImageEvent(SendImageEvent event, Emitter<ChatState> emit) async {
+    final path = await chatRepository.sendImg(path: event.listPath[0]);
+    final msg = addMessageForAsynchronousThread(path, 'image');
+    
+    // add new message type img
+    if (!socket.connected) return log("SOCKET_IO NOT CONNECTION!");
+    socket.emit("message", {
+      'subMsg': "đã gửi 1 ảnh",
+      'message': msg,
+      'idUser': currentUser.sId,
+      'idTarget': event.friendID,
+      'idRoom': event.roomID,
+    });
+    await getSourceChat(true, event.roomID, friend!);
+  }
 
+  Message addMessageForAsynchronousThread(content, type) {
     // prepare message data
     String date = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
     final msg = Message(
       idSender: currentUser.sId!,
-      content: event.message,
-      type: 'text',
+      content: content,
+      type: type,
       time: date,
       state: socket.connected ? 'loading' : 'failed',
     );
 
     // push message into source chat with state loading
-    final data = addNewMessageWhileSocketSorking(
+    final data = addNewMessageWhileSocketWorking(
       msg: msg,
       date: date,
       currentUser: currentUser,
       listTime: listTime,
       sourceChat: sourceChat,
     );
+
     sourceChat = data[0];
     listTime = data[1];
+    return msg;
+  }
 
+  sendMessageEvent(SendMessageEvent event, Emitter<ChatState> emit) async {
+    if (currentUser.sId == null) return;
+
+    final msg = addMessageForAsynchronousThread(event.message, 'text');
     emit(HasSourceChatState(
       isOnl: true,
       idRoom: event.idRoom,
@@ -205,7 +246,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       friend: friend!,
     ));
 
-    if (!socket.connected) return;
+    if (!socket.connected) return log("SOCKET_IO NOT CONNECTION!");
     socket.emit('message', {
       'message': msg,
       'idUser': currentUser.sId,
@@ -229,14 +270,17 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       // Join room
       friend = event.friend;
       if (!socket.connected) return;
-      socket.emit('getSourceChat', {"roomID": roomID});
+      socket.emit(
+        'joinRoom',
+        {"roomID": roomID, "userID": currentUser.sId},
+      );
       await getSourceChat(event.isOnl, roomID, event.friend);
     } else {
       // Init room
       friend = event.friend;
       emit(HasSourceChatState(
         isOnl: event.isOnl,
-        idRoom: roomID,
+        idRoom: "",
         currentUser: currentUser,
         friend: event.friend,
       ));
@@ -246,7 +290,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   joinRoomEvent(JoinRoomEvent event, Emitter<ChatState> emit) async {
     friend = event.friend;
     if (!socket.connected) return;
-    socket.emit('getSourceChat', {"roomID": event.roomID});
+    socket.emit(
+      'joinRoom',
+      {"roomID": event.roomID, "userID": currentUser.sId},
+    );
     await getSourceChat(event.isOnl, event.roomID, event.friend);
   }
 

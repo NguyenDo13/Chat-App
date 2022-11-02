@@ -16,3 +16,4 @@ const customPurple = Color.fromARGB(255, 114, 36, 249);
 
 const darkBlue = Color(0xFF0260AE);
 const lightBlue = Colors.blue;
+

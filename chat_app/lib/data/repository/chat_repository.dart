@@ -10,7 +10,8 @@ class ChatRepository extends IServiceAPI {
   String urlEndPointFindAUser = "chat/findAUser";
   String urlEndPointGetRooms = "chat/getRooms";
   String urlEndPointGetFriendRequests = "chat/getFriendRequests";
-  String urlEndPointRemoveRequest= "chat/removeRequest";
+  String urlEndPointRemoveRequest = "chat/removeRequest";
+  String urlEndPointSendIMG = "chat/upload";
 
   final BaseApiServices apiServices = NetworkApiService();
   late Environment environment;
@@ -18,8 +19,10 @@ class ChatRepository extends IServiceAPI {
   ChatRepository({required this.environment}) {
     urlEndPointFindAUser = environment.baseURL + urlEndPointFindAUser;
     urlEndPointGetRooms = environment.baseURL + urlEndPointGetRooms;
-    urlEndPointGetFriendRequests = environment.baseURL + urlEndPointGetFriendRequests;
+    urlEndPointGetFriendRequests =
+        environment.baseURL + urlEndPointGetFriendRequests;
     urlEndPointRemoveRequest = environment.baseURL + urlEndPointRemoveRequest;
+    urlEndPointSendIMG = environment.baseURL + urlEndPointSendIMG;
   }
 
   @override
@@ -50,7 +53,7 @@ class ChatRepository extends IServiceAPI {
     }
   }
 
-   Future<BaseResponse?> getRooms({required data}) async {
+  Future<BaseResponse?> getRooms({required data}) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointGetRooms,
@@ -62,6 +65,7 @@ class ChatRepository extends IServiceAPI {
       return null;
     }
   }
+
   Future<BaseResponse?> getFriendRequests({required data}) async {
     try {
       final response = await apiServices.getPostApiResponse(
@@ -74,7 +78,8 @@ class ChatRepository extends IServiceAPI {
       return null;
     }
   }
-    Future<BaseResponse?> removeRequest({required data}) async {
+
+  Future<BaseResponse?> removeRequest({required data}) async {
     try {
       final response = await apiServices.getPostApiResponse(
         urlEndPointRemoveRequest,
@@ -84,6 +89,19 @@ class ChatRepository extends IServiceAPI {
       return BaseResponse.fromJson(response);
     } on Exception catch (_) {
       return null;
+    }
+  }
+
+  Future<String> sendImg({required String path}) async {
+    try {
+      final response = await apiServices.postMultipartApiResponse(
+        urlEndPointSendIMG,
+        "img",
+        path,
+      );
+      return response['path'];
+    } on Exception catch (_) {
+      return '';
     }
   }
 }

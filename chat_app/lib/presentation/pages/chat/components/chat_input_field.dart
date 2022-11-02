@@ -9,6 +9,7 @@ import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:media_picker_widget/media_picker_widget.dart';
 import 'package:provider/provider.dart';
 
 class ChatInputField extends StatefulWidget {
@@ -28,7 +29,7 @@ class ChatInputField extends StatefulWidget {
 
 class _ChatInputFieldState extends State<ChatInputField> {
   late bool isVisibility;
-  late File file;
+  List<Media> mediaList = [];
   @override
   void initState() {
     isVisibility = true;
@@ -48,7 +49,13 @@ class _ChatInputFieldState extends State<ChatInputField> {
         child: Row(
           children: [
             _actionIcon(Icons.camera_alt, () => _openCamera()),
-            _actionIcon(CupertinoIcons.photo, () {}),
+            _actionIcon(
+                CupertinoIcons.photo,
+                () => _openImagePicker(
+                      context,
+                      widget.idRoom,
+                      widget.idFriend,
+                    )),
             _actionIcon(Icons.mic, () {}),
             _inputMessage(
               appState,
@@ -68,8 +75,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 );
               },
               child: const Icon(
-                CupertinoIcons.heart_fill,
-                color: Colors.red,
+                Icons.send_rounded,
+                color: Colors.blue,
               ),
             ),
           ],
@@ -78,21 +85,51 @@ class _ChatInputFieldState extends State<ChatInputField> {
     );
   }
 
+  _openImagePicker(BuildContext context, String roomID, String friendID) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return MediaPicker(
+            mediaList: mediaList,
+            onPick: (selectedList) {
+              setState(() => mediaList = selectedList);
+              List<String> listPath = [];
+              for (var selected in selectedList) {
+                listPath.add(selected.file!.path);
+              }
+              _sendImage(listPath, roomID, friendID);
+              Navigator.pop(context);
+            },
+            onCancel: () => Navigator.pop(context),
+            mediaCount: MediaCount.multiple,
+            mediaType: MediaType.all,
+            decoration: PickerDecoration(
+              actionBarPosition: ActionBarPosition.top,
+              blurStrength: 2,
+              completeText: 'Gửi',
+            ),
+          );
+        });
+  }
+
   Future _openCamera() async {
-    try {
-      final cameras = await availableCameras();
-      final firstCamera = cameras.first;
-      await Future.delayed(const Duration(seconds: 1));
-      // ignore: use_build_context_synchronously
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TakePictureScreen(camera: firstCamera),
-        ),
-      );
-    } catch (e) {
-      log("BUGS:$e");
-    }
+    openCamera(onCapture: (image) {
+      setState(() => mediaList = [image]);
+    });
+    // try {
+    //   final cameras = await availableCameras();
+    //   final firstCamera = cameras.first;
+    //   await Future.delayed(const Duration(seconds: 1));
+    //   // ignore: use_build_context_synchronously
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => TakePictureScreen(camera: firstCamera),
+    //     ),
+    //   );
+    // } catch (e) {
+    //   log("BUGS:$e");
+    // }
   }
 
   _onChangeInputMessage(String value) {
@@ -188,6 +225,16 @@ class _ChatInputFieldState extends State<ChatInputField> {
           blurRadius: 7,
         ),
       ],
+    );
+  }
+
+  _sendImage(List<String> listPath, roomID, friendID) {
+    Provider.of<ChatBloc>(context, listen: false).add(
+      SendImageEvent(
+        listPath: listPath,
+        roomID: roomID,
+        friendID: friendID,
+      ),
     );
   }
 

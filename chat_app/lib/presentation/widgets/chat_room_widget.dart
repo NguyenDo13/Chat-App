@@ -35,14 +35,14 @@ class ChatRoomWidget extends StatefulWidget {
 class _ChatRoomWidgetState extends State<ChatRoomWidget> {
   @override
   Widget build(BuildContext context) {
-    final currentUserID = context.watch<ChatBloc>().currentUser.sId;
     // State text style which show notify that is not view
-    final styleNotView = widget.chatRoom.lastMessage!.idSender != currentUserID
+    final styleNotView = _isNotification(context)
         ? Theme.of(context)
             .textTheme
             .headlineSmall!
             .copyWith(color: lightBlue, fontWeight: FontWeight.w400)
         : Theme.of(context).textTheme.headlineSmall;
+
     return ListTile(
       onTap: () {
         if (!widget.isGroup) {
@@ -54,8 +54,6 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
             ),
           );
         }
-
-        // TODO: change state item chat to viewed
       },
       visualDensity: const VisualDensity(vertical: 0.7),
       leading: StateAvatar(
@@ -78,7 +76,7 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
           bottom: Dimensions.height4,
         ),
         child: Text(
-          widget.chatRoom.lastMessage!.content, //* Content
+          _isSender(context) + widget.chatRoom.lastMessage!.content,
           overflow: TextOverflow.ellipsis,
           style: styleNotView,
         ),
@@ -110,10 +108,10 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  formatTimeRoom(widget.chatRoom.lastMessage!.time), //* time
+                  formatTimeRoom(widget.chatRoom.lastMessage!.time),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
-                if (widget.chatRoom.lastMessage!.idSender != currentUserID) ...[
+                if (_isNotification(context)) ...[
                   SizedBox(height: Dimensions.height14),
                   Container(
                     constraints: BoxConstraints(maxHeight: Dimensions.height20),
@@ -135,5 +133,38 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
               ],
             ),
     );
+  }
+
+  bool _isNotification(BuildContext context) {
+    final currentUserID = context.watch<ChatBloc>().currentUser.sId;
+    String senderID = widget.chatRoom.lastMessage!.idSender;
+    int value = widget.chatRoom.state!;
+    if (senderID != currentUserID && value > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  String _isSender(BuildContext context) {
+    final currentUserID = context.watch<ChatBloc>().currentUser.sId;
+    String senderID = widget.chatRoom.lastMessage!.idSender;
+
+    bool isCurrentUser = false;
+    if (currentUserID == senderID) {
+      isCurrentUser = true;
+    }
+
+    bool isTypeIMG = false;
+    if (widget.chatRoom.lastMessage!.type == 'image') {
+      isTypeIMG = true;
+    }
+
+    String result = '';
+    if (isCurrentUser) {
+      result = isTypeIMG ? 'Bạn ' : 'Bạn: ';
+    } else {
+      result = isTypeIMG ? '${widget.user.name!} ' : '';
+    }
+    return result;
   }
 }

@@ -19,25 +19,31 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AppStateProvider appState = context.watch<AppStateProvider>();
 
-    return Scaffold(
-      appBar: _buildAppbar(appState.darkMode),
-      body: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: Dimensions.width14,
-          vertical: Dimensions.height14,
-        ),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const TitleWidget(title: 'gợi ý', isUpper: true),
-              SizedBox(height: Dimensions.height20),
-              ListUserWidget(
-                listUser: listFriend!,
-                isAddFriend: false,
-              ),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        context.read<ChatBloc>().add(ExitSearchEvent());
+        return false;
+      },
+      child: Scaffold(
+        appBar: _buildAppbar(appState.darkMode),
+        body: Container(
+          margin: EdgeInsets.symmetric(
+            horizontal: Dimensions.width14,
+            vertical: Dimensions.height14,
+          ),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const TitleWidget(title: 'gợi ý', isUpper: true),
+                SizedBox(height: Dimensions.height20),
+                ListUserWidget(
+                  listUser: listFriend!,
+                  isAddFriend: false,
+                ),
+              ],
+            ),
           ),
         ),
       ),

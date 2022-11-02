@@ -2,7 +2,7 @@ import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/message.dart';
 import 'package:intl/intl.dart';
 
-List<dynamic> addNewMessageWhileSocketSorking({
+List<dynamic> addNewMessageWhileSocketWorking({
   required List<String> listTime,
   required Message msg,
   required List<dynamic> sourceChat,

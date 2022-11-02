@@ -14,7 +14,7 @@ class AppStateProvider extends ChangeNotifier {
   bool get hasConnect => _hasConnect;
 
   // setup dark mode
-  late UserRepository userRepository;
+  late UserRepository userRepo;
   bool _darkMode = false;
   bool get darkMode => _darkMode;
   set darkMode(bool darkMode) {
@@ -31,14 +31,14 @@ class AppStateProvider extends ChangeNotifier {
     );
 
     // Init Repository
-    userRepository = UserRepository(environment: Environment(isServerDev: true));
+    userRepo = UserRepository(environment: Environment(isServerDev: true));
   }
 
   // post request change darkmode to server
   changeDarkMode(bool darkMode, String userID) async {
     _darkMode = darkMode;
     notifyListeners();
-    await userRepository.changeDarkMode(
+    await userRepo.changeDarkMode(
       data: {'userID': userID, 'isDarkMode': darkMode},
       header: {'Content-Type': 'application/json'},
     );
@@ -47,11 +47,9 @@ class AppStateProvider extends ChangeNotifier {
   // Check connect network
   Future checkConnectionStatus(ConnectivityResult result) async {
     if (result == ConnectivityResult.none) {
-      log('Không có mạng!');
       _hasConnect = false;
       notifyListeners();
     } else {
-      log('Có mạng!');
       _hasConnect = true;
       notifyListeners();
     }

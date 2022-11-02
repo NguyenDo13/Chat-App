@@ -1,7 +1,10 @@
 import 'package:chat_app/presentation/pages/chat/components/app_bar.dart';
 import 'package:chat_app/presentation/pages/chat/components/chat_input_field.dart';
 import 'package:chat_app/presentation/pages/chat/components/message_view.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ChatScreen extends StatefulWidget {
   final String idRoom;
@@ -20,19 +23,25 @@ class _ChatScreenState extends State<ChatScreen> {
   final _controllerChat = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: buildAppBar(
-        context: context,
-      ),
-      body: Column(
-        children: [
-          const MessageView(),
-          ChatInputField(
-            controllerChat: _controllerChat,
-            idRoom: widget.idRoom,
-            idFriend: widget.friendID,
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        Provider.of<ChatBloc>(context, listen: false).add(ExitRoomEvent());
+        return false;
+      },
+      child: Scaffold(
+        appBar: buildAppBar(
+          context: context,
+        ),
+        body: Column(
+          children: [
+            const MessageView(),
+            ChatInputField(
+              controllerChat: _controllerChat,
+              idRoom: widget.idRoom,
+              idFriend: widget.friendID,
+            ),
+          ],
+        ),
       ),
     );
   }

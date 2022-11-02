@@ -19,7 +19,7 @@ class SearchBar extends StatelessWidget {
       height: Dimensions.height44,
       margin: EdgeInsets.fromLTRB(
         Dimensions.width14,
-        Dimensions.height14,
+        0,
         Dimensions.width14,
         0,
       ),

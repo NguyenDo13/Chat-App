@@ -25,43 +25,51 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
   Widget build(BuildContext context) {
     //* app states
     AppStateProvider appState = context.watch<AppStateProvider>();
-    return BlocBuilder<ChatBloc, ChatState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            toolbarHeight: Dimensions.height72,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Provider.of<ChatBloc>(context, listen: false)
-                    .add(ExitFriendEvent());
-              },
-            ),
-            title: TextFieldWidget(
-              hintText: 'Nhập địa chỉ email',
-              padding: 0,
-              boxDecorationColor:
-                  appState.darkMode ? blackDarkMode! : Colors.white,
-              onChanged: (value) {},
-              onDeleted: _onDelete,
-              onSubmitted: (value) {
-                FocusScope.of(context).unfocus();
-                Provider.of<ChatBloc>(context, listen: false).add(
-                  FindUserEvent(email: value),
-                );
-              },
-              suffixIconColor: appState.darkMode ? Colors.white : Colors.black,
-            ),
-          ),
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.all(Dimensions.height14),
-            child: state is LookingForFriendState && state.init!
-                ? FriendRequestView(friendRequests: state.requests!,)
-                : const ListSearchUsers(),
-          ),
-        );
+    return WillPopScope(
+      onWillPop: () async {
+        Provider.of<ChatBloc>(context, listen: false).add(ExitFriendEvent());
+        return false;
       },
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: Dimensions.height72,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Provider.of<ChatBloc>(context, listen: false)
+                  .add(ExitFriendEvent());
+            },
+          ),
+          title: TextFieldWidget(
+            hintText: 'Nhập địa chỉ email',
+            padding: 0,
+            boxDecorationColor:
+                appState.darkMode ? blackDarkMode! : Colors.white,
+            onChanged: (value) {},
+            onDeleted: _onDelete,
+            onSubmitted: (value) {
+              FocusScope.of(context).unfocus();
+              Provider.of<ChatBloc>(context, listen: false).add(
+                FindUserEvent(email: value),
+              );
+            },
+            suffixIconColor: appState.darkMode ? Colors.white : Colors.black,
+          ),
+        ),
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.all(Dimensions.height14),
+          child: BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {
+            return Center(
+              child: state is LookingForFriendState && state.init!
+                  ? FriendRequestView(
+                      friendRequests: state.requests!,
+                    )
+                  : const ListSearchUsers(),
+            );
+          }),
+        ),
+      ),
     );
   }
 
