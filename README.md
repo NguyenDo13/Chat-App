@@ -1,1 +1,1 @@
-# Chat-App
+ChitChat: application for chat.
