@@ -9,6 +9,7 @@ List<dynamic> addNewMessageWhileSocketWorking({
   required User currentUser,
   required String date,
 }) {
+  bool isCurrentTime = false;
   if (listTime.isEmpty) {
     final newClusterTime = [
       [msg.toJson()]
@@ -17,9 +18,10 @@ List<dynamic> addNewMessageWhileSocketWorking({
     listTime.add(date);
   } else {
     // is current date equal date of last time in source chat
-    final currentDate = DateTime.now().day;
-    final lastDate = int.parse(listTime.last.split("/")[0].split(" ")[1]);
+    final lastDate = listTime.last.split(" ")[1];
+    final currentDate = date.split(" ")[1];
     if (currentDate == lastDate) {
+      isCurrentTime = true;
       // get last cluster Msg of last cluster time in source chat
       final lastClusterMsg = sourceChat.last.last;
       final lastSenderID = Message.fromJson(lastClusterMsg[0]).idSender;
@@ -30,6 +32,7 @@ List<dynamic> addNewMessageWhileSocketWorking({
         sourceChat.last.add(newClusterMsg);
       }
     } else {
+      isCurrentTime = false;
       final newClusterTime = [
         [msg.toJson()]
       ];
@@ -37,7 +40,7 @@ List<dynamic> addNewMessageWhileSocketWorking({
       listTime.add(date);
     }
   }
-  return [sourceChat, listTime];
+  return [sourceChat, listTime, isCurrentTime];
 }
 
 String formatName({required String name}) {

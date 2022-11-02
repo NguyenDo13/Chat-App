@@ -25,7 +25,7 @@ class NetworkApiService extends BaseApiServices {
       responseJson = returnResponse(response);
     } on SocketException {
       log("Can't post request to server!");
-      // throw FetchDataException('No Internet Connection');
+      throw FetchDataException('No Internet Connection');
     }
     return responseJson;
   }
@@ -77,7 +77,7 @@ class NetworkApiService extends BaseApiServices {
       responseJson = returnResponse(response);
     } on SocketException {
       log("Can't post request to server!");
-      // throw FetchDataException('No Internet Connection');
+      throw FetchDataException('No Internet Connection');
     }
     return responseJson;
   }

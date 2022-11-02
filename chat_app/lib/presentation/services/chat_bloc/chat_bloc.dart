@@ -195,20 +195,34 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   sendImageEvent(SendImageEvent event, Emitter<ChatState> emit) async {
     final path = await chatRepository.sendImg(path: event.listPath[0]);
     final msg = addMessageForAsynchronousThread(path, 'image');
-    
+    log("iscurrentTime: ${msg[1]}");
+    emit(HasSourceChatState(
+      isOnl: true,
+      idRoom: event.roomID,
+      sourceChat: sourceChat,
+      listTime: listTime,
+      currentUser: currentUser,
+      friend: friend!,
+    ));
+
     // add new message type img
-    if (!socket.connected) return log("SOCKET_IO NOT CONNECTION!");
-    socket.emit("message", {
-      'subMsg': "đã gửi 1 ảnh",
-      'message': msg,
-      'idUser': currentUser.sId,
-      'idTarget': event.friendID,
-      'idRoom': event.roomID,
-    });
+    sendMessageToServer(msg, event.friendID, event.roomID);
     await getSourceChat(true, event.roomID, friend!);
   }
 
-  Message addMessageForAsynchronousThread(content, type) {
+  sendMessageToServer(msg, friendID, roomID) {
+    if (!socket.connected) return log("SOCKET_IO NOT CONNECTION!");
+    socket.emit("message", {
+      'subMsg': "đã gửi 1 ảnh",
+      'message': msg[0],
+      'isCurrentTime': msg[1],
+      'idUser': currentUser.sId,
+      'idTarget': friendID,
+      'idRoom': roomID,
+    });
+  }
+
+  List<dynamic> addMessageForAsynchronousThread(content, type) {
     // prepare message data
     String date = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
     final msg = Message(
@@ -230,13 +244,13 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     sourceChat = data[0];
     listTime = data[1];
-    return msg;
+    return [msg, data[2]];
   }
 
   sendMessageEvent(SendMessageEvent event, Emitter<ChatState> emit) async {
     if (currentUser.sId == null) return;
-
     final msg = addMessageForAsynchronousThread(event.message, 'text');
+
     emit(HasSourceChatState(
       isOnl: true,
       idRoom: event.idRoom,
@@ -246,13 +260,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       friend: friend!,
     ));
 
-    if (!socket.connected) return log("SOCKET_IO NOT CONNECTION!");
-    socket.emit('message', {
-      'message': msg,
-      'idUser': currentUser.sId,
-      'idTarget': event.friendID,
-      'idRoom': event.idRoom,
-    });
+    sendMessageToServer(msg, event.friendID, event.idRoom);
     await getSourceChat(true, event.idRoom, friend!);
   }
 
