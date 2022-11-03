@@ -149,22 +149,13 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
     final currentUserID = context.watch<ChatBloc>().currentUser.sId;
     String senderID = widget.chatRoom.lastMessage!.idSender;
 
-    bool isCurrentUser = false;
-    if (currentUserID == senderID) {
-      isCurrentUser = true;
-    }
+    if (currentUserID != senderID) return '';
 
-    bool isTypeIMG = false;
-    if (widget.chatRoom.lastMessage!.type == 'image') {
-      isTypeIMG = true;
+    switch (widget.chatRoom.lastMessage!.type) {
+      case 'text':
+        return 'Bạn: ';
+      default:
+        return 'Bạn ';
     }
-
-    String result = '';
-    if (isCurrentUser) {
-      result = isTypeIMG ? 'Bạn ' : 'Bạn: ';
-    } else {
-      result = isTypeIMG ? '${widget.user.name!} ' : '';
-    }
-    return result;
   }
 }

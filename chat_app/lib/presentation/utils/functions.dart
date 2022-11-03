@@ -2,6 +2,7 @@ import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/message.dart';
 import 'package:intl/intl.dart';
 
+/// add a message to list message before send a request msg to server
 List<dynamic> addNewMessageWhileSocketWorking({
   required List<String> listTime,
   required Message msg,
@@ -43,6 +44,7 @@ List<dynamic> addNewMessageWhileSocketWorking({
   return [sourceChat, listTime, isCurrentTime];
 }
 
+/// Return last word of the name
 String formatName({required String name}) {
   final arrayName = name.split(" ");
   if (arrayName.length > 1) {
@@ -51,12 +53,7 @@ String formatName({required String name}) {
   return arrayName[0];
 }
 
-/*
-Functional: format time from '12:00 01/10/2000' to
-      Date: 01/10 (if month equal now)
-     Month: 01/2000 (if year equal now)
-      Hour: 12:00 (if date equal now)
-*/
+///format time from '12:00 01/10/2000' to date: 01/10 (if month equal now), month: 01/2000 (if year equal now), hour: 12:00 (if date equal now)
 String formatTimeRoom(String time) {
   final currentTime = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
 

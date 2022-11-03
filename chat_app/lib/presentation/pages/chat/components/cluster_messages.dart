@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/data/models/message.dart';
 import 'package:chat_app/presentation/pages/chat/components/message_item.dart';
 import 'package:chat_app/presentation/res/colors.dart';
@@ -5,6 +6,9 @@ import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
+
+import 'cannot_load_img.dart';
+import 'loading_img.dart';
 
 class ClusterMessages extends StatefulWidget {
   final String avatarFriend;
@@ -75,10 +79,10 @@ class _ClusterMessagesState extends State<ClusterMessages> {
                   }
                   final msg = Message.fromJson(item);
                   return MessageItem(
-                    message: msg,
-                    theme: widget.theme,
-                    isSender: widget.isSender,
-                  );
+                          message: msg,
+                          theme: widget.theme,
+                          isSender: widget.isSender,
+                        );
                 }).toList(),
               ),
               height4,

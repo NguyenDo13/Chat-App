@@ -25,12 +25,13 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<ChatBloc>(context, listen: false).add(ExitRoomEvent());
+        Provider.of<ChatBloc>(context, listen: false).add(ExitRoomEvent(roomID: widget.idRoom));
         return false;
       },
       child: Scaffold(
         appBar: buildAppBar(
           context: context,
+          roomID: widget.idRoom,
         ),
         body: Column(
           children: [

@@ -18,7 +18,7 @@ class Message {
   });
 
   String idSender;
-  String content;
+  dynamic content;
   String type;
   String time;
   String state;

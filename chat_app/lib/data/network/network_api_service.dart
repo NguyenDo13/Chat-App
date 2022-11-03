@@ -51,21 +51,23 @@ class NetworkApiService extends BaseApiServices {
   }
 
   @override
-  Future postMultipartApiResponse(
+  Future postMultipartApiWithMutiFiles(
     String url,
     String field,
-    String path,
+    List<String> paths,
   ) async {
     dynamic responseJson;
 
     try {
       final request = http.MultipartRequest("POST", Uri.parse(url));
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          field,
-          path,
-        ),
-      );
+      for (var p in paths) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            field,
+            p,
+          ),
+        );
+      }
 
       request.headers.addAll({
         "Content-type": "multipart/form-data",

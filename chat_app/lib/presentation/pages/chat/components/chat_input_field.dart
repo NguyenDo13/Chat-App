@@ -1,5 +1,3 @@
-import 'dart:developer';
-import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
@@ -97,7 +95,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
               for (var selected in selectedList) {
                 listPath.add(selected.file!.path);
               }
-              _sendImage(listPath, roomID, friendID);
+              _sendImages(listPath, roomID, friendID);
               Navigator.pop(context);
             },
             onCancel: () => Navigator.pop(context),
@@ -228,9 +226,9 @@ class _ChatInputFieldState extends State<ChatInputField> {
     );
   }
 
-  _sendImage(List<String> listPath, roomID, friendID) {
+  _sendImages(List<String> listPath, roomID, friendID) {
     Provider.of<ChatBloc>(context, listen: false).add(
-      SendImageEvent(
+      SendImagesEvent(
         listPath: listPath,
         roomID: roomID,
         friendID: friendID,

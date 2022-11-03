@@ -7,22 +7,19 @@ import '../network/base_api_service.dart';
 import '../network/network_api_service.dart';
 
 class ChatRepository extends IServiceAPI {
-  String urlEndPointFindAUser = "chat/findAUser";
-  String urlEndPointGetRooms = "chat/getRooms";
-  String urlEndPointGetFriendRequests = "chat/getFriendRequests";
-  String urlEndPointRemoveRequest = "chat/removeRequest";
-  String urlEndPointSendIMG = "chat/upload";
+  String endPointFindAUser = "chat/findAUser";
+  String endPointGetFriendRequests = "chat/getFriendRequests";
+  String endPointRemoveRequest = "chat/removeRequest";
+  String endPointUploadMultiFiles = "chat/multiUpload";
 
   final BaseApiServices apiServices = NetworkApiService();
   late Environment environment;
 
   ChatRepository({required this.environment}) {
-    urlEndPointFindAUser = environment.baseURL + urlEndPointFindAUser;
-    urlEndPointGetRooms = environment.baseURL + urlEndPointGetRooms;
-    urlEndPointGetFriendRequests =
-        environment.baseURL + urlEndPointGetFriendRequests;
-    urlEndPointRemoveRequest = environment.baseURL + urlEndPointRemoveRequest;
-    urlEndPointSendIMG = environment.baseURL + urlEndPointSendIMG;
+    endPointFindAUser = environment.baseURL + endPointFindAUser;
+    endPointGetFriendRequests = environment.baseURL + endPointGetFriendRequests;
+    endPointRemoveRequest = environment.baseURL + endPointRemoveRequest;
+    endPointUploadMultiFiles = environment.baseURL + endPointUploadMultiFiles;
   }
 
   @override
@@ -40,10 +37,11 @@ class ChatRepository extends IServiceAPI {
     return Error.fromJson(value);
   }
 
-  Future<BaseResponse?> findAUser({required data}) async {
+  /// Find a user to add new friend request. This function return infomations of user
+  Future<BaseResponse?> findUser({required data}) async {
     try {
       final response = await apiServices.getPostApiResponse(
-        urlEndPointFindAUser,
+        endPointFindAUser,
         data,
         {'Content-Type': 'application/json'},
       );
@@ -53,23 +51,11 @@ class ChatRepository extends IServiceAPI {
     }
   }
 
-  Future<BaseResponse?> getRooms({required data}) async {
-    try {
-      final response = await apiServices.getPostApiResponse(
-        urlEndPointGetRooms,
-        data,
-        {'Content-Type': 'application/json'},
-      );
-      return BaseResponse.fromJson(response);
-    } on Exception catch (_) {
-      return null;
-    }
-  }
-
+  /// This function to get list friend request
   Future<BaseResponse?> getFriendRequests({required data}) async {
     try {
       final response = await apiServices.getPostApiResponse(
-        urlEndPointGetFriendRequests,
+        endPointGetFriendRequests,
         data,
         {'Content-Type': 'application/json'},
       );
@@ -79,10 +65,11 @@ class ChatRepository extends IServiceAPI {
     }
   }
 
+  /// This function to remove a friend request
   Future<BaseResponse?> removeRequest({required data}) async {
     try {
       final response = await apiServices.getPostApiResponse(
-        urlEndPointRemoveRequest,
+        endPointRemoveRequest,
         data,
         {'Content-Type': 'application/json'},
       );
@@ -92,16 +79,17 @@ class ChatRepository extends IServiceAPI {
     }
   }
 
-  Future<String> sendImg({required String path}) async {
+  /// This function to send images, return list paths.
+  Future<dynamic> sendImages({required List<String> paths}) async {
     try {
-      final response = await apiServices.postMultipartApiResponse(
-        urlEndPointSendIMG,
-        "img",
-        path,
+      final response = await apiServices.postMultipartApiWithMutiFiles(
+        endPointUploadMultiFiles,
+        "chats",
+        paths,
       );
-      return response['path'];
+      return response['paths'];
     } on Exception catch (_) {
-      return '';
+      return null;
     }
   }
 }

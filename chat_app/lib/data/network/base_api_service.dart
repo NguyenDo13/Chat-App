@@ -1,9 +1,10 @@
 abstract class BaseApiServices {
   Future<dynamic> getPostApiResponse(String url, dynamic data, dynamic headers);
 
-  Future<dynamic> postMultipartApiResponse(
+  /// Post a request contain multi files
+  Future<dynamic> postMultipartApiWithMutiFiles(
     String url,
     String field,
-    String path,
+    List<String> paths,
   );
 }

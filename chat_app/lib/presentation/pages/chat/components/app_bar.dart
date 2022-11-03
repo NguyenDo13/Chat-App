@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 AppBar buildAppBar({
   required BuildContext context,
+  required String roomID,
 }) {
   final friend = context.watch<ChatBloc>().friend;
   return AppBar(
@@ -21,7 +22,7 @@ AppBar buildAppBar({
         return IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Provider.of<ChatBloc>(context, listen: false).add(ExitRoomEvent());
+            Provider.of<ChatBloc>(context, listen: false).add(ExitRoomEvent(roomID: roomID));
           },
         );
       },
@@ -47,13 +48,15 @@ AppBar buildAppBar({
                     formatName(name: state.friend.name!),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
-                  Text(
-                    'Đang hoạt động',
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelLarge!
-                        .copyWith(fontSize: 10),
-                  ),
+                  if (state.isOnl) ...[
+                    Text(
+                      "Đang hoạt động",
+                      style: Theme.of(context)
+                          .textTheme
+                          .labelLarge!
+                          .copyWith(fontSize: 10),
+                    ),
+                  ]
                 ],
               ),
             ],
