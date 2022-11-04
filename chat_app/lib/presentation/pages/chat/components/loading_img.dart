@@ -15,19 +15,37 @@ class LoadingImg extends StatelessWidget {
     final colorSenderBG = theme ? darkBlue : lightBlue;
     return Container(
       padding: EdgeInsets.all(Dimensions.height12),
+      width: Dimensions.width220 - 6,
       decoration: BoxDecoration(
         color: isSender ? colorSenderBG : colorBG,
       ),
-      child: Text(
-        'Đang tải lên 1 ảnh!',
-        overflow: TextOverflow.ellipsis,
-        maxLines: maxValueInteger,
-        style: isSender
-            ? Theme.of(context)
-                .textTheme
-                .displaySmall!
-                .copyWith(color: Colors.white)
-            : Theme.of(context).textTheme.displaySmall,
+      child: Row(
+        mainAxisAlignment:
+            isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: Dimensions.height14,
+            width: Dimensions.height14,
+            child: const CircularProgressIndicator(
+              strokeWidth: 1.0,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(
+            width: Dimensions.width10,
+          ),
+          Text(
+            'Đang tải lên 1 ảnh!',
+            overflow: TextOverflow.ellipsis,
+            maxLines: maxValueInteger,
+            style: isSender
+                ? Theme.of(context)
+                    .textTheme
+                    .displaySmall!
+                    .copyWith(color: Colors.white)
+                : Theme.of(context).textTheme.displaySmall,
+          ),
+        ],
       ),
     );
     // return SizedBox(

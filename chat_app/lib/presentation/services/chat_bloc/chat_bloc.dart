@@ -192,6 +192,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   sendImagesEvent(SendImagesEvent event, Emitter<ChatState> emit) async {
+    log(" go here too");
     final paths = await chatRepository.sendImages(paths: event.listPath);
     final req = addMessageForAsynchronousThread(
       paths,

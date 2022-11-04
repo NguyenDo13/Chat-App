@@ -46,7 +46,12 @@ class _ChatInputFieldState extends State<ChatInputField> {
       child: SafeArea(
         child: Row(
           children: [
-            _actionIcon(Icons.camera_alt, () => _openCamera()),
+            _actionIcon(
+                Icons.camera_alt,
+                () => _openCamera(
+                      widget.idRoom,
+                      widget.idFriend,
+                    )),
             _actionIcon(
                 CupertinoIcons.photo,
                 () => _openImagePicker(
@@ -110,24 +115,29 @@ class _ChatInputFieldState extends State<ChatInputField> {
         });
   }
 
-  Future _openCamera() async {
-    openCamera(onCapture: (image) {
-      setState(() => mediaList = [image]);
-    });
-    // try {
-    //   final cameras = await availableCameras();
-    //   final firstCamera = cameras.first;
-    //   await Future.delayed(const Duration(seconds: 1));
-    //   // ignore: use_build_context_synchronously
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => TakePictureScreen(camera: firstCamera),
-    //     ),
-    //   );
-    // } catch (e) {
-    //   log("BUGS:$e");
-    // }
+  Future _openCamera(String roomID, String friendID) async {
+    try {
+      final cameras = await availableCameras();
+      final firstCamera = cameras.first;
+      await Future.delayed(const Duration(seconds: 1));
+      if (!mounted) return;
+
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TakePictureScreen(
+            camera: firstCamera,
+            cameras: cameras,
+          ),
+        ),
+      );
+
+      if (result != null) {
+        _sendImages(result, roomID, friendID);
+      }
+    } catch (e) {
+      print("BUGS: $e");
+    }
   }
 
   _onChangeInputMessage(String value) {
