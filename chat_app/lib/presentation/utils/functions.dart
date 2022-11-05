@@ -2,46 +2,9 @@ import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/message.dart';
 import 'package:intl/intl.dart';
 
-/// add a message to list message before send a request msg to server
-List<dynamic> addNewMessageWhileSocketWorking({
-  required List<String> listTime,
-  required Message msg,
-  required List<dynamic> sourceChat,
-  required User currentUser,
-  required String date,
-}) {
-  bool isCurrentTime = false;
-  if (listTime.isEmpty) {
-    final newClusterTime = [
-      [msg.toJson()]
-    ];
-    sourceChat.add(newClusterTime);
-    listTime.add(date);
-  } else {
-    // is current date equal date of last time in source chat
-    final lastDate = listTime.last.split(" ")[1];
-    final currentDate = date.split(" ")[1];
-    if (currentDate == lastDate) {
-      isCurrentTime = true;
-      // get last cluster Msg of last cluster time in source chat
-      final lastClusterMsg = sourceChat.last.last;
-      final lastSenderID = Message.fromJson(lastClusterMsg[0]).idSender;
-      if (lastSenderID == currentUser.sId) {
-        lastClusterMsg.add(msg.toJson());
-      } else {
-        final newClusterMsg = [msg.toJson()];
-        sourceChat.last.add(newClusterMsg);
-      }
-    } else {
-      isCurrentTime = false;
-      final newClusterTime = [
-        [msg.toJson()]
-      ];
-      sourceChat.add(newClusterTime);
-      listTime.add(date);
-    }
-  }
-  return [sourceChat, listTime, isCurrentTime];
+/// format duration to hh:mm:ss
+String formatDuration(Duration d) {
+  return d.toString().split('.').first.substring(2);
 }
 
 /// Return last word of the name
@@ -53,7 +16,7 @@ String formatName({required String name}) {
   return arrayName[0];
 }
 
-///format time from '12:00 01/10/2000' to date: 01/10 (if month equal now), month: 01/2000 (if year equal now), hour: 12:00 (if date equal now)
+/// format time from '12:00 01/10/2000' to date: 01/10 (if month equal now), month: 01/2000 (if year equal now), hour: 12:00 (if date equal now)
 String formatTimeRoom(String time) {
   final currentTime = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
 
@@ -84,12 +47,14 @@ String formatTimeRoom(String time) {
   return checkArrayDate[0];
 }
 
+/// Return hh:mm
 String formatTime(String time) {
   final checkArrayTime = time.split("/");
   final checkArrayDate = checkArrayTime[0].split(" ");
   return checkArrayDate[0];
 }
 
+/// Return dd/mm
 String formatDay(String time) {
   final currentTime = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
 
@@ -139,4 +104,46 @@ String formatDay(String time) {
 String customTimeResult(int check, int current, String custom) {
   int result = current - check;
   return "$result $custom";
+}
+
+/// add a message to list message before send a request msg to server
+List<dynamic> addNewMessageWhileSocketWorking({
+  required List<String> listTime,
+  required Message msg,
+  required List<dynamic> sourceChat,
+  required User currentUser,
+  required String date,
+}) {
+  bool isCurrentTime = false;
+  if (listTime.isEmpty) {
+    final newClusterTime = [
+      [msg.toJson()]
+    ];
+    sourceChat.add(newClusterTime);
+    listTime.add(date);
+  } else {
+    // is current date equal date of last time in source chat
+    final lastDate = listTime.last.split(" ")[1];
+    final currentDate = date.split(" ")[1];
+    if (currentDate == lastDate) {
+      isCurrentTime = true;
+      // get last cluster Msg of last cluster time in source chat
+      final lastClusterMsg = sourceChat.last.last;
+      final lastSenderID = Message.fromJson(lastClusterMsg[0]).idSender;
+      if (lastSenderID == currentUser.sId) {
+        lastClusterMsg.add(msg.toJson());
+      } else {
+        final newClusterMsg = [msg.toJson()];
+        sourceChat.last.add(newClusterMsg);
+      }
+    } else {
+      isCurrentTime = false;
+      final newClusterTime = [
+        [msg.toJson()]
+      ];
+      sourceChat.add(newClusterTime);
+      listTime.add(date);
+    }
+  }
+  return [sourceChat, listTime, isCurrentTime];
 }

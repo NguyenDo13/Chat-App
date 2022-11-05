@@ -3,10 +3,18 @@ import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class LoadingImg extends StatelessWidget {
+class LoadingMessage extends StatelessWidget {
   final bool isSender;
   final bool theme;
-  const LoadingImg({super.key, required this.isSender, required this.theme});
+  final String content;
+  final double width;
+  const LoadingMessage({
+    super.key,
+    required this.isSender,
+    required this.theme,
+    required this.content,
+    required this.width,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +23,10 @@ class LoadingImg extends StatelessWidget {
     final colorSenderBG = theme ? darkBlue : lightBlue;
     return Container(
       padding: EdgeInsets.all(Dimensions.height12),
-      width: Dimensions.width220 - 6,
+      width: width,
       decoration: BoxDecoration(
         color: isSender ? colorSenderBG : colorBG,
+        borderRadius: BorderRadius.circular(Dimensions.double12),
       ),
       child: Row(
         mainAxisAlignment:
@@ -35,7 +44,7 @@ class LoadingImg extends StatelessWidget {
             width: Dimensions.width10,
           ),
           Text(
-            'Đang tải lên 1 ảnh!',
+            content,
             overflow: TextOverflow.ellipsis,
             maxLines: maxValueInteger,
             style: isSender
@@ -48,14 +57,5 @@ class LoadingImg extends StatelessWidget {
         ],
       ),
     );
-    // return SizedBox(
-    //   width: Dimensions.screenWidth * 7 / 10,
-    //   // height: Dimensions.height220 * 2,
-    //   child: const Center(
-    //     child: CircularProgressIndicator(
-    //       strokeWidth: 2.0,
-    //     ),
-    //   ),
-    // );
   }
 }

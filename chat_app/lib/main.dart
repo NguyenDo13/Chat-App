@@ -33,7 +33,7 @@ class ChitChatApp extends StatelessWidget {
       child: Consumer<AppStateProvider>(
         builder: (context, appState, child) {
           return GetMaterialApp(
-            title: 'Chat App',
+            title: 'ChitChat App',
             debugShowCheckedModeBanner: false,
             theme: appState.darkMode ? AppTheme.dark() : AppTheme.light(),
             home: const AppAuthentication(),

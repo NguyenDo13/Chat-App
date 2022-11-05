@@ -8,7 +8,7 @@ import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'cannot_load_img.dart';
-import 'loading_img.dart';
+import 'loading_msg.dart';
 
 class ClusterMessages extends StatefulWidget {
   final String avatarFriend;

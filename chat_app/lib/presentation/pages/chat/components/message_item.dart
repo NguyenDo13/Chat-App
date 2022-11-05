@@ -1,14 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/data/models/message.dart';
 import 'package:chat_app/presentation/pages/chat/components/cannot_load_img.dart';
+import 'package:chat_app/presentation/pages/chat/components/image_message.dart';
+import 'package:chat_app/presentation/pages/chat/components/video_message.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
-import 'loading_img.dart';
+import 'loading_msg.dart';
 
 class MessageItem extends StatefulWidget {
   final Message message;
@@ -39,28 +40,26 @@ class _MessageItemState extends State<MessageItem> {
     final colorBG = widget.theme ? darkGreyDarkMode : lightGreyLightMode;
     final colorSenderBG = widget.theme ? darkBlue : lightBlue;
     final radius15 = Radius.circular(Dimensions.double12);
-
+    final crossAxisAlign =
+        widget.isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start;
+    var hieght2 = SizedBox(height: Dimensions.height2);
+    var height4 = SizedBox(height: Dimensions.height4);
     return Column(
-      crossAxisAlignment:
-          widget.isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: crossAxisAlign,
       children: [
         GestureDetector(
-          onTap: () {
-            setState(() {
-              _isMessageInfo = !_isMessageInfo;
-            });
-          },
-          onLongPress: () {
-            _bottomActionMessage(context);
-          },
+          onTap: () => setState(() => _isMessageInfo = !_isMessageInfo),
+          onLongPress: () => ScaffoldMessenger.of(context).showSnackBar(
+            _bottomActionMsg(context),
+          ),
           child: _message(colorSenderBG, colorBG, radius15),
         ),
         if (_isMessageInfo) ...[
-          SizedBox(height: Dimensions.height2),
+          hieght2,
           _infoMsgWidget(context),
         ],
         if (widget.message.state == 'failed') ...[
-          SizedBox(height: Dimensions.height4),
+          height4,
           _sendMsgFailedWidget(context),
         ],
       ],
@@ -91,16 +90,13 @@ class _MessageItemState extends State<MessageItem> {
     switch (widget.message.type) {
       case 'image':
         return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => VideoDemo(),
-                  ));
-            },
-            child: _multiImgMsg(widget.message));
+          onTap: () {},
+          child: _imagesMessageWidget(widget.message.content),
+        );
+      case 'video':
+        return _videosMessageWidget(widget.message.content);
       default:
-        return _textMessage(colorSenderBG, colorBG, radius15);
+        return _textMessageWidget(colorSenderBG, colorBG, radius15);
     }
   }
 
@@ -121,84 +117,71 @@ class _MessageItemState extends State<MessageItem> {
     );
   }
 
-  Widget _multiImgMsg(Message message) {
-    List<dynamic> paths = message.content as List<dynamic>;
+  Widget _videosMessageWidget(List<dynamic> urlList) {
     return Column(
       crossAxisAlignment:
           widget.isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: paths.map((path) {
-        return Container(
-          constraints: BoxConstraints(
-            maxWidth: Dimensions.screenWidth * 7 / 10,
-            maxHeight: Dimensions.height220 * 2,
-          ),
-          margin: EdgeInsets.only(top: Dimensions.height2),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Dimensions.double12),
-            boxShadow: [
-              BoxShadow(
-                color: widget.isSender ? Colors.black45 : Colors.black12,
-                offset: const Offset(1, 1),
-                blurRadius: 2,
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(Dimensions.double16 / 2),
-            child: CachedNetworkImage(
-              imageUrl: "https://appsocketonline2.herokuapp.com$path",
-              fit: BoxFit.contain,
-              placeholder: (context, url) => LoadingImg(
-                isSender: widget.isSender,
-                theme: widget.theme,
-              ),
-              errorWidget: (context, url, error) => CannotLoadImg(
-                isSender: widget.isSender,
-                theme: widget.theme,
-              ),
-            ),
-          ),
+      children: urlList.map((url) {
+        return VideoMessage(
+          url: url,
+          isSender: widget.isSender,
+          theme: widget.theme,
         );
       }).toList(),
     );
   }
 
-  Widget _textMessage(colorSenderBG, colorBG, radius15) {
-    return Container(
-        constraints: BoxConstraints(maxWidth: Dimensions.screenWidth * 4 / 5),
-        margin: EdgeInsets.only(top: Dimensions.height10 / 2),
-        padding: EdgeInsets.all(Dimensions.height12),
-        decoration: BoxDecoration(
-          color: widget.isSender ? colorSenderBG : colorBG,
-          borderRadius: BorderRadius.only(
-            bottomLeft: widget.isSender ? radius15 : const Radius.circular(0),
-            bottomRight: widget.isSender ? const Radius.circular(0) : radius15,
-            topLeft: radius15,
-            topRight: radius15,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: widget.isSender ? Colors.black45 : Colors.black12,
-              offset: const Offset(1, 1),
-              blurRadius: 2,
-            ),
-          ],
-        ),
-        child: Text(
-          widget.message.content,
-          overflow: TextOverflow.ellipsis,
-          maxLines: maxValueInteger,
-          style: widget.isSender
-              ? Theme.of(context)
-                  .textTheme
-                  .displaySmall!
-                  .copyWith(color: Colors.white)
-              : Theme.of(context).textTheme.displaySmall,
-        ));
+  Widget _imagesMessageWidget(List<dynamic> paths) {
+    return Column(
+      crossAxisAlignment:
+          widget.isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: paths.map((path) {
+        return ImageMessage(
+          isSender: widget.isSender,
+          theme: widget.theme,
+          path: path,
+        );
+      }).toList(),
+    );
   }
 
-  void _bottomActionMessage(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  Widget _textMessageWidget(colorSenderBG, colorBG, radius15) {
+    return Container(
+      constraints: BoxConstraints(maxWidth: Dimensions.screenWidth * 4 / 5),
+      margin: EdgeInsets.only(top: Dimensions.height10 / 2),
+      padding: EdgeInsets.all(Dimensions.height12),
+      decoration: BoxDecoration(
+        color: widget.isSender ? colorSenderBG : colorBG,
+        borderRadius: BorderRadius.only(
+          bottomLeft: widget.isSender ? radius15 : const Radius.circular(0),
+          bottomRight: widget.isSender ? const Radius.circular(0) : radius15,
+          topLeft: radius15,
+          topRight: radius15,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: widget.isSender ? Colors.black45 : Colors.black12,
+            offset: const Offset(1, 1),
+            blurRadius: 2,
+          ),
+        ],
+      ),
+      child: Text(
+        widget.message.content,
+        overflow: TextOverflow.ellipsis,
+        maxLines: maxValueInteger,
+        style: widget.isSender
+            ? Theme.of(context)
+                .textTheme
+                .displaySmall!
+                .copyWith(color: Colors.white)
+            : Theme.of(context).textTheme.displaySmall,
+      ),
+    );
+  }
+
+  SnackBar _bottomActionMsg(BuildContext context) {
+    return SnackBar(
       backgroundColor: Colors.white,
       content: SizedBox(
         height: 82,
@@ -229,14 +212,11 @@ class _MessageItemState extends State<MessageItem> {
         )),
       ),
       duration: const Duration(seconds: maxValueInteger),
-    ));
+    );
   }
 
-  Column _actionMessage({
-    required IconData icon,
-    Function()? action,
-    required String title,
-  }) {
+  Widget _actionMessage(
+      {required IconData icon, Function()? action, required String title}) {
     return Column(
       children: [
         IconButton(
@@ -251,87 +231,3 @@ class _MessageItemState extends State<MessageItem> {
     );
   }
 }
-
-class VideoDemo extends StatefulWidget {
-  const VideoDemo({super.key});
-
-  @override
-  State<VideoDemo> createState() => _VideoDemoState();
-}
-
-class _VideoDemoState extends State<VideoDemo> {
-  late VideoPlayerController _playerController;
-  late Future<void> _initializeVideoPlayerFuture;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Create and store the VideoPlayerController. The VideoPlayerController
-    // offers several different constructors to play videos from assets, files,
-    // or the internet.
-    _playerController = VideoPlayerController.network(
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4',
-    );
-
-    // Initialize the controller and store the Future for later use.
-    _initializeVideoPlayerFuture = _playerController.initialize();
-
-    // Use the controller to loop the video.
-    _playerController.setLooping(true);
-  }
-
-  @override
-  void dispose() {
-    // Ensure disposing of the VideoPlayerController to free up resources.
-    _playerController.dispose();
-
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder(
-        future: _initializeVideoPlayerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If the VideoPlayerController has finished initialization, use
-            // the data it provides to limit the aspect ratio of the video.
-            return AspectRatio(
-              aspectRatio: _playerController.value.aspectRatio,
-              // Use the VideoPlayer widget to display the video.
-              child: VideoPlayer(_playerController),
-            );
-          } else {
-            // If the VideoPlayerController is still initializing, show a
-            // loading spinner.
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Wrap the play or pause in a call to `setState`. This ensures the
-          // correct icon is shown.
-          setState(() {
-            // If the video is playing, pause it.
-            if (_playerController.value.isPlaying) {
-              _playerController.pause();
-            } else {
-              // If the video is paused, play it.
-              _playerController.play();
-            }
-          });
-        },
-        // Display the correct icon depending on the state of the player.
-        child: Icon(
-          _playerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
-        ),
-      ),
-    );
-  }
-}
-

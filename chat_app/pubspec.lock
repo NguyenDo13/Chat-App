@@ -197,6 +197,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.8"
+  emoji_picker_flutter:
+    dependency: "direct main"
+    description:
+      name: emoji_picker_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.5.0"
+  extended_text_field:
+    dependency: "direct main"
+    description:
+      name: extended_text_field
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "10.1.1"
+  extended_text_library:
+    dependency: transitive
+    description:
+      name: extended_text_library
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "9.1.1"
   fake_async:
     dependency: transitive
     description:

@@ -23,7 +23,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   // Chat room
   List<dynamic> sourceChat = [];
-  List<String> listTime = [];
+  List<String> timeList = [];
   User? friend;
 
   // Friend
@@ -47,7 +47,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     on<ExitRoomEvent>(exitChatRoom);
     //* Message
     on<SendMessageEvent>(sendMessageEvent);
-    on<SendImagesEvent>(sendImagesEvent);
+    on<SendFilesEvent>(sendFilesEvent);
     //* Friend
     on<LookingForFriendEvent>(lookingForFriend);
     on<FindUserEvent>(findUserEvent);
@@ -191,27 +191,30 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     ));
   }
 
-  sendImagesEvent(SendImagesEvent event, Emitter<ChatState> emit) async {
-    log(" go here too");
+  sendFilesEvent(SendFilesEvent event, Emitter<ChatState> emit) async {
+    // upload files to server and get a response
     final paths = await chatRepository.sendImages(paths: event.listPath);
+
     final req = addMessageForAsynchronousThread(
       paths,
-      'image',
+      event.fileType,
     );
+
+    // push data for UI
     emit(HasSourceChatState(
       isOnl: true,
       idRoom: event.roomID,
       sourceChat: sourceChat,
-      listTime: listTime,
+      listTime: timeList,
       currentUser: currentUser,
       friend: friend!,
     ));
 
     // add new message type img
     sendMessageBySocket(
-      "đã gửi ${paths.length} ảnh",
-      req[0],
-      req[1],
+      "đã gửi ${paths.length} ${event.fileType}",
+      req[0], // message
+      req[1], // is current time or not
       event.friendID,
       event.roomID,
     );
@@ -231,7 +234,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   }
 
   /// add a message to list message before send a request msg to server
-  List<dynamic> addMessageForAsynchronousThread(content, type) {
+  List<dynamic> addMessageForAsynchronousThread(content, String type) {
     // prepare message data
     String date = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
     final msg = Message(
@@ -247,12 +250,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       msg: msg,
       date: date,
       currentUser: currentUser,
-      listTime: listTime,
+      listTime: timeList,
       sourceChat: sourceChat,
     );
 
     sourceChat = data[0]; // new source chat
-    listTime = data[1]; // new list timr
+    timeList = data[1]; // new time list
     return [msg, data[2]]; // Message , bool(is current time or not)
   }
 
@@ -264,7 +267,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       isOnl: true,
       idRoom: event.idRoom,
       sourceChat: sourceChat,
-      listTime: listTime,
+      listTime: timeList,
       currentUser: currentUser,
       friend: friend!,
     ));
@@ -325,7 +328,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       }
 
       sourceChat = listSourceChat;
-      listTime = listKeyTime;
+      timeList = listKeyTime;
 
       emit(HasSourceChatState(
         isOnl: isOnl,

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/user_presence.dart';
+import 'package:chat_app/presentation/enum/enums.dart';
 
 abstract class ChatEvent {
   const ChatEvent();
@@ -50,11 +51,13 @@ class SendMessageEvent extends ChatEvent {
   });
 }
 
-class SendImagesEvent extends ChatEvent {
+class SendFilesEvent extends ChatEvent {
   final List<String> listPath;
+  final String fileType;
   final String roomID;
   final String friendID;
-  SendImagesEvent({
+  SendFilesEvent({
+    required this.fileType,
     required this.listPath,
     required this.roomID,
     required this.friendID,

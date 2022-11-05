@@ -21,11 +21,19 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final _controllerChat = TextEditingController();
+
+  @override
+  void dispose() {
+    _controllerChat.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<ChatBloc>(context, listen: false).add(ExitRoomEvent(roomID: widget.idRoom));
+        Provider.of<ChatBloc>(context, listen: false)
+            .add(ExitRoomEvent(roomID: widget.idRoom));
         return false;
       },
       child: Scaffold(
