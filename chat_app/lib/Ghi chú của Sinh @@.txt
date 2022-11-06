@@ -1,4 +1,5 @@
 1. Các công việc còn tồn động do sự lười biếng của hôm qua, làm nhanh nhé ban ơi:
+    - Tat cai flash cua chup anh di thang kia
     - Làm màn hình review ảnh
     - cập nhật lại trạng thái online or offline
     - Hiển thị list user online
@@ -8,7 +9,6 @@
     - đổi mật khẩu
     - đa ngôn ngữ
     - ...
-Gắng hoàn thành trong hôm nay nhé bạn ơi. ko kip roi lam sao day ban oi
 
 
 
