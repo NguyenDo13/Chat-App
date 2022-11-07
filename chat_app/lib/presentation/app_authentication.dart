@@ -13,8 +13,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppAuthentication extends StatefulWidget {
+  final Future<SharedPreferences> sharedFuture;
+  final String? tokenUser;
   const AppAuthentication({
     Key? key,
+    required this.sharedFuture,
+    this.tokenUser,
   }) : super(key: key);
 
   @override
@@ -22,18 +26,6 @@ class AppAuthentication extends StatefulWidget {
 }
 
 class _AppAuthenticationState extends State<AppAuthentication> {
-  // Initialize SharedPreferences to get tokenUser
-  late Future<SharedPreferences> shared;
-  _initshared() async {
-    shared = SharedPreferences.getInstance();
-  }
-
-  @override
-  void initState() {
-    _initshared();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthBloc>(
@@ -41,8 +33,10 @@ class _AppAuthenticationState extends State<AppAuthentication> {
         AuthRepository(
           environment: Environment(isServerDev: true),
         ),
-        shared,
-      ),
+        widget.sharedFuture,
+      )..add(widget.tokenUser != null
+          ? LoginByAccessTokenEvent()
+          : InitLoginEvent()),
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           // Check dark mode
@@ -55,15 +49,6 @@ class _AppAuthenticationState extends State<AppAuthentication> {
           }
         },
         builder: (context, state) {
-          // Splash screen
-          if (state is AuthLoadingState) {
-            context.read<AuthBloc>().add(LoginWithAccessTokenEvent());
-            return const SplashScreen();
-          }
-          // Login screen
-          if (state is LoginState) {
-            return const LoginScreen();
-          }
           // Register screen
           if (state is RegisterState) {
             return const SignUpScreen();
@@ -77,12 +62,7 @@ class _AppAuthenticationState extends State<AppAuthentication> {
               listFriend: state.listFriend,
             );
           }
-          // Error
-          return const Center(
-              child: Text(
-            'Error 500',
-            style: TextStyle(color: Colors.red),
-          ));
+          return const LoginScreen();
         },
       ),
     );

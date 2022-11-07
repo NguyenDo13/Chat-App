@@ -28,8 +28,10 @@ class NormalLoginEvent extends AuthEvent {
   });
 }
 
+class InitLoginEvent extends AuthEvent {}
+
 //* Login with a code
-class LoginWithAccessTokenEvent extends AuthEvent {}
+class LoginByAccessTokenEvent extends AuthEvent {}
 
 //* Login by Google account
 class GoogleLoginEvent extends AuthEvent {}

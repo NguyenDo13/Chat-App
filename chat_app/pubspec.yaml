@@ -33,6 +33,7 @@ dependencies:
   shared_preferences: ^2.0.15
   socket_io_client: ^2.0.0
   video_player: ^2.4.7
+  flutter_native_splash: ^2.2.14
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -43,9 +44,13 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/logos/chitchat.png"
-  adaptive_icon_background: "#bcaed9"
-  adaptive_icon_foreground: "assets/logos/chitchat.png"
+  image_path: "assets/logos/logo_chitchat.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/logos/logo_chitchat.png"
+
+flutter_native_splash:
+  color: "#fae179"
+  image: assets/logos/logo_chitchat_1680.png
 
 flutter:
   uses-material-design: true

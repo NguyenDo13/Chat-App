@@ -20,11 +20,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     //* Event to login by application account
     on<NormalLoginEvent>(normalLogin);
 
+    on<InitLoginEvent>((event, emit) => emit(LoginState(loading: false)));
+
     //* Event to register a new app account
     on<RegisterEvent>(_registerEvent);
 
     //* Event to login with a code that is accessToken. It is allocated when previously logged in.
-    on<LoginWithAccessTokenEvent>(loginWithAccessToken);
+    on<LoginByAccessTokenEvent>(loginByAccessToken);
 
     on<InitRegisterEvent>((event, emit) => emit(RegisterState(loading: false)));
 
@@ -55,7 +57,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     //* Logout App
     emit(LoginState(loading: false));
-    
+
     //* Clear data of the user
     final shared = await sharedPreferences;
     shared.setString('auth_token', '');
@@ -156,10 +158,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  loginWithAccessToken(
-    LoginWithAccessTokenEvent event,
+  loginByAccessToken(
+    LoginByAccessTokenEvent event,
     Emitter<AuthState> emit,
   ) async {
+    //* Show loading popup
+    emit(LoginState(loading: true));
+
     //* Init data for request
     final shared = await sharedPreferences;
     final tokenUser = shared.getString('auth_token');
@@ -187,6 +192,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _authUser = authRepository.convertDynamicToObject(value.data[0]);
 
     //* Login success
+    emit(LoginState(loading: false));
     emit(LoggedState(
       loading: false,
       authUser: _authUser,
@@ -194,5 +200,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       friendRequests: _authUser!.friendRequests,
       listFriend: _authUser!.listFriend,
     ));
+
   }
 }
