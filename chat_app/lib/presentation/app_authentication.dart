@@ -3,7 +3,6 @@ import 'package:chat_app/data/repository/auth_repository.dart';
 import 'package:chat_app/presentation/pages/page_controller.dart';
 import 'package:chat_app/presentation/pages/login/login_screen.dart';
 import 'package:chat_app/presentation/pages/signup/signup_screen.dart';
-import 'package:chat_app/presentation/pages/splash/splash_screen.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
@@ -45,6 +44,7 @@ class _AppAuthenticationState extends State<AppAuthentication> {
             AppStateProvider appState = context.read<AppStateProvider>();
             if (state.authUser != null) {
               appState.darkMode = state.authUser!.user!.isDarkMode!;
+              appState.urlImage = state.authUser!.user!.urlImage!;
             }
           }
         },

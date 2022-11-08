@@ -8,12 +8,14 @@ import '../network/network_api_service.dart';
 
 class UserRepository extends IServiceAPI{
   String urlEndPointChangeDarkMode = "user/changeDarkMode";
+  String urlEndPointUploadImg = "user/upload";
 
   final BaseApiServices apiServices = NetworkApiService();
   late Environment environment;
 
   UserRepository({required this.environment}) {
     urlEndPointChangeDarkMode = environment.baseURL + urlEndPointChangeDarkMode;
+    urlEndPointUploadImg = environment.baseURL + urlEndPointUploadImg;
   }
 
   @override
@@ -39,6 +41,21 @@ class UserRepository extends IServiceAPI{
         header,
       );
       return BaseResponse.fromJson(response);
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+
+  /// This function to send images, return list paths.
+  Future<dynamic> uploadAvatar({required String path, required String userID}) async {
+    try {
+      final response = await apiServices.postMultipartFile(
+        urlEndPointUploadImg,
+        "avatars",
+        path,
+        userID,
+      );
+      return response['path'];
     } on Exception catch (_) {
       return null;
     }

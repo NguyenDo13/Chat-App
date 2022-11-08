@@ -19,7 +19,7 @@ class NetworkApiService extends BaseApiServices {
             headers: headers,
           )
           .timeout(
-            const Duration(seconds: 10),
+            const Duration(seconds: 100),
           );
 
       responseJson = returnResponse(response);
@@ -68,6 +68,32 @@ class NetworkApiService extends BaseApiServices {
           ),
         );
       }
+
+      request.headers.addAll({
+        "Content-type": "multipart/form-data",
+      });
+
+      http.StreamedResponse streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      responseJson = returnResponse(response);
+    } on SocketException {
+      log("Can't post request to server!");
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
+
+  @override
+  Future postMultipartFile(
+      String url, String field, String path, String userID) async {
+    dynamic responseJson;
+
+    try {
+      final request = http.MultipartRequest("POST", Uri.parse(url));
+
+      request.files.add(await http.MultipartFile.fromPath(field, path));
+      request.fields.addAll({'userID': userID});
 
       request.headers.addAll({
         "Content-type": "multipart/form-data",

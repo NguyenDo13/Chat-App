@@ -10,14 +10,18 @@ import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:socket_io_client/socket_io_client.dart'
-    as IO; // ignore: library_prefixes
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import 'components/user_avatar.dart'; // ignore: library_prefixes
 
 class SettingScreen extends StatelessWidget {
   final IO.Socket socket;
   final AuthUser authUser;
-  const SettingScreen(
-      {super.key, required this.authUser, required this.socket});
+  const SettingScreen({
+    super.key,
+    required this.authUser,
+    required this.socket,
+  });
   @override
   Widget build(BuildContext context) {
     // Size
@@ -31,23 +35,39 @@ class SettingScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          sizedBox24,
-          _avatar(
-            authUser.user?.urlImage ?? '',
-            authUser.user?.name ?? "unknow",
-          ),
-          sizedBox24,
-          _nameOfUser(context, authUser.user?.name ?? "unknow"),
           sizedBox50,
-          _changeDarkMode(appStateProvider, context, authUser.user!.sId!),
+          UserAvatar(
+            avatar: appStateProvider.urlImage,
+            userID: authUser.user!.sId!,
+            theme: appStateProvider.darkMode,
+          ),
+          sizedBox12,
+          Text(
+            authUser.user?.name ?? "unknow",
+            maxLines: 4,
+            style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                  fontSize: 20,
+                ),
+          ),
+          sizedBox50,
+          ChangeDarkMode(
+            isDarkMode: appStateProvider.darkMode,
+            onchange: (value) => _changeDarkMode(value, context),
+          ),
           sizedBox12,
           _changeLaguage(),
           sizedBox12,
-          _userInfo(context),
+          FeatureSetting(
+            icon: CupertinoIcons.person_circle,
+            title: 'Thông tin cá nhân',
+            color: Colors.deepPurple[400]!,
+            onTap: () => _changeUserInfo(context),
+          ),
           sizedBox12,
           _bannedUser(),
           sizedBox12,
           _logout(context),
+          sizedBox24,
         ],
       ),
     );
@@ -59,22 +79,6 @@ class SettingScreen extends StatelessWidget {
       title: 'Ngôn ngữ',
       color: Colors.green[400]!,
       onTap: () {},
-    );
-  }
-
-  ChangeDarkMode _changeDarkMode(
-    AppStateProvider appStateProvider,
-    BuildContext context,
-    String userID,
-  ) {
-    return ChangeDarkMode(
-      isDarkMode: appStateProvider.darkMode,
-      onchange: (value) {
-        Provider.of<AppStateProvider>(context, listen: false).changeDarkMode(
-          value,
-          userID,
-        );
-      },
     );
   }
 
@@ -98,46 +102,21 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  FeatureSetting _userInfo(BuildContext context) {
-    return FeatureSetting(
-      icon: CupertinoIcons.person_circle,
-      title: 'Thông tin cá nhân',
-      color: Colors.deepPurple[400]!,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PersonalInformation(
-              avatar: authUser.user?.urlImage ?? '',
-            ),
-          ),
-        );
-      },
+  _changeDarkMode(bool value, BuildContext context) {
+    Provider.of<AppStateProvider>(context, listen: false).changeDarkMode(
+      value,
+      authUser.user!.sId!,
     );
   }
 
-  Text _nameOfUser(BuildContext context, String name) {
-    return Text(
-      name,
-      maxLines: 4,
-      style: Theme.of(context).textTheme.displayLarge!.copyWith(
-        shadows: [
-          const BoxShadow(
-            color: Colors.black12,
-            offset: Offset(1, 1),
-            blurRadius: 2,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Center _avatar(String avatar, String name) {
-    return Center(
-      child: StateAvatar(
-        avatar: avatar,
-        isStatus: false,
-        radius: Dimensions.double40 * 5,
+  _changeUserInfo(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PersonalInformation(
+          avatar: authUser.user?.urlImage ?? '',
+          name: authUser.user?.name ?? "unknow",
+        ),
       ),
     );
   }

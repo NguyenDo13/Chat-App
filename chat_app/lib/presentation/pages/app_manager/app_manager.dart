@@ -45,31 +45,15 @@ class _AppManagerState extends State<AppManager> {
     ];
     List<dynamic>? valueRequest = context.watch<ChatBloc>().requests;
     bool theme = context.watch<AppStateProvider>().darkMode;
+    String urlImage = context.watch<AppStateProvider>().urlImage;
 
     return WillPopScope(
-      onWillPop: () async {
-        final difference = DateTime.now().difference(timeBackPressed);
-        final isExitWarning = difference >= const Duration(seconds: 2);
-
-        timeBackPressed = DateTime.now();
-        if (isExitWarning) {
-          Fluttertoast.showToast(
-            msg: 'Press back again to exit',
-            fontSize: 10,
-            textColor: theme ? Colors.white : Colors.black,
-            backgroundColor: theme ? darkGreyDarkMode : lightGreyLightMode,
-          );
-          return false;
-        } else {
-          Fluttertoast.cancel();
-          return true;
-        }
-      },
+      onWillPop: () => _exitApp(theme),
       child: Scaffold(
         appBar: appBarPageManagar(
           currentPage,
           context,
-          widget.authUser.user?.urlImage ?? '',
+          urlImage,
           widget.authUser.user?.name ?? '',
           widget.socket,
           valueRequest != null ? valueRequest.length : 0,
@@ -117,5 +101,24 @@ class _AppManagerState extends State<AppManager> {
         ),
       ),
     );
+  }
+
+  Future<bool> _exitApp(bool theme) async {
+    final difference = DateTime.now().difference(timeBackPressed);
+    final isExitWarning = difference >= const Duration(seconds: 2);
+
+    timeBackPressed = DateTime.now();
+    if (isExitWarning) {
+      Fluttertoast.showToast(
+        msg: 'Press back again to exit',
+        fontSize: 10,
+        textColor: theme ? Colors.white : Colors.black,
+        backgroundColor: theme ? darkGreyDarkMode : lightGreyLightMode,
+      );
+      return false;
+    } else {
+      Fluttertoast.cancel();
+      return true;
+    }
   }
 }

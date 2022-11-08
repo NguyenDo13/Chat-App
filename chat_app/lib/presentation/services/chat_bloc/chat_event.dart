@@ -105,3 +105,10 @@ class RemoveFriendRequest extends ChatEvent {
 class InitLookingForChatEvent extends ChatEvent {}
 
 class ExitSearchEvent extends ChatEvent {}
+
+class UpdatePresenceEvent extends ChatEvent {
+  final String? roomID;
+  UpdatePresenceEvent({
+    this.roomID,
+  });
+}

@@ -9,7 +9,6 @@ import 'package:chat_app/presentation/widgets/input_text_field_search.dart';
 import 'package:chat_app/presentation/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class SearchScreen extends StatelessWidget {
   final List<dynamic>? listFriend;

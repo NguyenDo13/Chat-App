@@ -7,4 +7,12 @@ abstract class BaseApiServices {
     String field,
     List<String> paths,
   );
+
+  /// Post a request contain a file
+  Future<dynamic> postMultipartFile(
+    String url,
+    String field,
+    String path,
+    String userID,
+  );
 }

@@ -4,6 +4,7 @@ import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/chat_room.dart';
 import 'package:chat_app/data/models/message.dart';
+import 'package:chat_app/data/models/user_presence.dart';
 import 'package:chat_app/data/repository/chat_repository.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
@@ -25,6 +26,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   List<dynamic> sourceChat = [];
   List<String> timeList = [];
   User? friend;
+  bool? friendPresence;
 
   // Friend
   List<dynamic>? requests = [];
@@ -59,9 +61,27 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     //* Search
     on<InitLookingForChatEvent>(initLookingForChat);
     on<ExitSearchEvent>(exitSearchFriend);
-
+    on<UpdatePresenceEvent>((event, emit) {
+      if (event.roomID != null) {
+        return emit(
+          HasSourceChatState(
+            isOnl: friendPresence!,
+            idRoom: event.roomID!,
+            currentUser: currentUser,
+            friend: friend!,
+          ),
+        );
+      }
+      if (state is LookingForChatState) {
+        emit(LookingForChatState(listFriend: listFriend!));
+      }
+      if (state is JoinAppState) {
+        emit(JoinAppState(listDataRoom!, listFriend));
+      }
+    });
     updateListDataRooms();
     getFriendRequest();
+    updatePresence();
   }
 
   exitSearchFriend(ExitSearchEvent event, Emitter<ChatState> emit) {
@@ -78,6 +98,9 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   exitChatRoom(ExitRoomEvent event, Emitter<ChatState> emit) {
     socket.emit("exitRoom", event.roomID);
+    final presence =
+        UserPresence.fromJson(listDataRoom![0]['presence']).presence!;
+    log("presence to see: $presence");
     emit(JoinAppState(listDataRoom!, listFriend));
   }
 
@@ -116,6 +139,37 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   Future updateFriends() async {
     socket.on("updateFriends", (data) {
       listFriend = data;
+    });
+  }
+
+  updatePresence({String? roomID}) {
+    socket.on("updatePresence", (data) {
+      log("userID: ${data['userID']}");
+      log("presence: ${data['presence']}");
+
+      for (var i = 0; i < listDataRoom!.length; i++) {
+        if (listDataRoom![i]['presence']['userID'] == data['userID']) {
+          listDataRoom![i]['presence']['presence'] = data['presence'];
+          log("update room");
+
+          break;
+        }
+      }
+
+      for (var i = 0; i < listFriend!.length; i++) {
+        if (listFriend![i]['presence']['userID'] == data['userID']) {
+          listFriend![i]['presence']['presence'] = data['presence'];
+          log("update friend");
+
+          break;
+        }
+      }
+
+      if (friend != null && friend!.sId == data['userID']) {
+        friendPresence = data['presence'];
+      }
+
+      add(UpdatePresenceEvent(roomID: roomID));
     });
   }
 
@@ -202,7 +256,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
     // push data for UI
     emit(HasSourceChatState(
-      isOnl: true,
+      isOnl: friendPresence!,
       idRoom: event.roomID,
       sourceChat: sourceChat,
       listTime: timeList,
@@ -218,7 +272,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       event.friendID,
       event.roomID,
     );
-    await getSourceChat(true, event.roomID, friend!);
+    await getSourceChat(event.roomID, friend!);
   }
 
   sendMessageBySocket(subMsg, msg, isCurrentTime, friendID, roomID) {
@@ -264,7 +318,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     final req = addMessageForAsynchronousThread(event.message, 'text');
 
     emit(HasSourceChatState(
-      isOnl: true,
+      isOnl: friendPresence!,
       idRoom: event.idRoom,
       sourceChat: sourceChat,
       listTime: timeList,
@@ -273,7 +327,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     ));
 
     sendMessageBySocket('', req[0], req[1], event.friendID, event.idRoom);
-    await getSourceChat(true, event.idRoom, friend!);
+    await getSourceChat(event.idRoom, friend!);
   }
 
   checkHasRoomEvent(CheckHasRoomEvent event, Emitter<ChatState> emit) async {
@@ -289,15 +343,18 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     if (roomID != '') {
       // Join room
       friend = event.friend;
+      friendPresence = event.isOnl;
       if (!socket.connected) return;
       socket.emit(
         'joinRoom',
         {"roomID": roomID, "userID": currentUser.sId},
       );
-      await getSourceChat(event.isOnl, roomID, event.friend);
+      await getSourceChat(roomID, event.friend);
     } else {
       // Init room
       friend = event.friend;
+      friendPresence = event.isOnl;
+
       emit(HasSourceChatState(
         isOnl: event.isOnl,
         idRoom: "",
@@ -309,15 +366,16 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   joinRoomEvent(JoinRoomEvent event, Emitter<ChatState> emit) async {
     friend = event.friend;
+    friendPresence = event.isOnl;
     if (!socket.connected) return;
     socket.emit(
       'joinRoom',
       {"roomID": event.roomID, "userID": currentUser.sId},
     );
-    await getSourceChat(event.isOnl, event.roomID, event.friend);
+    await getSourceChat(event.roomID, event.friend);
   }
 
-  Future getSourceChat(bool isOnl, String roomID, User friend) async {
+  Future getSourceChat(String roomID, User friend) async {
     socket.on('getSourceChat', (data) async {
       final objectSourceChat = await data['sourceChat'];
       final listKeyTime = data['sourceChat'].keys.toList();
@@ -331,7 +389,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       timeList = listKeyTime;
 
       emit(HasSourceChatState(
-        isOnl: isOnl,
+        isOnl: friendPresence!,
         idRoom: roomID,
         sourceChat: listSourceChat,
         listTime: listKeyTime,
@@ -339,6 +397,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         friend: friend,
       ));
       socket.emit("viewMessage", {"roomID": roomID, "userID": currentUser.sId});
+      updatePresence();
     });
   }
 

@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:chat_app/data/environment.dart';
+import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/repository/user_repository.dart';
+import 'package:chat_app/presentation/res/colors.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AppStateProvider extends ChangeNotifier {
   // Check connect Network
@@ -19,6 +22,13 @@ class AppStateProvider extends ChangeNotifier {
   bool get darkMode => _darkMode;
   set darkMode(bool darkMode) {
     _darkMode = darkMode;
+    notifyListeners();
+  }
+
+  String _urlImage = '';
+  String get urlImage => _urlImage;
+  set urlImage(String url) {
+    _urlImage = url;
     notifyListeners();
   }
 
@@ -42,6 +52,24 @@ class AppStateProvider extends ChangeNotifier {
       data: {'userID': userID, 'isDarkMode': darkMode},
       header: {'Content-Type': 'application/json'},
     );
+  }
+
+  Future uploadAvatar(String path, String userID) async {
+    final responseUrl = await userRepo.uploadAvatar(
+      path: path,
+      userID: userID,
+    );
+    if (responseUrl == null) {
+      return Fluttertoast.showToast(
+        msg: 'Không thể cập nhật ảnh đại diện',
+        fontSize: 12,
+        textColor: _darkMode ? Colors.white : Colors.black,
+        backgroundColor: _darkMode ? darkGreyDarkMode : lightGreyLightMode,
+      );
+    }
+    _urlImage = responseUrl;
+    notifyListeners();
+    return responseUrl;
   }
 
   // Check connect network

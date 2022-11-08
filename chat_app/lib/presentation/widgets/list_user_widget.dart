@@ -1,4 +1,5 @@
 import 'package:chat_app/data/models/auth_user.dart';
+import 'package:chat_app/data/models/user_presence.dart';
 import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
@@ -33,7 +34,8 @@ class ListUserWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemCount: listUser.length,
         itemBuilder: (context, index) {
-          final friend = User.fromJson(listUser[index]);
+          final friend = User.fromJson(listUser[index]['friend']);
+          final presence = UserPresence.fromJson(listUser[index]['presence']);
           return Padding(
             padding: EdgeInsets.only(bottom: Dimensions.height10),
             child: ListTile(
@@ -45,7 +47,7 @@ class ListUserWidget extends StatelessWidget {
                   CheckHasRoomEvent(
                     userID: userID!,
                     friend: friend,
-                    isOnl: false,
+                    isOnl: presence.presence!,
                   ),
                 );
               },
@@ -53,7 +55,7 @@ class ListUserWidget extends StatelessWidget {
                 padding: EdgeInsets.only(right: Dimensions.width8),
                 child: StateAvatar(
                   avatar: friend.urlImage ?? '',
-                  isStatus: false,
+                  isStatus: presence.presence!,
                   radius: Dimensions.double12 * 4,
                 ),
               ),
