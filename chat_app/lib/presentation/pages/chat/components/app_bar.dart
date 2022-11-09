@@ -1,5 +1,4 @@
 import 'package:chat_app/presentation/pages/information_chat_room/information_chat_room.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
@@ -8,6 +7,7 @@ import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 AppBar buildAppBar({
@@ -16,13 +16,14 @@ AppBar buildAppBar({
 }) {
   final friend = context.watch<ChatBloc>().friend;
   return AppBar(
-    toolbarHeight: Dimensions.height72,
+    toolbarHeight: 72.h,
     leading: BlocBuilder<ChatBloc, ChatState>(
       builder: (context, state) {
         return IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Provider.of<ChatBloc>(context, listen: false).add(ExitRoomEvent(roomID: roomID));
+            Provider.of<ChatBloc>(context, listen: false)
+                .add(ExitRoomEvent(roomID: roomID));
           },
         );
       },
@@ -36,10 +37,10 @@ AppBar buildAppBar({
               StateAvatar(
                 avatar: state.friend.urlImage!,
                 isStatus: state.isOnl,
-                radius: Dimensions.double40,
+                radius: 40.r,
               ),
               SizedBox(
-                width: Dimensions.width12,
+                width: 12.w,
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,7 +55,7 @@ AppBar buildAppBar({
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge!
-                          .copyWith(fontSize: 10),
+                          .copyWith(fontSize: 10.r),
                     ),
                   ]
                 ],
@@ -93,11 +94,11 @@ AppBar buildAppBar({
         icon: Icon(
           CupertinoIcons.info_circle_fill,
           color: Colors.blue,
-          size: Dimensions.double30,
+          size: 30.r,
         ),
       ),
       SizedBox(
-        width: Dimensions.height4,
+        width: 4.h,
       ),
     ],
   );
