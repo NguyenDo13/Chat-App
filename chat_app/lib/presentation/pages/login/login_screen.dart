@@ -18,7 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String deviceToken;
+  const LoginScreen({super.key, required this.deviceToken});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -136,6 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
           NormalLoginEvent(
             email: _email,
             password: _password,
+            deviceToken: widget.deviceToken,
           ),
         );
   }

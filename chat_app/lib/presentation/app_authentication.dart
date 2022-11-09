@@ -14,10 +14,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppAuthentication extends StatefulWidget {
   final Future<SharedPreferences> sharedFuture;
   final String? tokenUser;
+  final String deviceToken;
   const AppAuthentication({
     Key? key,
     required this.sharedFuture,
-    this.tokenUser,
+    this.tokenUser, required this.deviceToken,
   }) : super(key: key);
 
   @override
@@ -62,7 +63,7 @@ class _AppAuthenticationState extends State<AppAuthentication> {
               listFriend: state.listFriend,
             );
           }
-          return const LoginScreen();
+          return LoginScreen( deviceToken: widget.deviceToken,);
         },
       ),
     );

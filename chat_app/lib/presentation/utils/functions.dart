@@ -1,6 +1,31 @@
+import 'dart:developer';
+
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/message.dart';
+import 'package:chat_app/presentation/res/colors.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+
+///
+Future<void> firebaseOnBackgroundMessageHandle(RemoteMessage mesage) async {
+  try {
+    log("firebase message title: ${mesage.notification!.title}");
+    log("firebase message body: ${mesage.notification!.body}");
+  } catch (e) {
+    showToast(e.toString());
+  }
+}
+
+showToast(String msg) {
+  Fluttertoast.showToast(
+    msg: msg,
+    fontSize: 12,
+    textColor: Colors.black,
+    backgroundColor: lightGreyLightMode,
+  );
+}
 
 /// format duration to hh:mm:ss
 String formatDuration(Duration d) {

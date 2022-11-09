@@ -17,8 +17,7 @@ class ListOnlineUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ChatBloc, ChatState>(
-      listener: (context, state) {
-      },
+      listener: (context, state) {},
       child: Container(
         padding: EdgeInsets.fromLTRB(
           Dimensions.width14,
@@ -43,7 +42,7 @@ class ListOnlineUser extends StatelessWidget {
             return Row(
               children: [
                 if (index == 0) ...[
-                  _addNewFriend(context, appStateProvider),
+                  _addNewFriend(context, appStateProvider.darkMode),
                 ],
                 _friendWidget(friend, appStateProvider, context, presence),
               ],
@@ -56,7 +55,7 @@ class ListOnlineUser extends StatelessWidget {
 
   Widget _friendWidget(
     User friend,
-    AppStateProvider appState,
+    AppStateProvider state,
     BuildContext context,
     UserPresence presence,
   ) {
@@ -78,7 +77,7 @@ class ListOnlineUser extends StatelessWidget {
                 friend.name ?? "UNKNOWN",
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
-                style: appState.darkMode
+                style: state.darkMode
                     ? Theme.of(context)
                         .textTheme
                         .bodySmall!
@@ -95,7 +94,7 @@ class ListOnlineUser extends StatelessWidget {
     );
   }
 
-  Widget _addNewFriend(BuildContext context, AppStateProvider appState) {
+  Widget _addNewFriend(BuildContext context, bool theme) {
     return GestureDetector(
       onTap: () {},
       child: Center(
@@ -108,8 +107,8 @@ class ListOnlineUser extends StatelessWidget {
               DottedBorder(
                 borderType: BorderType.RRect,
                 radius: Radius.circular(Dimensions.double30),
-                color: Colors.blue,
-                strokeWidth: 2,
+                color: theme ? darkBlue : lightBlue,
+                strokeWidth: 1.5,
                 padding: EdgeInsets.all(Dimensions.height2),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(
@@ -118,14 +117,11 @@ class ListOnlineUser extends StatelessWidget {
                   child: Container(
                     height: 52,
                     width: 52,
-                    color:
-                        appState.darkMode ? darkGreyDarkMode : Colors.grey[300],
+                    color: theme ? darkGreyDarkMode : Colors.grey[300],
                     child: Center(
                       child: Icon(
                         Icons.add_sharp,
-                        color: appState.darkMode
-                            ? lightGreyLightMode
-                            : darkGreyDarkMode,
+                        color: theme ? lightGreyLightMode : darkGreyDarkMode,
                         size: 20,
                       ),
                     ),
@@ -138,7 +134,7 @@ class ListOnlineUser extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 textAlign: TextAlign.center,
-                style: appState.darkMode
+                style: theme
                     ? Theme.of(context)
                         .textTheme
                         .bodySmall!

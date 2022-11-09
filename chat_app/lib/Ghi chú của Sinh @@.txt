@@ -2,9 +2,8 @@
     - Tat cai flash cua chup anh di thang kia
     - Làm màn hình review ảnh
 
-    - xem trang cá nhân người dùng
-    - Cập nhật thông tin người dùng
     - đổi mật khẩu
     - đa ngôn ngữ
     - hien thi room theo thoi gian, list useronline theo online
-    - ...
+    - make lai auto size
+    - update them cai notification bang firebase de

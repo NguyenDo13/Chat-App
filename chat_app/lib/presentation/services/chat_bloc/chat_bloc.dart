@@ -61,27 +61,29 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     //* Search
     on<InitLookingForChatEvent>(initLookingForChat);
     on<ExitSearchEvent>(exitSearchFriend);
-    on<UpdatePresenceEvent>((event, emit) {
-      if (event.roomID != null) {
-        return emit(
-          HasSourceChatState(
-            isOnl: friendPresence!,
-            idRoom: event.roomID!,
-            currentUser: currentUser,
-            friend: friend!,
-          ),
-        );
-      }
-      if (state is LookingForChatState) {
-        emit(LookingForChatState(listFriend: listFriend!));
-      }
-      if (state is JoinAppState) {
-        emit(JoinAppState(listDataRoom!, listFriend));
-      }
-    });
+    on<UpdatePresenceEvent>(updatePresenceEvent);
     updateListDataRooms();
     getFriendRequest();
     updatePresence();
+  }
+
+  updatePresenceEvent(UpdatePresenceEvent event, Emitter<ChatState> emit) {
+    if (event.roomID != null) {
+      return emit(
+        HasSourceChatState(
+          isOnl: friendPresence!,
+          idRoom: event.roomID!,
+          currentUser: currentUser,
+          friend: friend!,
+        ),
+      );
+    }
+    if (state is LookingForChatState) {
+      emit(LookingForChatState(listFriend: listFriend!));
+    }
+    if (state is JoinAppState) {
+      emit(JoinAppState(listDataRoom!, listFriend));
+    }
   }
 
   exitSearchFriend(ExitSearchEvent event, Emitter<ChatState> emit) {

@@ -27,7 +27,6 @@ class UserAvatar extends StatefulWidget {
 }
 
 class _UserAvatarState extends State<UserAvatar> {
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -48,7 +47,7 @@ class _UserAvatarState extends State<UserAvatar> {
               width: Dimensions.height48 + Dimensions.height4,
               height: Dimensions.height48 + Dimensions.height4,
               decoration: BoxDecoration(
-                color: const Color(0xfafafafa),
+                color: widget.theme ? darkColor : lightColor,
                 borderRadius: BorderRadius.circular(Dimensions.double30),
               ),
               child: InkWell(
@@ -59,6 +58,13 @@ class _UserAvatarState extends State<UserAvatar> {
                   height: Dimensions.height44,
                   decoration: BoxDecoration(
                     color: lightGreyLightMode,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black45,
+                        offset: Offset(1, 1),
+                        blurRadius: 2,
+                      ),
+                    ],
                     borderRadius: BorderRadius.circular(
                       Dimensions.double30,
                     ),

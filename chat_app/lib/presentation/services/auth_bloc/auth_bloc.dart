@@ -126,7 +126,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     //* Post request (email, password) to server, receive response value
     final value = await authRepository.getDataLogin(
-      data: {'email': event.email, 'password': event.password},
+      data: {
+        'email': event.email,
+        'password': event.password,
+        'deviceToken': event.deviceToken,
+      },
       header: {'Content-Type': 'application/json'},
     );
 
@@ -200,6 +204,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       friendRequests: _authUser!.friendRequests,
       listFriend: _authUser!.listFriend,
     ));
-
   }
 }
