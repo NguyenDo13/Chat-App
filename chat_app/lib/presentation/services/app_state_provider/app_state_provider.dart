@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:chat_app/data/environment.dart';
-import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/repository/user_repository.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';

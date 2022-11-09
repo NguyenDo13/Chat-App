@@ -1,7 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:chat_app/data/models/auth_user.dart';
-import 'package:chat_app/data/models/user_presence.dart';
-import 'package:chat_app/presentation/enum/enums.dart';
 
 abstract class ChatEvent {
   const ChatEvent();

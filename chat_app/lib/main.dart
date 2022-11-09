@@ -7,7 +7,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'presentation/res/colors.dart';
@@ -17,12 +16,12 @@ import 'presentation/utils/functions.dart';
 Future<void> main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
-    
+
     await Firebase.initializeApp();
     FirebaseMessaging.onBackgroundMessage(firebaseOnBackgroundMessageHandle);
 
     // Set Orientation of the application
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
     // Hide status bar
     SystemChrome.setSystemUIOverlayStyle(

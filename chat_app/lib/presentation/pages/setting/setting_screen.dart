@@ -1,6 +1,5 @@
 // ignore_for_file: library_prefixes
 import 'package:chat_app/data/models/auth_user.dart';
-import 'package:chat_app/presentation/pages/personal_information/personal_information.dart';
 import 'package:chat_app/presentation/pages/setting/components/change_dark_mode.dart';
 import 'package:chat_app/presentation/pages/setting/components/feature_setting.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
