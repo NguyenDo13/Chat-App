@@ -1,5 +1,5 @@
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StateBottomNavigationBar extends StatelessWidget {
   final IconData icon;
@@ -17,21 +17,21 @@ class StateBottomNavigationBar extends StatelessWidget {
           ? [
               Icon(
                 icon,
-                size: Dimensions.height14 * 2,
+                size: 28.r,
               ),
               Positioned(
-                top: -Dimensions.height2,
-                right: -Dimensions.height2,
+                top: -2.h,
+                right: -2.h,
                 child: Container(
-                  constraints: BoxConstraints(maxWidth: Dimensions.height20),
-                  width: Dimensions.height20,
-                  height: Dimensions.height20,
+                  constraints: BoxConstraints(maxWidth: 20.h),
+                  width: 20.h,
+                  height: 20.h,
                   padding: EdgeInsets.symmetric(
-                    horizontal: Dimensions.height2,
-                    vertical: Dimensions.height2,
+                    horizontal: 2.h,
+                    vertical: 2.h,
                   ),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Dimensions.double40),
+                    borderRadius: BorderRadius.circular(40.r),
                   ),
                   child: CircleAvatar(
                     backgroundColor: Colors.red,
@@ -48,7 +48,7 @@ class StateBottomNavigationBar extends StatelessWidget {
           : [
               Icon(
                 icon,
-                size: Dimensions.height14 * 2,
+                size: 28.r,
               ),
             ],
     );

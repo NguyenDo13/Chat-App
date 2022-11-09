@@ -1,5 +1,4 @@
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
@@ -9,6 +8,7 @@ import 'package:chat_app/presentation/widgets/input_text_field_search.dart';
 import 'package:chat_app/presentation/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchScreen extends StatelessWidget {
   final List<dynamic>? listFriend;
@@ -27,8 +27,8 @@ class SearchScreen extends StatelessWidget {
         appBar: _buildAppbar(appState.darkMode),
         body: Container(
           margin: EdgeInsets.symmetric(
-            horizontal: Dimensions.width14,
-            vertical: Dimensions.height14,
+            horizontal: 14.w,
+            vertical: 14.h,
           ),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -36,7 +36,7 @@ class SearchScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const TitleWidget(title: 'gợi ý', isUpper: true),
-                SizedBox(height: Dimensions.height20),
+                SizedBox(height: 20.h),
                 ListUserWidget(
                   listUser: listFriend!,
                   isAddFriend: false,
@@ -51,7 +51,7 @@ class SearchScreen extends StatelessWidget {
 
   AppBar _buildAppbar(isDarkMode) {
     return AppBar(
-      toolbarHeight: Dimensions.height72,
+      toolbarHeight: 72.h,
       leading: BlocBuilder<ChatBloc, ChatState>(
         builder: (context, state) {
           return IconButton(

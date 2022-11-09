@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:chat_app/presentation/helper/loading/loading_screen_controller.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoadingScreen {
   factory LoadingScreen() => _shared;
@@ -49,9 +49,9 @@ class LoadingScreen {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: Dimensions.height40),
+                  SizedBox(height: 40.h),
                   const CircularProgressIndicator(),
-                  SizedBox(height: Dimensions.height40),
+                  SizedBox(height: 40.h),
                 ],
               ),
             ),

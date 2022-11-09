@@ -1,5 +1,5 @@
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ForgotPasswordBtn extends StatelessWidget {
   const ForgotPasswordBtn({super.key});
@@ -10,7 +10,7 @@ class ForgotPasswordBtn extends StatelessWidget {
       onTap: () {},
       child: Container(
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.all(Dimensions.height10),
+        padding: EdgeInsets.all(10.h),
         child: Text(
           'Forgot Password?',
           style: Theme.of(context).textTheme.titleMedium!.copyWith(

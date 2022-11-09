@@ -1,9 +1,7 @@
 import 'package:chat_app/data/models/auth_user.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
-// import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InformationChatRoomScreen extends StatelessWidget {
   final User friend;
@@ -12,10 +10,8 @@ class InformationChatRoomScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Size
-    final sizedBox24 = SizedBox(height: Dimensions.height24);
-    final sizedBox50 = SizedBox(height: Dimensions.height10 * 5);
-    // app states
-    // AppStateProvider appState = context.watch<AppStateProvider>();
+    final sizedBox24 = SizedBox(height: 24.h);
+    final sizedBox50 = SizedBox(height: 50.h);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -27,7 +23,7 @@ class InformationChatRoomScreen extends StatelessWidget {
               child: StateAvatar(
                 avatar: friend.urlImage!,
                 isStatus: false,
-                radius: Dimensions.double40 * 5,
+                radius: 200.r,
               ),
             ),
             sizedBox24,

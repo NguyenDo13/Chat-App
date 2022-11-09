@@ -1,5 +1,5 @@
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignInOtherWays extends StatelessWidget {
   const SignInOtherWays({super.key});
@@ -15,7 +15,7 @@ class SignInOtherWays extends StatelessWidget {
             fontWeight: FontWeight.w400,
           ),
         ),
-        SizedBox(height: Dimensions.height10),
+        SizedBox(height: 10.h),
         Text(
           'Sign in with',
           style: Theme.of(context).textTheme.titleMedium!.copyWith(

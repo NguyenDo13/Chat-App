@@ -1,14 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/data/models/message.dart';
 import 'package:chat_app/presentation/pages/chat/components/message_item.dart';
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
-
-import 'cannot_load_img.dart';
-import 'loading_msg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ClusterMessages extends StatefulWidget {
   final String avatarFriend;
@@ -45,16 +41,16 @@ class _ClusterMessagesState extends State<ClusterMessages> {
   @override
   Widget build(BuildContext context) {
     // size
-    final width4 = SizedBox(width: Dimensions.height4);
-    final height4 = SizedBox(height: Dimensions.height4);
+    final width4 = SizedBox(width: 4.w);
+    final height4 = SizedBox(height: 4.h);
 
     int currentIndex = 0;
     final timeMessageItem = Message.fromJson(widget.messages.last).time;
 
     return Padding(
       padding: EdgeInsets.only(
-        top: Dimensions.height10,
-        bottom: Dimensions.height10,
+        top: 10.h,
+        bottom: 10.h,
       ),
       child: Row(
         mainAxisAlignment:
@@ -79,10 +75,10 @@ class _ClusterMessagesState extends State<ClusterMessages> {
                   }
                   final msg = Message.fromJson(item);
                   return MessageItem(
-                          message: msg,
-                          theme: widget.theme,
-                          isSender: widget.isSender,
-                        );
+                    message: msg,
+                    theme: widget.theme,
+                    isSender: widget.isSender,
+                  );
                 }).toList(),
               ),
               height4,
@@ -106,8 +102,8 @@ class _ClusterMessagesState extends State<ClusterMessages> {
                   if (_loading && widget.isSender) ...[
                     width4,
                     SizedBox(
-                      height: Dimensions.height12,
-                      width: Dimensions.height12,
+                      height: 12.h,
+                      width: 12.w,
                       child: const CircularProgressIndicator(
                         strokeWidth: 1.3,
                         color: darkGreyLightMode,
@@ -121,7 +117,7 @@ class _ClusterMessagesState extends State<ClusterMessages> {
                 StateAvatar(
                   avatar: widget.avatarFriend,
                   isStatus: false,
-                  radius: 16,
+                  radius: 16.r,
                 ),
               ],
             ],

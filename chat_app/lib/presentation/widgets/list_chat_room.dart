@@ -1,10 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 
@@ -27,9 +27,10 @@ class _ListChatRoomState extends State<ListChatRoom> {
   @override
   Widget build(BuildContext context) {
     AppStateProvider appState = context.watch<AppStateProvider>();
+    final maxHeight = MediaQuery.of(context).size.height;
     return Container(
       constraints: BoxConstraints(
-        maxHeight: Dimensions.screenHeight,
+        maxHeight: maxHeight,
       ),
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
@@ -51,31 +52,20 @@ class _ListChatRoomState extends State<ListChatRoom> {
         : Theme.of(context).textTheme.headlineSmall;
 
     return ListTile(
-      onTap: () {
-        // if (!widget.isGroup) {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //       builder: (context) => const ChatScreen(socket: ),
-        //     ),
-        //   );
-        // }
-
-        // TODO: change state item chat to viewed
-      },
+      onTap: () {},
       visualDensity: const VisualDensity(vertical: 0.7),
       leading: StateAvatar(
         avatar:
             "assets/avatars/${widget.listUsers[index][0].avatar}", //* avatar
         isStatus: widget.listUsers[index][0].state, //* state
-        radius: Dimensions.double30 * 2,
+        radius: 60.r,
       ),
       title: Container(
         margin: EdgeInsets.fromLTRB(
           0,
-          Dimensions.height10,
+          10.h,
           0,
-          Dimensions.height8,
+          8.h,
         ),
         child: Text(
           widget.listUsers[index][0].username, //* Name
@@ -84,28 +74,24 @@ class _ListChatRoomState extends State<ListChatRoom> {
       ),
       subtitle: Container(
         margin: EdgeInsets.only(
-          bottom: Dimensions.height4,
+          bottom: 4.h,
         ),
         child: Row(
           children: [
             SizedBox(
-              width: Dimensions.width152,
+              width: 152.w,
               child: Text(
                 widget.listUsers[index][1], //* Content
                 overflow: TextOverflow.ellipsis,
                 style: styleNotView,
               ),
             ),
-            SizedBox(
-              width: Dimensions.width8 / 2,
-            ),
+            SizedBox(width: 4.w),
             Text(
               '|',
               style: styleNotView,
             ),
-            SizedBox(
-              width: Dimensions.width8 / 2,
-            ),
+            SizedBox(width: 4.w),
             Text(
               widget.listUsers[index][2], //* time
               style: styleNotView,
@@ -117,23 +103,23 @@ class _ListChatRoomState extends State<ListChatRoom> {
           ? Container(
               margin: EdgeInsets.fromLTRB(
                 0,
-                Dimensions.height10,
+                10.h,
                 0,
-                Dimensions.height8,
+                8.h,
               ),
               constraints: BoxConstraints(
-                maxWidth: Dimensions.height40,
-                maxHeight: Dimensions.height40,
+                maxWidth: 40.h,
+                maxHeight: 40.h,
               ),
               decoration: BoxDecoration(
                 color:
                     appState.darkMode ? Colors.grey[800] : lightGreyLightMode,
-                borderRadius: BorderRadius.circular(Dimensions.double40),
+                borderRadius: BorderRadius.circular(40.r),
               ),
               child: Center(
                   child: Icon(
                 CupertinoIcons.phone_solid,
-                size: Dimensions.double40 / 2,
+                size: 20.r,
               )),
             )
           : null,

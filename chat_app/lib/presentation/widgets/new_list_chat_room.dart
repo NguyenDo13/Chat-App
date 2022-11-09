@@ -5,7 +5,6 @@ import 'package:chat_app/presentation/widgets/chat_room_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 
 class NewListChatRoom extends StatefulWidget {
@@ -27,9 +26,11 @@ class _NewListChatRoomState extends State<NewListChatRoom> {
   @override
   Widget build(BuildContext context) {
     AppStateProvider appState = context.watch<AppStateProvider>();
+    final maxHeight = MediaQuery.of(context).size.height;
+
     return Container(
       constraints: BoxConstraints(
-        maxHeight: Dimensions.screenHeight,
+        maxHeight: maxHeight,
       ),
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),

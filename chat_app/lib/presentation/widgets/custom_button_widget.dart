@@ -1,5 +1,5 @@
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomBtnWidget extends StatelessWidget {
   final String title;
@@ -20,8 +20,8 @@ class CustomBtnWidget extends StatelessWidget {
       ),
       onPressed: onPressed,
       child: SizedBox(
-        height: Dimensions.height48,
-        width: 92,
+        height: 48.h,
+        width: 92.w,
         child: Center(
           child: Text(
             title,

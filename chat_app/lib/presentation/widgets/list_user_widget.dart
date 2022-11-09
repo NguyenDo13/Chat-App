@@ -1,13 +1,11 @@
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/user_presence.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ListUserWidget extends StatelessWidget {
@@ -26,9 +24,11 @@ class ListUserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final maxHeight = MediaQuery.of(context).size.height;
+
     return Container(
       constraints: BoxConstraints(
-        maxHeight: Dimensions.screenHeight,
+        maxHeight: maxHeight,
       ),
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
@@ -37,7 +37,7 @@ class ListUserWidget extends StatelessWidget {
           final friend = User.fromJson(listUser[index]['friend']);
           final presence = UserPresence.fromJson(listUser[index]['presence']);
           return Padding(
-            padding: EdgeInsets.only(bottom: Dimensions.height10),
+            padding: EdgeInsets.only(bottom: 10.h),
             child: ListTile(
               onTap: () {
                 final userID = Provider.of<ChatBloc>(context, listen: false)
@@ -52,11 +52,11 @@ class ListUserWidget extends StatelessWidget {
                 );
               },
               leading: Container(
-                padding: EdgeInsets.only(right: Dimensions.width8),
+                padding: EdgeInsets.only(right: 8.w),
                 child: StateAvatar(
                   avatar: friend.urlImage ?? '',
                   isStatus: presence.presence!,
-                  radius: Dimensions.double12 * 4,
+                  radius: 48.r,
                 ),
               ),
               title: Text(
@@ -74,8 +74,8 @@ class ListUserWidget extends StatelessWidget {
   Widget _stateAcction(BuildContext context, User friend) {
     if (loadding!) {
       return SizedBox(
-        height: Dimensions.height12,
-        width: Dimensions.height12,
+        height: 12.h,
+        width: 12.w,
         child: const CircularProgressIndicator(strokeWidth: 2.5),
       );
     }

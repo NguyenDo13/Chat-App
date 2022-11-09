@@ -1,8 +1,8 @@
 import 'package:chat_app/data/models/auth_user.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class EmptyMessage extends StatelessWidget {
   final User friend;
@@ -28,9 +28,9 @@ class EmptyMessage extends StatelessWidget {
             StateAvatar(
               avatar: friend.urlImage!,
               isStatus: false,
-              radius: 200,
+              radius: 200.r,
             ),
-            SizedBox(height: Dimensions.height20),
+            SizedBox(height: 20.h),
             Text(
               'Hãy gửi lời chào để bắt đầu cuộc trò chuyện!',
               textAlign: TextAlign.center,

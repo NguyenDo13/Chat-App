@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/presentation/pages/chat/components/loading_msg.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'cannot_load_img.dart';
 
@@ -9,22 +9,25 @@ class ImageMessage extends StatelessWidget {
   final bool isSender;
   final bool theme;
   final String path;
-  const ImageMessage(
-      {super.key,
-      required this.isSender,
-      required this.theme,
-      required this.path,});
+  const ImageMessage({
+    super.key,
+    required this.isSender,
+    required this.theme,
+    required this.path,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final maxWidth = MediaQuery.of(context).size.width;
+
     return Container(
       constraints: BoxConstraints(
-        maxWidth: Dimensions.screenWidth * 7 / 10,
-        maxHeight: Dimensions.height220 * 2,
+        maxWidth: maxWidth * 7 / 10,
+        maxHeight: 440.h,
       ),
-      margin: EdgeInsets.only(top: Dimensions.height2),
+      margin: EdgeInsets.only(top: 2.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Dimensions.double12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
             color: isSender ? Colors.black45 : Colors.black12,
@@ -34,12 +37,12 @@ class ImageMessage extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(Dimensions.double16 / 2),
+        borderRadius: BorderRadius.circular(8.r),
         child: CachedNetworkImage(
           imageUrl: "https://appsocketonline2.herokuapp.com$path",
           fit: BoxFit.contain,
           placeholder: (context, url) => LoadingMessage(
-            width: 214,
+            width: 214.w,
             isSender: isSender,
             theme: theme,
             content: 'Đang tải lên 1 ảnh!',

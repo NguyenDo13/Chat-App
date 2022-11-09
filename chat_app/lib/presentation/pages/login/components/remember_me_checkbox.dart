@@ -1,8 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
 class RememberMeCheckbox extends StatefulWidget {
@@ -10,7 +8,8 @@ class RememberMeCheckbox extends StatefulWidget {
   final Function(bool?)? onChange;
   RememberMeCheckbox({
     Key? key,
-    required this.rememberMe, this.onChange,
+    required this.rememberMe,
+    this.onChange,
   }) : super(key: key);
 
   @override
@@ -21,7 +20,7 @@ class _RememberMeCheckboxState extends State<RememberMeCheckbox> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Dimensions.height20,
+      height: 20.h,
       child: Row(
         children: <Widget>[
           Theme(

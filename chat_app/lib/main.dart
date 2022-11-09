@@ -66,17 +66,17 @@ class _ChitChatAppState extends State<ChitChatApp> {
       log("firebase token: $value");
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage msg) {
-      log("OPenApp: ${msg.notification!.title}");
-    });
+    // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage msg) {
+    //   log("OPenApp: ${msg.notification!.title}");
+    // });
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage msg) {
-      try {
-        log("onMessage: ${msg.notification!.title!}");
-      } catch (e) {
-        log("error: $e");
-      }
-    });
+    // FirebaseMessaging.onMessage.listen((RemoteMessage msg) {
+    //   try {
+    //     log("onMessage: ${msg.notification!.title!}");
+    //   } catch (e) {
+    //     log("error: $e");
+    //   }
+    // });
     _initshared();
     _getToken();
     super.initState();
@@ -88,7 +88,7 @@ class _ChitChatAppState extends State<ChitChatApp> {
       create: (_) => AppStateProvider(),
       child: Consumer<AppStateProvider>(
         builder: (context, appState, child) {
-          return GetMaterialApp(
+          return MaterialApp(
             title: 'ChitChat App',
             debugShowCheckedModeBanner: false,
             theme: appState.darkMode ? AppTheme.dark() : AppTheme.light(),

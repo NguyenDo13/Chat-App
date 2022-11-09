@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InputTextField extends StatefulWidget {
   final Function(String)? onSubmitted;
@@ -53,12 +53,12 @@ class _InputTextFieldState extends State<InputTextField> {
                 fontWeight: FontWeight.bold,
               ),
         ),
-        SizedBox(height: Dimensions.height10),
+        SizedBox(height: 10.h),
         Container(
           alignment: Alignment.centerLeft,
           decoration: BoxDecoration(
             color: customPurple,
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(10.r),
             boxShadow: const [
               BoxShadow(
                 color: Colors.black12,
@@ -67,7 +67,7 @@ class _InputTextFieldState extends State<InputTextField> {
               ),
             ],
           ),
-          height: Dimensions.height60,
+          height: 60.h,
           child: TextField(
             key: Key(widget.keyInput),
             onChanged: widget.onChanged,
@@ -77,7 +77,7 @@ class _InputTextFieldState extends State<InputTextField> {
             obscureText: widget.obscure ? true : false,
             decoration: InputDecoration(
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(top: Dimensions.height14),
+              contentPadding: EdgeInsets.only(top: 14.h),
               prefixIcon: Icon(widget.icon, color: Colors.white),
               hintText: widget.hint,
               hintStyle: Theme.of(context)

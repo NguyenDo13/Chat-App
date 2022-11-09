@@ -3,9 +3,8 @@ import 'package:chat_app/presentation/res/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 
 class StateAvatar extends StatefulWidget {
@@ -32,28 +31,28 @@ class _StateAvatarState extends State<StateAvatar> {
         _avatarWidget(appState),
         if (widget.isStatus) ...[
           Positioned(
-            bottom: widget.radius == Dimensions.double40
-                ? -Dimensions.height2
-                : Dimensions.height2,
-            right: widget.radius == Dimensions.double40
-                ? -Dimensions.width10 / Dimensions.width10
-                : Dimensions.width2,
+            bottom: widget.radius == 40.r
+                ? -2.h
+                : 2.h,
+            right: widget.radius == 40.r
+                ? -1.w
+                : 2.w,
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: Dimensions.height2,
-                vertical: Dimensions.height2,
+                horizontal: 2.w,
+                vertical: 2.h,
               ),
               decoration: BoxDecoration(
                 color:
                     appState.darkMode ? const Color(0xFF303030) : Colors.white,
-                borderRadius: BorderRadius.circular(Dimensions.double40),
+                borderRadius: BorderRadius.circular(40.r),
               ),
               child: Container(
-                width: Dimensions.height10,
-                height: Dimensions.height10,
+                width: 10.h,
+                height: 10.h,
                 decoration: BoxDecoration(
                   color: Colors.green,
-                  borderRadius: BorderRadius.circular(Dimensions.double40),
+                  borderRadius: BorderRadius.circular(40.r),
                 ),
               ),
             ),

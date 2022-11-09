@@ -7,3 +7,5 @@
     - hien thi room theo thoi gian, list useronline theo online
     - make lai auto size
     - update them cai notification bang firebase de
+
+cần làm gấp: build camera send msg

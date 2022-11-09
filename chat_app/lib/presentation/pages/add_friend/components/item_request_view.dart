@@ -1,12 +1,12 @@
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/custom_button_widget.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ItemRequestView extends StatelessWidget {
@@ -24,26 +24,26 @@ class ItemRequestView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-        bottom: Dimensions.height30,
-        left: Dimensions.width12,
+        bottom: 30.h,
+        left: 12.w,
       ),
-      constraints: BoxConstraints(maxHeight: Dimensions.height120),
-      height: Dimensions.height48 * 2,
-      width: Dimensions.screenWidth,
+      constraints: BoxConstraints(maxHeight: 120.h),
+      height: 96.h,
+      width: MediaQuery.of(context).size.width,
       child: Row(
         children: [
           StateAvatar(
             avatar: user.urlImage ?? '',
             isStatus: false,
-            radius: 68,
+            radius: 68.r,
           ),
-          SizedBox(width: Dimensions.width10 * 2),
+          SizedBox(width: 20.w),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                constraints: BoxConstraints(maxWidth: 250),
+                constraints: BoxConstraints(maxWidth: 250.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -74,9 +74,7 @@ class ItemRequestView extends StatelessWidget {
                       );
                     },
                   ),
-                  SizedBox(
-                    width: Dimensions.width12,
-                  ),
+                  SizedBox(width: 12.w),
                   CustomBtnWidget(
                     title: 'Xóa',
                     onPressed: () {

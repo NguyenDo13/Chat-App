@@ -1,10 +1,10 @@
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchBar extends StatelessWidget {
   final bool theme;
@@ -16,16 +16,16 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: Dimensions.height44,
+      height: 44.h,
       margin: EdgeInsets.fromLTRB(
-        Dimensions.width14,
+        14.w,
         0,
-        Dimensions.width14,
+        14.w,
         0,
       ),
       decoration: BoxDecoration(
         color: theme ? darkGreyDarkMode : lightGreyLightMode,
-        borderRadius: BorderRadius.circular(Dimensions.double36),
+        borderRadius: BorderRadius.circular(36.r),
       ),
       child: InkWell(
         onTap: () {
@@ -33,13 +33,13 @@ class SearchBar extends StatelessWidget {
         },
         child: Row(
           children: [
-            SizedBox(width: Dimensions.width14),
+            SizedBox(width: 14.w),
             Icon(
               CupertinoIcons.search,
               color: theme ? Colors.white : darkGreyDarkMode,
-              size: Dimensions.double40 / 2,
+              size: 20.r,
             ),
-            SizedBox(width: Dimensions.width14),
+            SizedBox(width: 14.w),
             Text(
               'Tìm kiếm',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(

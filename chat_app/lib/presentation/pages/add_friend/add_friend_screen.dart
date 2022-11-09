@@ -1,9 +1,6 @@
-// ignore_for_file: invalid_use_of_visible_for_testing_member
-
 import 'package:chat_app/presentation/pages/add_friend/components/list_search.dart';
 import 'package:chat_app/presentation/pages/add_friend/components/friend_requests.dart';
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
@@ -11,6 +8,7 @@ import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
 import 'package:chat_app/presentation/widgets/input_text_field_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class AddFriendScreen extends StatefulWidget {
@@ -32,7 +30,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: Dimensions.height72,
+          toolbarHeight: 72.h,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -58,7 +56,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.all(Dimensions.height14),
+          padding: EdgeInsets.all(14.h),
           child: BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {
             return Center(
               child: state is LookingForFriendState && state.init!

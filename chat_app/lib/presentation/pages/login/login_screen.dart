@@ -2,7 +2,6 @@ import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
 import 'package:chat_app/presentation/pages/login/components/signin_other_ways.dart';
 import 'package:chat_app/presentation/pages/login/components/signin_title.dart';
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/login/components/forgot_password_btn.dart';
 import 'package:chat_app/presentation/pages/login/components/remember_me_checkbox.dart';
 import 'package:chat_app/presentation/pages/login/components/signup_btn.dart';
@@ -16,6 +15,7 @@ import 'package:chat_app/presentation/widgets/large_round_button.dart';
 import 'package:chat_app/presentation/widgets/warning_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatefulWidget {
   final String deviceToken;
@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SnackBar(
                 backgroundColor: lightGreyDarkMode,
                 content: SizedBox(
-                  height: 32,
+                  height: 32.h,
                   child: Center(
                     child: Text(
                       state.message ?? 'Cannot connect to server',
@@ -70,14 +70,14 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             child: Container(
               padding: paddingAuthLG,
-              height: Dimensions.screenHeight,
-              width: Dimensions.screenWidth,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
               decoration: boxBGAuth,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const SignInTitle(),
-                  SizedBox(height: Dimensions.height20),
+                  SizedBox(height: 20.h),
                   InputTextField(
                     title: 'Email',
                     hint: 'Enter your email',
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     isDataValid: _isValidEmail,
                     message: 'Email is required!',
                   ),
-                  SizedBox(height: Dimensions.height20),
+                  SizedBox(height: 20.h),
                   InputTextField(
                     title: 'Password',
                     hint: 'Enter your password',

@@ -2,13 +2,13 @@ import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/chat_room.dart';
 import 'package:chat_app/data/models/user_presence.dart';
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 class ChatRoomWidget extends StatefulWidget {
@@ -59,12 +59,12 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
       leading: StateAvatar(
         avatar: widget.user.urlImage ?? '',
         isStatus: widget.presence.presence!,
-        radius: Dimensions.double30 * 2,
+        radius: 60.r,
       ),
       title: Container(
         margin: EdgeInsets.only(
-          top: Dimensions.height10,
-          bottom: Dimensions.height8,
+          top: 10.h,
+          bottom: 8.h,
         ),
         child: Text(
           widget.user.name ?? "Unknow",
@@ -73,7 +73,7 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
       ),
       subtitle: Container(
         margin: EdgeInsets.only(
-          bottom: Dimensions.height4,
+          bottom: 4.h,
         ),
         child: Text(
           _isSender(context) + widget.chatRoom.lastMessage!.content,
@@ -85,23 +85,23 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
           ? Container(
               margin: EdgeInsets.fromLTRB(
                 0,
-                Dimensions.height10,
+                10.h,
                 0,
-                Dimensions.height8,
+                8.h,
               ),
               constraints: BoxConstraints(
-                maxWidth: Dimensions.height40,
-                maxHeight: Dimensions.height40,
+                maxWidth: 40.h,
+                maxHeight: 40.h,
               ),
               decoration: BoxDecoration(
                 color:
                     widget.isDarkMode ? Colors.grey[800] : lightGreyLightMode,
-                borderRadius: BorderRadius.circular(Dimensions.double40),
+                borderRadius: BorderRadius.circular(40.r),
               ),
               child: Center(
                   child: Icon(
                 CupertinoIcons.phone_solid,
-                size: Dimensions.double40 / 2,
+                size: 20.r,
               )),
             )
           : Column(
@@ -112,9 +112,9 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 if (_isNotification(context)) ...[
-                  SizedBox(height: Dimensions.height14),
+                  SizedBox(height: 14.h),
                   Container(
-                    constraints: BoxConstraints(maxHeight: Dimensions.height20),
+                    constraints: BoxConstraints(maxHeight: 20.h),
                     child: CircleAvatar(
                       backgroundColor: Colors.blue,
                       child: Center(
@@ -123,7 +123,7 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
                           style:
                               Theme.of(context).textTheme.labelSmall!.copyWith(
                                     color: Colors.white,
-                                    fontSize: 12,
+                                    fontSize: 12.r,
                                   ),
                         ),
                       ),

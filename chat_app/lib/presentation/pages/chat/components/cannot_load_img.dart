@@ -1,7 +1,7 @@
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CannotLoadMsg extends StatelessWidget {
   final bool isSender;
@@ -19,7 +19,7 @@ class CannotLoadMsg extends StatelessWidget {
     final colorBG = theme ? darkGreyDarkMode : lightGreyLightMode;
     final colorSenderBG = theme ? darkBlue : lightBlue;
     return Container(
-      padding: EdgeInsets.all(Dimensions.height12),
+      padding: EdgeInsets.all(12.h),
       decoration: BoxDecoration(
         color: isSender ? colorSenderBG : colorBG,
       ),

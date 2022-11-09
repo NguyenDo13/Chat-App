@@ -1,18 +1,17 @@
+// ignore_for_file: library_prefixes
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/presentation/pages/personal_information/personal_information.dart';
 import 'package:chat_app/presentation/pages/setting/components/change_dark_mode.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/pages/setting/components/feature_setting.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
-import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-
-import 'components/user_avatar.dart'; // ignore: library_prefixes
+import 'components/user_avatar.dart';
 
 class SettingScreen extends StatelessWidget {
   final IO.Socket socket;
@@ -25,9 +24,9 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Size
-    final sizedBox24 = SizedBox(height: Dimensions.height24);
-    final sizedBox50 = SizedBox(height: Dimensions.height10 * 5);
-    final sizedBox12 = SizedBox(height: Dimensions.height12);
+    final sizedBox24 = SizedBox(height: 24.h);
+    final sizedBox50 = SizedBox(height: 50.h);
+    final sizedBox12 = SizedBox(height: 12.h);
     // app states
     AppStateProvider appStateProvider = context.watch<AppStateProvider>();
 
@@ -46,7 +45,7 @@ class SettingScreen extends StatelessWidget {
             authUser.user?.name ?? "unknow",
             maxLines: 4,
             style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                  fontSize: 20,
+                  fontSize: 20.h,
                 ),
           ),
           sizedBox50,
@@ -110,14 +109,14 @@ class SettingScreen extends StatelessWidget {
   }
 
   _changeUserInfo(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PersonalInformation(
-          avatar: authUser.user?.urlImage ?? '',
-          name: authUser.user?.name ?? "unknow",
-        ),
-      ),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => PersonalInformation(
+    //       avatar: authUser.user?.urlImage ?? '',
+    //       name: authUser.user?.name ?? "unknow",
+    //     ),
+    //   ),
+    // );
   }
 }

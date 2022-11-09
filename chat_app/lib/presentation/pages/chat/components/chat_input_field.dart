@@ -2,16 +2,16 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:chat_app/presentation/enum/enums.dart';
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
-import 'package:chat_app/presentation/pages/take_picture/take_picture_screen.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:media_picker_widget/media_picker_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -50,8 +50,8 @@ class _ChatInputFieldState extends State<ChatInputField> {
       children: [
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: Dimensions.width14,
-            vertical: Dimensions.height10,
+            horizontal: 14.w,
+            vertical: 10.h,
           ),
           decoration: _decorationBox(appState),
           child: SafeArea(
@@ -71,12 +71,12 @@ class _ChatInputFieldState extends State<ChatInputField> {
                   _onChangeInputMessage,
                   context,
                 ),
-                SizedBox(width: Dimensions.width14),
+                SizedBox(width: 14.w),
                 InkWell(
                   onTap: () => _sendMessage(widget.controllerChat.text),
-                  child: const Icon(
+                  child: Icon(
                     Icons.send_rounded,
-                    size: 28,
+                    size: 28.h,
                     color: Colors.blue,
                   ),
                 ),
@@ -94,7 +94,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
     return Offstage(
       offstage: !emojiShowing,
       child: SizedBox(
-          height: 280,
+          height: 280.h,
           child: EmojiPicker(
             textEditingController: widget.controllerChat,
             config: Config(
@@ -116,9 +116,9 @@ class _ChatInputFieldState extends State<ChatInputField> {
               showRecentsTab: true,
               recentsLimit: 28,
               replaceEmojiOnLimitExceed: false,
-              noRecents: const Text(
+              noRecents: Text(
                 'No Recents',
-                style: TextStyle(fontSize: 20, color: Colors.black26),
+                style: TextStyle(fontSize: 20.h, color: Colors.black26),
                 textAlign: TextAlign.center,
               ),
               loadingIndicator: const SizedBox.shrink(),
@@ -135,12 +135,12 @@ class _ChatInputFieldState extends State<ChatInputField> {
     return Visibility(
       visible: isVisibility,
       child: Container(
-        padding: EdgeInsets.only(right: Dimensions.width14),
+        padding: EdgeInsets.only(right: 14.w),
         child: InkWell(
           onTap: onTap,
           child: Icon(
             icon,
-            size: 28,
+            size: 28.r,
             color: Colors.blue,
           ),
         ),
@@ -165,13 +165,13 @@ class _ChatInputFieldState extends State<ChatInputField> {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(30.r),
           color: theme ? darkGreyDarkMode : lightGreyLightMode100,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            SizedBox(width: Dimensions.width16),
+            SizedBox(width: 16.w),
             Expanded(
               child: TextField(
                 maxLines: 6,
@@ -191,7 +191,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 ),
               ),
             ),
-            SizedBox(width: Dimensions.width14),
+            SizedBox(width: 14.w),
             InkWell(
               onTap: () {
                 setState(() {
@@ -200,7 +200,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                 FocusScope.of(context).unfocus();
               },
               child: Container(
-                margin: const EdgeInsets.fromLTRB(0, 0, 6, 12),
+                margin: EdgeInsets.fromLTRB(0, 0, 6.w, 12.h),
                 child: const Icon(
                   Icons.sentiment_satisfied_alt_outlined,
                   color: Colors.blue,
@@ -262,26 +262,11 @@ class _ChatInputFieldState extends State<ChatInputField> {
 
   Future _openCamera() async {
     try {
-      final cameras = await availableCameras();
-      final firstCamera = cameras.first;
-      await Future.delayed(const Duration(seconds: 1));
-      if (!mounted) return;
-
-      final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => TakePictureScreen(
-            camera: firstCamera,
-            cameras: cameras,
-          ),
-        ),
-      );
-
-      if (result != null) {
-        _sendFiles(result, 'image');
-      }
-    } catch (e) {
-      log("BUGS: $e");
+      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (image == null) return;
+      _sendFiles([image.path], 'image');
+    } on PlatformException catch (e) {
+      log('Pick image failed: $e');
     }
   }
 

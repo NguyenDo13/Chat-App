@@ -2,12 +2,12 @@ import 'package:chat_app/data/models/message.dart';
 import 'package:chat_app/presentation/pages/chat/components/cluster_messages.dart';
 import 'package:chat_app/presentation/pages/chat/components/cluster_messages_time.dart';
 import 'package:chat_app/presentation/pages/chat/components/empty_message.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MessageView extends StatefulWidget {
   const MessageView({
@@ -28,8 +28,8 @@ class _MessageViewState extends State<MessageView> {
         child: SingleChildScrollView(
           reverse: true,
           padding: EdgeInsets.symmetric(
-            vertical: Dimensions.height10,
-            horizontal: Dimensions.height20,
+            vertical: 10.h,
+            horizontal: 20.w,
           ),
           physics: const BouncingScrollPhysics(),
           child: BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {

@@ -1,9 +1,8 @@
 import 'package:chat_app/presentation/pages/chat/components/cannot_load_img.dart';
 import 'package:chat_app/presentation/pages/chat/components/loading_msg.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoMessage extends StatefulWidget {
@@ -44,18 +43,19 @@ class _VideoMessageState extends State<VideoMessage> {
 
   @override
   Widget build(BuildContext context) {
+    final maxWidth = MediaQuery.of(context).size.width;
     return FutureBuilder(
       future: _initializeVideoPlayerFuture,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Container(
             constraints: BoxConstraints(
-              maxWidth: Dimensions.screenWidth * 7 / 10,
-              maxHeight: Dimensions.height220 * 2,
+              maxWidth: maxWidth * 7 / 10,
+              maxHeight: 440.h,
             ),
-            margin: EdgeInsets.only(top: Dimensions.height2),
+            margin: EdgeInsets.only(top: 2.h),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Dimensions.double12),
+              borderRadius: BorderRadius.circular(12.r),
               boxShadow: [
                 BoxShadow(
                   color: widget.isSender ? Colors.black45 : Colors.black12,
@@ -77,10 +77,10 @@ class _VideoMessageState extends State<VideoMessage> {
               setState(() => _isShowAction = !_isShowAction);
             },
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(Dimensions.double16 / 2),
+              borderRadius: BorderRadius.circular(8.r),
               child: Container(
-                width: Dimensions.screenWidth * 7 / 10,
-                margin: EdgeInsets.only(top: Dimensions.height2),
+                width: maxWidth * 7 / 10,
+                margin: EdgeInsets.only(top: 2.h),
                 child: AspectRatio(
                   aspectRatio: _playerController.value.aspectRatio,
                   child: Stack(
@@ -106,15 +106,20 @@ class _VideoMessageState extends State<VideoMessage> {
                             valueListenable: _playerController,
                             builder: (context, VideoPlayerValue value, child) {
                               return Padding(
-                                padding: const EdgeInsets.only(
-                                    right: 10, bottom: 10, top: 2),
+                                padding: EdgeInsets.only(
+                                  right: 10.w,
+                                  bottom: 10.h,
+                                  top: 2.h,
+                                ),
                                 child: Text(
                                   formatDuration(value.duration),
                                   style: Theme.of(context)
                                       .textTheme
                                       .labelSmall!
                                       .copyWith(
-                                          color: Colors.white, fontSize: 12),
+                                        color: Colors.white,
+                                        fontSize: 12.h,
+                                      ),
                                 ),
                               );
                             },
@@ -134,14 +139,16 @@ class _VideoMessageState extends State<VideoMessage> {
   }
 
   Widget _videoLoading() {
+    final maxWidth = MediaQuery.of(context).size.width;
+
     return Container(
       constraints: BoxConstraints(
-        maxWidth: Dimensions.screenWidth * 7 / 10,
-        maxHeight: Dimensions.height220 * 2,
+        maxWidth: maxWidth * 7 / 10,
+        maxHeight: 440.h,
       ),
-      margin: EdgeInsets.only(top: Dimensions.height2),
+      margin: EdgeInsets.only(top: 2.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Dimensions.double12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
             color: widget.isSender ? Colors.black45 : Colors.black12,
@@ -154,7 +161,7 @@ class _VideoMessageState extends State<VideoMessage> {
         isSender: widget.isSender,
         theme: widget.theme,
         content: 'Đang tải lên 1 video!',
-        width: 240,
+        width: 240.w,
       ),
     );
   }
@@ -172,7 +179,7 @@ class _VideoMessageState extends State<VideoMessage> {
       },
       icon: Icon(
         _playerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
-        size: 36,
+        size: 36.h,
         color: Colors.white30,
       ),
     );
@@ -185,7 +192,7 @@ class _VideoMessageState extends State<VideoMessage> {
           colors: const VideoProgressColors(playedColor: Colors.white),
           _playerController,
           allowScrubbing: true,
-          padding: EdgeInsets.symmetric(horizontal: Dimensions.width12),
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -194,17 +201,17 @@ class _VideoMessageState extends State<VideoMessage> {
               valueListenable: _playerController,
               builder: (context, VideoPlayerValue value, child) {
                 return Padding(
-                  padding: const EdgeInsets.only(
-                    left: 10,
-                    bottom: 10,
-                    top: 2,
+                  padding: EdgeInsets.only(
+                    left: 10.w,
+                    bottom: 10.h,
+                    top: 2.h,
                   ),
                   child: Text(
                     formatDuration(value.position),
                     style: Theme.of(context)
                         .textTheme
                         .labelSmall!
-                        .copyWith(color: Colors.white, fontSize: 12),
+                        .copyWith(color: Colors.white, fontSize: 12.h),
                   ),
                 );
               },
@@ -213,13 +220,13 @@ class _VideoMessageState extends State<VideoMessage> {
               valueListenable: _playerController,
               builder: (context, VideoPlayerValue value, child) {
                 return Padding(
-                  padding: const EdgeInsets.only(right: 10, bottom: 10, top: 2),
+                  padding:  EdgeInsets.only(right: 10.w, bottom: 10.h, top: 2.h,),
                   child: Text(
                     formatDuration(value.duration),
                     style: Theme.of(context)
                         .textTheme
                         .labelSmall!
-                        .copyWith(color: Colors.white, fontSize: 12),
+                        .copyWith(color: Colors.white, fontSize: 12.h),
                   ),
                 );
               },

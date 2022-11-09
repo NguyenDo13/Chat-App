@@ -1,5 +1,5 @@
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FeatureSetting extends StatelessWidget {
   final IconData icon;
@@ -20,22 +20,22 @@ class FeatureSetting extends StatelessWidget {
       onTap: onTap,
       leading: Container(
         margin: EdgeInsets.fromLTRB(
-          Dimensions.width14,
+          14.w,
           0,
-          Dimensions.width12 / 2,
+          6.w,
           0,
         ),
-        width: Dimensions.height10 * 5,
-        height: Dimensions.height10 * 5,
+        width: 50.w,
+        height: 50.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Dimensions.double40),
+          borderRadius: BorderRadius.circular(40.r),
           color: color,
         ),
         child: Center(
           child: Icon(
             icon,
             color: Colors.white,
-            size: Dimensions.double14 * 2,
+            size: 28.h,
           ),
         ),
       ),

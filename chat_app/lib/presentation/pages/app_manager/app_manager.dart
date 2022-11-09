@@ -4,7 +4,6 @@ import 'package:chat_app/presentation/pages/groups/group_chat.dart';
 import 'package:chat_app/presentation/pages/home/home_screen.dart';
 import 'package:chat_app/presentation/pages/setting/setting_screen.dart';
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/utils/constants.dart';
@@ -13,6 +12,7 @@ import 'package:chat_app/presentation/widgets/state_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:socket_io_client/socket_io_client.dart'
     as IO; // ignore: library_prefixes
@@ -60,7 +60,7 @@ class _AppManagerState extends State<AppManager> {
         ),
         body: SafeArea(child: pages[currentPage]),
         bottomNavigationBar: SizedBox(
-          height: Dimensions.height72 + Dimensions.height4,
+          height: 76.h,
           child: BottomNavigationBar(
             currentIndex: currentPage,
             onTap: (currentIndex) {
@@ -111,7 +111,7 @@ class _AppManagerState extends State<AppManager> {
     if (isExitWarning) {
       Fluttertoast.showToast(
         msg: 'Press back again to exit',
-        fontSize: 10,
+        fontSize: 10.r,
         textColor: theme ? Colors.white : Colors.black,
         backgroundColor: theme ? darkGreyDarkMode : lightGreyLightMode,
       );

@@ -1,5 +1,5 @@
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'colors.dart';
 
 // Login page
@@ -18,15 +18,15 @@ const boxBGAuth = BoxDecoration(
 );
 
 final paddingAuthLG = EdgeInsets.fromLTRB(
-  Dimensions.width10 * 4,
-  Dimensions.height62,
-  Dimensions.width10 * 4,
+  40.w,
+  62.h,
+  40.w,
   0,
 );
 
 final paddingAuthRG = EdgeInsets.fromLTRB(
-  Dimensions.width10 * 4,
-  Dimensions.height20,
-  Dimensions.width10 * 4,
+  40.w,
+  20.h,
+  40.w,
   0,
 );

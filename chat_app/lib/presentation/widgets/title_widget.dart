@@ -1,5 +1,5 @@
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TitleWidget extends StatelessWidget {
   final String title;
@@ -9,7 +9,7 @@ class TitleWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: Dimensions.width8),
+      padding: EdgeInsets.only(left: 8.w),
       child: Text(
         isUpper ? title.toUpperCase() : title,
         style: Theme.of(context).textTheme.titleSmall,

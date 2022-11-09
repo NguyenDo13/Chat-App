@@ -1,6 +1,6 @@
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/res/images_animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SocialBtnRow extends StatelessWidget {
   const SocialBtnRow({super.key});
@@ -8,7 +8,7 @@ class SocialBtnRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: Dimensions.height20),
+      padding: EdgeInsets.only(top: 20.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -33,8 +33,8 @@ class SocialBtnRow extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: Dimensions.height60 - Dimensions.height8,
-        width: Dimensions.height60 - Dimensions.height8,
+        height: 52.h,
+        width: 52.w,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.white70,

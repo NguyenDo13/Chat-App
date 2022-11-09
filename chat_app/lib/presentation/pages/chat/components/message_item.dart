@@ -1,16 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/data/models/message.dart';
-import 'package:chat_app/presentation/pages/chat/components/cannot_load_img.dart';
 import 'package:chat_app/presentation/pages/chat/components/image_message.dart';
 import 'package:chat_app/presentation/pages/chat/components/video_message.dart';
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:flutter/material.dart';
-
-import 'loading_msg.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class MessageItem extends StatefulWidget {
   final Message message;
   final bool theme;
@@ -39,11 +34,11 @@ class _MessageItemState extends State<MessageItem> {
     // UI
     final colorBG = widget.theme ? darkGreyDarkMode : lightGreyLightMode;
     final colorSenderBG = widget.theme ? darkBlue : lightBlue;
-    final radius15 = Radius.circular(Dimensions.double12);
+    final radius15 = Radius.circular(12.r);
     final crossAxisAlign =
         widget.isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start;
-    var hieght2 = SizedBox(height: Dimensions.height2);
-    var height4 = SizedBox(height: Dimensions.height4);
+    var hieght2 = SizedBox(height: 2.h);
+    var height4 = SizedBox(height: 4.h);
     return Column(
       crossAxisAlignment: crossAxisAlign,
       children: [
@@ -76,10 +71,10 @@ class _MessageItemState extends State<MessageItem> {
               .labelSmall!
               .copyWith(color: Colors.red),
         ),
-        SizedBox(width: Dimensions.height4),
-        const Icon(
+        SizedBox(width: 4.h),
+        Icon(
           Icons.error,
-          size: 16,
+          size: 16.h,
           color: Colors.red,
         ),
       ],
@@ -108,7 +103,7 @@ class _MessageItemState extends State<MessageItem> {
           'Đã xem',
           style: Theme.of(context).textTheme.labelSmall,
         ),
-        SizedBox(width: Dimensions.width14),
+        SizedBox(width: 14.w),
         Text(
           formatTime(widget.message.time),
           style: Theme.of(context).textTheme.labelSmall,
@@ -146,10 +141,12 @@ class _MessageItemState extends State<MessageItem> {
   }
 
   Widget _textMessageWidget(colorSenderBG, colorBG, radius15) {
+    final maxWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      constraints: BoxConstraints(maxWidth: Dimensions.screenWidth * 4 / 5),
-      margin: EdgeInsets.only(top: Dimensions.height10 / 2),
-      padding: EdgeInsets.all(Dimensions.height12),
+      constraints: BoxConstraints(maxWidth: maxWidth * 4 / 5),
+      margin: EdgeInsets.only(top: 5.h),
+      padding: EdgeInsets.all(12.h),
       decoration: BoxDecoration(
         color: widget.isSender ? colorSenderBG : colorBG,
         borderRadius: BorderRadius.only(
@@ -184,7 +181,7 @@ class _MessageItemState extends State<MessageItem> {
     return SnackBar(
       backgroundColor: Colors.white,
       content: SizedBox(
-        height: 82,
+        height: 82.h,
         child: Center(
             child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

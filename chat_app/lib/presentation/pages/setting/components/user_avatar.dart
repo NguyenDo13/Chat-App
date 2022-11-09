@@ -1,13 +1,11 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -33,29 +31,29 @@ class _UserAvatarState extends State<UserAvatar> {
       child: Stack(
         children: [
           Container(
-            padding: EdgeInsets.all(Dimensions.height12),
+            padding: EdgeInsets.all(12.h),
             child: StateAvatar(
               avatar: widget.avatar,
               isStatus: false,
-              radius: Dimensions.double30 * 4,
+              radius: 120.r,
             ),
           ),
           Positioned(
-            bottom: Dimensions.height4,
-            right: Dimensions.height4,
+            bottom: 4.h,
+            right: 4.w,
             child: Container(
-              width: Dimensions.height48 + Dimensions.height4,
-              height: Dimensions.height48 + Dimensions.height4,
+              width: 52.w,
+              height: 52.h,
               decoration: BoxDecoration(
                 color: widget.theme ? darkColor : lightColor,
-                borderRadius: BorderRadius.circular(Dimensions.double30),
+                borderRadius: BorderRadius.circular(30.r),
               ),
               child: InkWell(
                 onTap: _changeAvatar,
                 child: Container(
-                  margin: EdgeInsets.all(Dimensions.height6),
-                  width: Dimensions.height44,
-                  height: Dimensions.height44,
+                  margin: EdgeInsets.all(6.h),
+                  width: 44.w,
+                  height: 44.h,
                   decoration: BoxDecoration(
                     color: lightGreyLightMode,
                     boxShadow: const [
@@ -66,12 +64,12 @@ class _UserAvatarState extends State<UserAvatar> {
                       ),
                     ],
                     borderRadius: BorderRadius.circular(
-                      Dimensions.double30,
+                      30.r,
                     ),
                   ),
                   child: Icon(
                     CupertinoIcons.camera_fill,
-                    size: Dimensions.double40 / 2,
+                    size: 20.h,
                     color: Colors.black,
                   ),
                 ),
@@ -89,16 +87,16 @@ class _UserAvatarState extends State<UserAvatar> {
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return Container(
-          height: Dimensions.height18 * 10,
+          height: 180.h,
           padding: EdgeInsets.symmetric(
-            vertical: Dimensions.height12,
-            horizontal: Dimensions.height20,
+            vertical: 12.h,
+            horizontal: 20.w,
           ),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Dimensions.height12),
-              topRight: Radius.circular(Dimensions.height12),
+              topLeft: Radius.circular(12.h),
+              topRight: Radius.circular(12.h),
             ),
           ),
           child: Center(
@@ -111,7 +109,7 @@ class _UserAvatarState extends State<UserAvatar> {
                       .bodyLarge!
                       .copyWith(color: Colors.black),
                 ),
-                SizedBox(height: Dimensions.height8),
+                SizedBox(height: 8.h),
                 ListTile(
                   onTap: () => _pickImage(ImageSource.camera),
                   leading: const Icon(

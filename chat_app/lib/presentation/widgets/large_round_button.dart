@@ -1,6 +1,6 @@
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LargeRoundButton extends StatelessWidget {
   final String textButton;
@@ -16,15 +16,15 @@ class LargeRoundButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: Dimensions.height25),
+        margin: EdgeInsets.symmetric(vertical: 25.h),
         padding: EdgeInsets.symmetric(
-          vertical: Dimensions.height25,
-          horizontal: Dimensions.width25,
+          vertical: 25.h,
+          horizontal: 25.w,
         ),
         width: double.infinity,
         decoration: BoxDecoration(
           color: customPurple,
-          borderRadius: BorderRadius.circular(Dimensions.double40),
+          borderRadius: BorderRadius.circular(40.r),
           boxShadow: const [
             BoxShadow(
               color: Colors.black26,
@@ -39,7 +39,7 @@ class LargeRoundButton extends StatelessWidget {
             style: TextStyle(
               color: Colors.white70,
               letterSpacing: 1.5,
-              fontSize: Dimensions.double36 / 2,
+              fontSize: 18.r,
               fontWeight: FontWeight.bold,
               fontFamily: 'OpenSans',
             ),

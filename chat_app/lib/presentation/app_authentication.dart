@@ -9,6 +9,7 @@ import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppAuthentication extends StatefulWidget {
@@ -18,7 +19,8 @@ class AppAuthentication extends StatefulWidget {
   const AppAuthentication({
     Key? key,
     required this.sharedFuture,
-    this.tokenUser, required this.deviceToken,
+    this.tokenUser,
+    required this.deviceToken,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,11 @@ class AppAuthentication extends StatefulWidget {
 class _AppAuthenticationState extends State<AppAuthentication> {
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+      context,
+      designSize: Size(MediaQuery.of(context).size.width,
+          MediaQuery.of(context).size.height),
+    );
     return BlocProvider<AuthBloc>(
       create: (context) => AuthBloc(
         AuthRepository(
@@ -63,7 +70,9 @@ class _AppAuthenticationState extends State<AppAuthentication> {
               listFriend: state.listFriend,
             );
           }
-          return LoginScreen( deviceToken: widget.deviceToken,);
+          return LoginScreen(
+            deviceToken: widget.deviceToken,
+          );
         },
       ),
     );

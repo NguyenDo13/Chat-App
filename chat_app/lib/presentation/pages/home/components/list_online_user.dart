@@ -1,7 +1,6 @@
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/user_presence.dart';
 import 'package:chat_app/presentation/res/colors.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
@@ -9,6 +8,7 @@ import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ListOnlineUser extends StatelessWidget {
   final List<dynamic> listOnlineFriend;
@@ -20,13 +20,13 @@ class ListOnlineUser extends StatelessWidget {
       listener: (context, state) {},
       child: Container(
         padding: EdgeInsets.fromLTRB(
-          Dimensions.width14,
-          Dimensions.height14,
-          Dimensions.width14,
+          14.w,
+          14.h,
+          14.w,
           0,
         ),
         constraints: BoxConstraints(
-          maxHeight: Dimensions.height120,
+          maxHeight: 120.h,
         ),
         // color: Colors.red,
         child: ListView.builder(
@@ -63,16 +63,16 @@ class ListOnlineUser extends StatelessWidget {
       onTap: () {},
       child: Center(
         child: Container(
-          margin: EdgeInsets.only(right: Dimensions.width12),
-          constraints: BoxConstraints(maxWidth: Dimensions.width62),
+          margin: EdgeInsets.only(right: 12.w),
+          constraints: BoxConstraints(maxWidth: 62.w),
           child: Column(
             children: [
               StateAvatar(
                 avatar: friend.urlImage ?? '',
                 isStatus: presence.presence!,
-                radius: Dimensions.double30 * 2,
+                radius: 60.r,
               ),
-              SizedBox(height: Dimensions.height4),
+              SizedBox(height: 4.h),
               Text(
                 friend.name ?? "UNKNOWN",
                 overflow: TextOverflow.ellipsis,
@@ -99,20 +99,20 @@ class ListOnlineUser extends StatelessWidget {
       onTap: () {},
       child: Center(
         child: Container(
-          margin: EdgeInsets.only(right: Dimensions.width12),
-          constraints: BoxConstraints(maxWidth: Dimensions.width62),
+          margin: EdgeInsets.only(right: 12.w),
+          constraints: BoxConstraints(maxWidth: 62.w),
           child: Column(
             children: [
-              SizedBox(height: Dimensions.height2),
+              SizedBox(height: 2.h),
               DottedBorder(
                 borderType: BorderType.RRect,
-                radius: Radius.circular(Dimensions.double30),
+                radius: Radius.circular(30.r),
                 color: theme ? darkBlue : lightBlue,
                 strokeWidth: 1.5,
-                padding: EdgeInsets.all(Dimensions.height2),
+                padding: EdgeInsets.all(2.h),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(
-                    Radius.circular(Dimensions.double30),
+                    Radius.circular(30.r),
                   ),
                   child: Container(
                     height: 52,
@@ -128,7 +128,7 @@ class ListOnlineUser extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: Dimensions.height4),
+              SizedBox(height: 4.h),
               Text(
                 "Thêm bạn",
                 overflow: TextOverflow.ellipsis,

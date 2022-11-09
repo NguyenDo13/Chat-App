@@ -1,7 +1,6 @@
 import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
 import 'package:chat_app/presentation/helper/notify/alert_error.dart';
 import 'package:chat_app/presentation/pages/signup/components/signin_btn.dart';
-import 'package:chat_app/presentation/res/dimentions.dart';
 import 'package:chat_app/presentation/res/style.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
@@ -12,6 +11,7 @@ import 'package:chat_app/presentation/widgets/warning_message_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -32,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _messageVerified = "";
   @override
   Widget build(BuildContext context) {
-    var sizedBox16 = SizedBox(height: Dimensions.height16);
+    var sizedBox16 = SizedBox(height: 16.h);
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is RegisterState) {
@@ -59,8 +59,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: SingleChildScrollView(
             child: Container(
               padding: paddingAuthRG,
-              height: Dimensions.screenHeight,
-              width: Dimensions.screenWidth,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
               decoration: boxBGAuth,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +142,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   _signupApp(BuildContext context) {
-    if (_isValidName || _isValidEmail || _isValidPassword || _isValidVerified) return;
+    if (_isValidName || _isValidEmail || _isValidPassword || _isValidVerified){
+      return;
+    }
     context.read<AuthBloc>().add(
           RegisterEvent(
             name: _name,
@@ -157,7 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       'Sign Up',
       style: Theme.of(context).textTheme.displayLarge!.copyWith(
             color: Colors.white70,
-            fontSize: 30.0,
+            fontSize: 30.h,
             fontWeight: FontWeight.bold,
           ),
     );
