@@ -11,6 +11,7 @@ class ChatRepository extends IServiceAPI {
   String endPointGetFriendRequests = "chat/getFriendRequests";
   String endPointRemoveRequest = "chat/removeRequest";
   String endPointUploadMultiFiles = "chat/multiUpload";
+  String endPointUploadFile = "chat/upload";
 
   final BaseApiServices apiServices = NetworkApiService();
   late Environment environment;
@@ -20,6 +21,7 @@ class ChatRepository extends IServiceAPI {
     endPointGetFriendRequests = environment.baseURL + endPointGetFriendRequests;
     endPointRemoveRequest = environment.baseURL + endPointRemoveRequest;
     endPointUploadMultiFiles = environment.baseURL + endPointUploadMultiFiles;
+    endPointUploadFile = environment.baseURL + endPointUploadFile;
   }
 
   @override
@@ -92,4 +94,19 @@ class ChatRepository extends IServiceAPI {
       return null;
     }
   }
+
+  /// This function to send images, return list paths.
+  Future<dynamic> sendAudio({required String path}) async {
+    try {
+      final response = await apiServices.postMultipartFile(
+        endPointUploadFile,
+        "chats",
+        path,
+        null
+      );
+      return response['path'];
+    } on Exception catch (_) {
+      return null;
+    }
+  }  
 }

@@ -1,4 +1,4 @@
-const ip = '106';
+const ip = '3';
 class Environment {
   String baseURL = 'http://192.168.1.$ip:5000/';
   String urlServer = 'http://192.168.1.$ip:5000';

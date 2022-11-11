@@ -11,8 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ListOnlineUser extends StatelessWidget {
-  final List<dynamic> listOnlineFriend;
-  const ListOnlineUser({super.key, required this.listOnlineFriend});
+  final List<dynamic> listFriend;
+  const ListOnlineUser({super.key, required this.listFriend});
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +32,11 @@ class ListOnlineUser extends StatelessWidget {
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
-          itemCount: listOnlineFriend.length,
+          itemCount: listFriend.length,
           itemBuilder: (BuildContext context, int index) {
-            final friend = User.fromJson(listOnlineFriend[index]['friend']);
+            final friend = User.fromJson(listFriend[index]['friend']);
             final presence =
-                UserPresence.fromJson(listOnlineFriend[index]['presence']);
+                UserPresence.fromJson(listFriend[index]['presence']);
             AppStateProvider appStateProvider =
                 context.watch<AppStateProvider>();
             return Row(

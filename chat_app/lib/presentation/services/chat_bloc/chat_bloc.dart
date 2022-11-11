@@ -8,6 +8,7 @@ import 'package:chat_app/data/models/user_presence.dart';
 import 'package:chat_app/data/repository/chat_repository.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
+import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -100,9 +101,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   exitChatRoom(ExitRoomEvent event, Emitter<ChatState> emit) {
     socket.emit("exitRoom", event.roomID);
-    final presence =
-        UserPresence.fromJson(listDataRoom![0]['presence']).presence!;
-    log("presence to see: $presence");
     emit(JoinAppState(listDataRoom!, listFriend));
   }
 
@@ -161,6 +159,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       for (var i = 0; i < listFriend!.length; i++) {
         if (listFriend![i]['presence']['userID'] == data['userID']) {
           listFriend![i]['presence']['presence'] = data['presence'];
+          listFriend = sortListUserToOnlState(listFriend!);
           log("update friend");
 
           break;
@@ -201,6 +200,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       if (existedRoom == false) {
         listDataRoom!.add(data);
       }
+      listDataRoom = sortListRoomToLastestTime(listDataRoom!);
     });
   }
 
@@ -249,7 +249,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   sendFilesEvent(SendFilesEvent event, Emitter<ChatState> emit) async {
     // upload files to server and get a response
-    final paths = await chatRepository.sendImages(paths: event.listPath);
+    String paths;
+    if (event.fileType == 'audio') {
+      paths = await chatRepository.sendAudio(path: event.listPath[0]);
+    } else {
+      paths = await chatRepository.sendImages(paths: event.listPath);
+    }
 
     final req = addMessageForAsynchronousThread(
       paths,
@@ -292,7 +297,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   /// add a message to list message before send a request msg to server
   List<dynamic> addMessageForAsynchronousThread(content, String type) {
     // prepare message data
-    String date = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
+    String date = DateFormat(dateMsg).format(DateTime.now());
     final msg = Message(
       idSender: currentUser.sId!,
       content: content,

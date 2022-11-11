@@ -86,14 +86,20 @@ class NetworkApiService extends BaseApiServices {
 
   @override
   Future postMultipartFile(
-      String url, String field, String path, String userID) async {
+    String url,
+    String field,
+    String path,
+    String? userID,
+  ) async {
     dynamic responseJson;
 
     try {
       final request = http.MultipartRequest("POST", Uri.parse(url));
 
       request.files.add(await http.MultipartFile.fromPath(field, path));
-      request.fields.addAll({'userID': userID});
+      if (userID != null) {
+        request.fields.addAll({'userID': userID});
+      }
 
       request.headers.addAll({
         "Content-type": "multipart/form-data",

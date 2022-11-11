@@ -18,6 +18,7 @@ AppBar appBarPageManagar(
   String name,
   IO.Socket socket,
   int requests,
+  Function() ontapAvatar,
 ) {
   AppStateProvider appState = context.watch<AppStateProvider>();
   return AppBar(
@@ -25,7 +26,7 @@ AppBar appBarPageManagar(
     title: Row(
       children: [
         InkWell(
-          onTap: () {},
+          onTap: ontapAvatar,
           child: Container(
             margin: EdgeInsets.only(right: 16.w),
             child: Center(
@@ -38,7 +39,7 @@ AppBar appBarPageManagar(
           ),
         ),
         Text(
-          TITLES_PAGE[currentPage],
+          titlesPage[currentPage],
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ],

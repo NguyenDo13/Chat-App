@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/chat_room.dart';
 import 'package:chat_app/data/models/user_presence.dart';
@@ -40,7 +41,7 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
         ? Theme.of(context)
             .textTheme
             .headlineSmall!
-            .copyWith(color: lightBlue, fontWeight: FontWeight.w400)
+            .copyWith(color: Colors.black, fontWeight: FontWeight.w600)
         : Theme.of(context).textTheme.headlineSmall;
 
     return ListTile(
@@ -68,7 +69,11 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
         ),
         child: Text(
           widget.user.name ?? "Unknow",
-          style: Theme.of(context).textTheme.titleLarge,
+          style: !_isNotification(context)
+              ? Theme.of(context).textTheme.titleLarge
+              : Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
         ),
       ),
       subtitle: Container(
@@ -109,26 +114,40 @@ class _ChatRoomWidgetState extends State<ChatRoomWidget> {
               children: [
                 Text(
                   formatTimeRoom(widget.chatRoom.lastMessage!.time),
-                  style: Theme.of(context).textTheme.bodySmall,
+                  style: !_isNotification(context)
+                      ? Theme.of(context).textTheme.bodySmall
+                      : Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
                 ),
                 if (_isNotification(context)) ...[
                   SizedBox(height: 14.h),
-                  Container(
-                    constraints: BoxConstraints(maxHeight: 20.h),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.blue,
-                      child: Center(
-                        child: Text(
-                          "${widget.chatRoom.state}",
-                          style:
-                              Theme.of(context).textTheme.labelSmall!.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 12.r,
-                                  ),
-                        ),
-                      ),
+                  Badge(
+                    badgeContent: Text(
+                      "${widget.chatRoom.state}",
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                            color: Colors.white,
+                            fontSize: 8.r,
+                          ),
                     ),
+                    position: BadgePosition.topEnd(),
                   ),
+                  // Container(
+                  //   constraints: BoxConstraints(maxHeight: 20.h),
+                  //   child: CircleAvatar(
+                  //     backgroundColor: Colors.blue,
+                  //     child: Center(
+                  //       child: Text(
+                  //         "${widget.chatRoom.state}",
+                  //         style:
+                  //             Theme.of(context).textTheme.labelSmall!.copyWith(
+                  //                   color: Colors.white,
+                  //                   fontSize: 12.r,
+                  //                 ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ],
             ),

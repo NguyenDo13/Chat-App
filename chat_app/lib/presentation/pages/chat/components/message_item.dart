@@ -1,4 +1,5 @@
 import 'package:chat_app/data/models/message.dart';
+import 'package:chat_app/presentation/pages/chat/components/audio_message.dart';
 import 'package:chat_app/presentation/pages/chat/components/image_message.dart';
 import 'package:chat_app/presentation/pages/chat/components/video_message.dart';
 import 'package:chat_app/presentation/res/colors.dart';
@@ -6,6 +7,7 @@ import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 class MessageItem extends StatefulWidget {
   final Message message;
   final bool theme;
@@ -43,7 +45,7 @@ class _MessageItemState extends State<MessageItem> {
       crossAxisAlignment: crossAxisAlign,
       children: [
         GestureDetector(
-          onTap: () => setState(() => _isMessageInfo = !_isMessageInfo),
+          // onTap: () => setState(() => _isMessageInfo = !_isMessageInfo),
           onLongPress: () => ScaffoldMessenger.of(context).showSnackBar(
             _bottomActionMsg(context),
           ),
@@ -90,6 +92,20 @@ class _MessageItemState extends State<MessageItem> {
         );
       case 'video':
         return _videosMessageWidget(widget.message.content);
+      case 'audio':
+        return AudioMessage(
+          url: widget.message.content,
+          colorMsg: widget.isSender ? colorSenderBG : colorBG,
+          borderMsg: BorderRadius.only(
+            bottomLeft: widget.isSender ? radius15 : const Radius.circular(0),
+            bottomRight: widget.isSender ? const Radius.circular(0) : radius15,
+            topLeft: radius15,
+            topRight: radius15,
+          ),
+          colorShadow: widget.isSender ? Colors.black45 : Colors.black12,
+          mainAlign:
+              widget.isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+        );
       default:
         return _textMessageWidget(colorSenderBG, colorBG, radius15);
     }

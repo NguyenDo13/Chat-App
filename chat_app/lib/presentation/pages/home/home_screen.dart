@@ -2,13 +2,15 @@ import 'package:chat_app/presentation/helper/error/no_internet.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
+import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/new_list_chat_room.dart';
 import 'package:chat_app/presentation/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'components/list_online_user.dart'; 
-import 'package:socket_io_client/socket_io_client.dart' as IO;// ignore: library_prefixes
+import 'components/list_online_user.dart';
+import 'package:socket_io_client/socket_io_client.dart'
+    as IO; // ignore: library_prefixes
 
 class HomeScreen extends StatefulWidget {
   final IO.Socket socket;
@@ -39,10 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   const NoInternetText(),
                 ],
                 SearchBar(theme: appState.darkMode),
-                ListOnlineUser(listOnlineFriend: listFriend ?? []),
+                ListOnlineUser(listFriend: sortListUserToOnlState(listFriend!)),
                 state.listRoom.isNotEmpty
                     ? NewListChatRoom(
-                        listRoom: state.listRoom,
+                        listRoom: sortListRoomToLastestTime(state.listRoom),
                         isGroup: false,
                       )
                     : const Center(child: Text("Không có gì!")),

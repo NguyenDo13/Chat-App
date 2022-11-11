@@ -57,6 +57,11 @@ class _AppManagerState extends State<AppManager> {
           widget.authUser.user?.name ?? '',
           widget.socket,
           valueRequest != null ? valueRequest.length : 0,
+          () {
+            setState(() {
+              currentPage = 3;
+            });
+          },
         ),
         body: SafeArea(child: pages[currentPage]),
         bottomNavigationBar: SizedBox(
@@ -76,25 +81,25 @@ class _AppManagerState extends State<AppManager> {
                   icon: CupertinoIcons.chat_bubble_fill,
                   valueState: '1',
                 ),
-                label: TITLES_PAGE[0],
+                label: titlesPage[0],
               ),
               BottomNavigationBarItem(
                 icon: const StateBottomNavigationBar(
                   icon: CupertinoIcons.group_solid,
                 ),
-                label: TITLES_PAGE[1],
+                label: titlesPage[1],
               ),
               BottomNavigationBarItem(
                 icon: const StateBottomNavigationBar(
                   icon: CupertinoIcons.phone_solid,
                 ),
-                label: TITLES_PAGE[2],
+                label: titlesPage[2],
               ),
               BottomNavigationBarItem(
                 icon: const StateBottomNavigationBar(
                   icon: Icons.settings,
                 ),
-                label: TITLES_PAGE[3],
+                label: titlesPage[3],
               ),
             ],
           ),

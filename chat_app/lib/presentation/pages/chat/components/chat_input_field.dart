@@ -10,8 +10,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:media_picker_widget/media_picker_widget.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
@@ -33,13 +35,22 @@ class ChatInputField extends StatefulWidget {
 class _ChatInputFieldState extends State<ChatInputField> {
   late bool isVisibility;
   late bool emojiShowing;
+  final FlutterSoundRecorder recorder = FlutterSoundRecorder();
   List<Media> mediaList = []; // to save photos or videos have picked before
+  bool isRecorderReady = false;
+  bool isRecording = false;
 
   @override
   void initState() {
     isVisibility = true;
     emojiShowing = false;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    recorder.closeRecorder();
+    super.dispose();
   }
 
   @override
@@ -56,15 +67,21 @@ class _ChatInputFieldState extends State<ChatInputField> {
           child: SafeArea(
             child: Row(
               children: [
+                // Button open camera
                 _actionIcon(
                   Icons.camera_alt,
                   () => _openCamera(),
                 ),
+                // Button open gallery
                 _actionIcon(
                   CupertinoIcons.photo,
                   () => _openImagePicker(context),
                 ),
-                _actionIcon(Icons.mic, () {}),
+                // Button open record voice
+                _actionIcon(
+                  isRecording ? Icons.stop : Icons.mic,
+                  () => _recordVoice(),
+                ),
                 _inputMessage(
                   appState.darkMode,
                   _onChangeInputMessage,
@@ -305,6 +322,41 @@ class _ChatInputFieldState extends State<ChatInputField> {
       setState(() {
         isVisibility = true;
       });
+    }
+  }
+
+  Future _initRecorder() async {
+    final status = await Permission.microphone.request();
+    if (status != PermissionStatus.granted) {
+      isRecorderReady = false;
+    }
+    await recorder.openRecorder();
+    isRecorderReady = true;
+  }
+
+  Future _stop() async {
+    final path = await recorder.stopRecorder();
+    _sendFiles([path!], 'audio');
+    setState(() {
+      isRecording = false;
+    });
+  }
+
+  Future _recording() async {
+    setState(() {
+      isRecording = true;
+    });
+    await recorder.startRecorder(toFile: 'audio.aac');
+  }
+
+  _recordVoice() async {
+    await _initRecorder();
+    if (!isRecorderReady) return;
+
+    if (isRecording) {
+      await _stop();
+    } else {
+      await _recording();
     }
   }
 }

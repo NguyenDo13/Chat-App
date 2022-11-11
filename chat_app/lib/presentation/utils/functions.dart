@@ -1,14 +1,43 @@
 import 'dart:developer';
 
 import 'package:chat_app/data/models/auth_user.dart';
+import 'package:chat_app/data/models/chat_room.dart';
 import 'package:chat_app/data/models/message.dart';
+import 'package:chat_app/data/models/user_presence.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'constants.dart';
 
-///
+/// This function to sort list user by online state
+List<dynamic> sortListUserToOnlState(List<dynamic> listUser) {
+  listUser.sort((previous, next) {
+    final nextRoom = UserPresence.fromJson(next['presence']);
+    if (nextRoom.presence!) {
+      return 1;
+    }
+    return -1;
+  });
+  return listUser;
+}
+
+/// This function to sort list room by lastest time
+List<dynamic> sortListRoomToLastestTime(List<dynamic> listRoom) {
+  listRoom.sort((previous, next) {
+    final prevRoom = ChatRoom.fromJson(previous['room']);
+    final nextRoom = ChatRoom.fromJson(next['room']);
+
+    final prevTime = DateFormat(dateMsg).parse(prevRoom.lastMessage!.time);
+    final nextTime = DateFormat(dateMsg).parse(nextRoom.lastMessage!.time);
+
+    return nextTime.compareTo(prevTime);
+  });
+  return listRoom;
+}
+
+/// This function to handle Notification when app on background
 Future<void> firebaseOnBackgroundMessageHandle(RemoteMessage mesage) async {
   try {
     log("firebase message title: ${mesage.notification!.title}");

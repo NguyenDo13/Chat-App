@@ -34,7 +34,7 @@ Future<void> main() async {
     runApp(const ChitChatApp());
   } catch (e) {
     Fluttertoast.showToast(
-      msg: 'Firebase Message error: ${e.toString()}',
+      msg: 'system error: ${e.toString()}',
       fontSize: 12,
       textColor: Colors.black,
       backgroundColor: lightGreyLightMode,
