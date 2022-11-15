@@ -75,7 +75,7 @@ class FindUserEvent extends ChatEvent {
 }
 
 class FriendRequestEvent extends ChatEvent {
-  final User friend;
+  final dynamic friend;
   FriendRequestEvent({
     required this.friend,
   });

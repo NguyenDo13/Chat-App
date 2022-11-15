@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class ListSearchUsers extends StatelessWidget {
   const ListSearchUsers({super.key});
 
@@ -14,7 +15,10 @@ class ListSearchUsers extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TitleWidget(title: AppLocalizations.of(context)!.result, isUpper: true,),
+        TitleWidget(
+          title: AppLocalizations.of(context)!.result,
+          isUpper: true,
+        ),
         SizedBox(height: 20.h),
         BlocBuilder<ChatBloc, ChatState>(
           builder: (context, state) {
@@ -36,7 +40,9 @@ class ListSearchUsers extends StatelessWidget {
                 );
               }
             }
-            return Center(child: Text(AppLocalizations.of(context)!.error_connect),);
+            return Center(
+              child: Text(AppLocalizations.of(context)!.error_connect),
+            );
           },
         ),
       ],

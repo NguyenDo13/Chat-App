@@ -4,13 +4,12 @@ import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
-import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class ListOnlineUser extends StatelessWidget {
@@ -19,41 +18,72 @@ class ListOnlineUser extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ChatBloc, ChatState>(
-      listener: (context, state) {},
-      child: Container(
-        padding: EdgeInsets.fromLTRB(
-          14.w,
-          14.h,
-          14.w,
-          0,
-        ),
-        constraints: BoxConstraints(
-          maxHeight: 120.h,
-        ),
-        // color: Colors.red,
-        child: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          itemCount: listFriend.length,
-          itemBuilder: (BuildContext context, int index) {
-            final friend = User.fromJson(listFriend[index]['friend']);
-            final presence =
-                UserPresence.fromJson(listFriend[index]['presence']);
-            AppStateProvider appStateProvider =
-                context.watch<AppStateProvider>();
-            return Row(
-              children: [
-                if (index == 0) ...[
-                  _addNewFriend(context, appStateProvider.darkMode),
+    return listFriend.isEmpty
+        ? Center(
+            child: SizedBox(
+              width: 400.w,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    'assets/animations/add_friend.json',
+                    fit: BoxFit.fitWidth,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Provider.of<ChatBloc>(context, listen: false).add(
+                        LookingForFriendEvent(),
+                      );
+                    },
+                    child: SizedBox(
+                      width: 110.w,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.add),
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          Text(AppLocalizations.of(context)!.add_friend),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
-                _friendWidget(friend, appStateProvider, context, presence),
-              ],
-            );
-          },
-        ),
-      ),
-    );
+              ),
+            ),
+          )
+        : Container(
+            padding: EdgeInsets.fromLTRB(
+              14.w,
+              14.h,
+              14.w,
+              0,
+            ),
+            constraints: BoxConstraints(
+              maxHeight: 120.h,
+            ),
+            // color: Colors.red,
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: listFriend.length,
+              itemBuilder: (BuildContext context, int index) {
+                final friend = User.fromJson(listFriend[index]['friend']);
+                final presence =
+                    UserPresence.fromJson(listFriend[index]['presence']);
+                AppStateProvider appStateProvider =
+                    context.watch<AppStateProvider>();
+                return Row(
+                  children: [
+                    if (index == 0) ...[
+                      _addNewFriend(context, appStateProvider.darkMode),
+                    ],
+                    _friendWidget(friend, appStateProvider, context, presence),
+                  ],
+                );
+              },
+            ),
+          );
   }
 
   Widget _friendWidget(

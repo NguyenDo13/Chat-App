@@ -204,10 +204,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     });
   }
 
-  friendRequestEvent(FriendRequestEvent event, Emitter<ChatState> emit) {
+  friendRequestEvent(FriendRequestEvent event, Emitter<ChatState> emit) async {
     emit(LookingForFriendState(
       cuccessed: true,
-      user: event.friend.toJson(),
+      user: event.friend,
       addFriendSuccess: true,
     ));
 
@@ -216,6 +216,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       'addFriendRequest',
       {"userID": currentUser.sId, "friendID": event.friend.sId, "time": time},
     );
+    await listenResponseRequestSuccess(event.friend);
   }
 
   Future listenResponseRequestSuccess(user) async {

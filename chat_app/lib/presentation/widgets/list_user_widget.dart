@@ -63,7 +63,8 @@ class ListUserWidget extends StatelessWidget {
                 friend.name ?? 'UNKNOWN',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              trailing: isAddFriend ? _stateAcction(context, friend) : null,
+              trailing:
+                  isAddFriend ? _stateAcction(context, friend, presence) : null,
             ),
           );
         },
@@ -71,7 +72,8 @@ class ListUserWidget extends StatelessWidget {
     );
   }
 
-  Widget _stateAcction(BuildContext context, User friend) {
+  Widget _stateAcction(
+      BuildContext context, User friend, UserPresence presense) {
     if (loadding!) {
       return SizedBox(
         height: 12.h,
@@ -89,7 +91,7 @@ class ListUserWidget extends StatelessWidget {
       onTap: () {
         Provider.of<ChatBloc>(context, listen: false).add(
           FriendRequestEvent(
-            friend: friend,
+            friend: {'friend': friend.toJson(), 'presence': presense.toJson()},
           ),
         );
       },

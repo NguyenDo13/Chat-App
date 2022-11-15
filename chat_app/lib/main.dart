@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:chat_app/l10n/l10n.dart';
+import 'package:chat_app/presentation/res/l10n/l10n.dart';
 import 'package:chat_app/presentation/app_authentication.dart';
 import 'package:chat_app/presentation/res/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -65,7 +65,6 @@ class _ChitChatAppState extends State<ChitChatApp> {
     firebaseMsging.getToken().then((value) {
       if (value == null) return;
       deviceToken = value;
-      log("firebase token: $value");
     });
 
     // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage msg) {

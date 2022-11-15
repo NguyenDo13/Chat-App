@@ -88,7 +88,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         loading: false,
       ));
     }
-    emit(RegisterState(loading: false));
 
     /// Auto Login
     //* Post request (email, password) to server, receive response value
@@ -100,13 +99,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     //* Check correct value data
     if (valueLogin == null || valueLogin.result != 1) {
+      emit(RegisterState(loading: false));
       return emit(LoginState(loading: false));
     }
 
     //* Store accessToken to login
-    _authUser = authRepository.convertDynamicToObject(
-      valueLogin.data[0],
-    );
+    _authUser = authRepository.convertDynamicToObject(valueLogin.data[0]);
 
     //* Check accessToken before store
     if (_authUser!.accessToken != null &&
@@ -118,6 +116,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     //* Close loading popup
     emit(RegisterState(loading: false));
+    emit(LoggedState(
+      loading: false,
+      authUser: _authUser,
+      chatRooms: _authUser!.chatRooms,
+      friendRequests: _authUser!.friendRequests,
+      listFriend: _authUser!.listFriend,
+    ));
   }
 
   normalLogin(NormalLoginEvent event, Emitter<AuthState> emit) async {

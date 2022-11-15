@@ -8,7 +8,9 @@ import 'package:chat_app/presentation/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'components/list_online_user.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:socket_io_client/socket_io_client.dart'
     as IO; // ignore: library_prefixes
 
@@ -42,12 +44,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
                 SearchBar(theme: appState.darkMode),
                 ListOnlineUser(listFriend: sortListUserToOnlState(listFriend!)),
-                state.listRoom.isNotEmpty
-                    ? NewListChatRoom(
-                        listRoom: sortListRoomToLastestTime(state.listRoom),
-                        isGroup: false,
-                      )
-                    : const Center(child: Text("Không có gì!")),
+                if (state.listRoom.isNotEmpty) ...[
+                  NewListChatRoom(
+                    listRoom: sortListRoomToLastestTime(state.listRoom),
+                    isGroup: false,
+                  ),
+                ],
+                
               ],
             ],
           );

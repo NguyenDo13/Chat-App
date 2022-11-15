@@ -6,7 +6,6 @@ import 'package:chat_app/presentation/pages/setting/setting_screen.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
-import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:chat_app/presentation/widgets/app_bar_page_managar.dart';
 import 'package:chat_app/presentation/widgets/state_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
