@@ -16,6 +16,7 @@ import 'package:media_picker_widget/media_picker_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatInputField extends StatefulWidget {
   final TextEditingController controllerChat;
@@ -133,7 +134,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
               recentsLimit: 28,
               replaceEmojiOnLimitExceed: false,
               noRecents: Text(
-                'No Recents',
+                AppLocalizations.of(context)!.no_recents,
                 style: TextStyle(fontSize: 20.h, color: Colors.black26),
                 textAlign: TextAlign.center,
               ),
@@ -203,7 +204,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                         color: theme ? Colors.white : darkGreyLightMode,
                       ),
                   border: InputBorder.none,
-                  hintText: "Nhắn tin",
+                  hintText:  AppLocalizations.of(context)!.inbox,
                 ),
               ),
             ),
@@ -239,7 +240,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
       decoration: PickerDecoration(
         actionBarPosition: ActionBarPosition.top,
         blurStrength: 2,
-        completeText: 'Gửi',
+        completeText: AppLocalizations.of(context)!.send,
       ),
     );
   }

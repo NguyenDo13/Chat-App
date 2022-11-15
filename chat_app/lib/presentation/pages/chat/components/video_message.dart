@@ -4,6 +4,7 @@ import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VideoMessage extends StatefulWidget {
   final String url;
@@ -67,7 +68,7 @@ class _VideoMessageState extends State<VideoMessage> {
             child: CannotLoadMsg(
               isSender: widget.isSender,
               theme: widget.theme,
-              content: 'Không thể tải video!',
+              content: AppLocalizations.of(context)!.cannot_load_video,
             ),
           );
         }
@@ -160,7 +161,7 @@ class _VideoMessageState extends State<VideoMessage> {
       child: LoadingMessage(
         isSender: widget.isSender,
         theme: widget.theme,
-        content: 'Đang tải lên 1 video!',
+        content: AppLocalizations.of(context)!.loading_video,
         width: 240.w,
       ),
     );

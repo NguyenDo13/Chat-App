@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:chat_app/l10n/l10n.dart';
 import 'package:chat_app/presentation/app_authentication.dart';
 import 'package:chat_app/presentation/res/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'presentation/res/colors.dart';
 import 'presentation/services/app_state_provider/app_state_provider.dart';
 import 'presentation/utils/functions.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   try {
@@ -91,6 +94,13 @@ class _ChitChatAppState extends State<ChitChatApp> {
             title: 'ChitChat App',
             debugShowCheckedModeBanner: false,
             theme: appState.darkMode ? AppTheme.dark() : AppTheme.light(),
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: L10n.all,
             home: AppAuthentication(
               sharedFuture: sharedFuture,
               tokenUser: tokenUser,

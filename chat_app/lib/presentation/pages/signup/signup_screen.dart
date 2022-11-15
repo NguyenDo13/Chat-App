@@ -12,7 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -68,8 +68,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _buildSignUpTitle(context),
                   sizedBox16,
                   InputTextField(
-                    title: 'Name',
-                    hint: 'Enter your name',
+                    title: AppLocalizations.of(context)!.name,
+                    hint: AppLocalizations.of(context)!.enter_your_name,
                     icon: CupertinoIcons.person,
                     keyInput: 'name',
                     obscure: false,
@@ -79,12 +79,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   WarningMessage(
                     isDataValid: _isValidEmail,
-                    message: 'Name is required!',
+                    message: AppLocalizations.of(context)!.required_name,
                   ),
                   sizedBox16,
                   InputTextField(
-                    title: 'Email',
-                    hint: 'Enter your email',
+                    title: AppLocalizations.of(context)!.email,
+                    hint: AppLocalizations.of(context)!.enter_your_email,
                     icon: Icons.email,
                     keyInput: 'email',
                     obscure: false,
@@ -94,12 +94,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   WarningMessage(
                     isDataValid: _isValidEmail,
-                    message: 'Email is required!',
+                    message: AppLocalizations.of(context)!.required_email,
                   ),
                   sizedBox16,
                   InputTextField(
-                    title: 'Password',
-                    hint: 'Enter your password',
+                    title: AppLocalizations.of(context)!.password,
+                    hint: AppLocalizations.of(context)!.enter_your_password,
                     icon: Icons.lock,
                     keyInput: 'password',
                     obscure: true,
@@ -113,8 +113,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   sizedBox16,
                   InputTextField(
-                    title: 'Verify',
-                    hint: 'Re-enter your password',
+                    title: AppLocalizations.of(context)!.verify,
+                    hint: AppLocalizations.of(context)!.re_enter_your_password,
                     icon: Icons.verified_user_outlined,
                     keyInput: 'password',
                     obscure: true,
@@ -128,7 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   sizedBox16,
                   LargeRoundButton(
-                    textButton: 'Sign Up',
+                    textButton: AppLocalizations.of(context)!.register,
                     onTap: () => _signupApp(context),
                   ),
                   const SignInBtn(),
@@ -156,7 +156,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Text _buildSignUpTitle(BuildContext context) {
     return Text(
-      'Sign Up',
+      AppLocalizations.of(context)!.register,
       style: Theme.of(context).textTheme.displayLarge!.copyWith(
             color: Colors.white70,
             fontSize: 30.h,
@@ -195,12 +195,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (password.isEmpty) {
       setState(() {
         _isValidPassword = true;
-        _messagePassword = 'Password is required!';
+        _messagePassword = AppLocalizations.of(context)!.required_password;
       });
     } else if (password.length < 6) {
       setState(() {
         _isValidPassword = true;
-        _messagePassword = 'Must be more than 5 characters!';
+        _messagePassword = AppLocalizations.of(context)!.more_than_5_charac;
       });
     } else {
       setState(() {
@@ -214,12 +214,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (_password.isEmpty) {
       setState(() {
         _isValidVerified = true;
-        _messageVerified = 'Please enter the password first!';
+        _messageVerified = AppLocalizations.of(context)!.warn_password_first;
       });
     } else if (_password != password) {
       setState(() {
         _isValidVerified = true;
-        _messageVerified = 'Password does not match!';
+        _messageVerified = AppLocalizations.of(context)!.warn_password_match;
       });
     } else {
       setState(() {

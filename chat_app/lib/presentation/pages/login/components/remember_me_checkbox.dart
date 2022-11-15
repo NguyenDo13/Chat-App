@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-// ignore: must_be_immutable
+
 class RememberMeCheckbox extends StatefulWidget {
-  late bool rememberMe;
+  final bool rememberMe;
   final Function(bool?)? onChange;
-  RememberMeCheckbox({
+  const RememberMeCheckbox({
     Key? key,
     required this.rememberMe,
     this.onChange,

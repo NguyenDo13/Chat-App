@@ -1,21 +1,21 @@
 import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
 import 'package:chat_app/presentation/pages/login/components/signin_other_ways.dart';
 import 'package:chat_app/presentation/pages/login/components/signin_title.dart';
-import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/pages/login/components/forgot_password_btn.dart';
-import 'package:chat_app/presentation/pages/login/components/remember_me_checkbox.dart';
 import 'package:chat_app/presentation/pages/login/components/signup_btn.dart';
 import 'package:chat_app/presentation/pages/login/components/social_btn_row.dart';
 import 'package:chat_app/presentation/res/style.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
+import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/input_text_field.dart';
 import 'package:chat_app/presentation/widgets/large_round_button.dart';
 import 'package:chat_app/presentation/widgets/warning_message_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   final String deviceToken;
@@ -44,23 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
             LoadingScreen().hide();
           }
           if (state.message != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: lightGreyDarkMode,
-                content: SizedBox(
-                  height: 32.h,
-                  child: Center(
-                    child: Text(
-                      state.message ?? 'Cannot connect to server',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: redAccent,
-                          ),
-                    ),
-                  ),
-                ),
-                duration: const Duration(seconds: 2),
-              ),
-            );
+            showToast(state.message ?? AppLocalizations.of(context)!.cannot_connect_to_server);
           }
         }
       },
@@ -79,28 +63,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SignInTitle(),
                   SizedBox(height: 20.h),
                   InputTextField(
-                    title: 'Email',
-                    hint: 'Enter your email',
+                    title:  AppLocalizations.of(context)!.email,
+                    hint: AppLocalizations.of(context)!.enter_your_email,
                     icon: Icons.email,
                     keyInput: 'email',
                     obscure: false,
                     type: TextInputType.emailAddress,
-                    onSubmitted: null,
+                    onSubmitted: (value){},
                     onChanged: (email) => _formatEmail(email),
                   ),
                   WarningMessage(
                     isDataValid: _isValidEmail,
-                    message: 'Email is required!',
+                    message: AppLocalizations.of(context)!.required_email,
                   ),
                   SizedBox(height: 20.h),
                   InputTextField(
-                    title: 'Password',
-                    hint: 'Enter your password',
+                    title: AppLocalizations.of(context)!.password,
+                    hint: AppLocalizations.of(context)!.enter_your_password,
                     icon: Icons.lock,
                     keyInput: 'password',
                     obscure: true,
                     type: TextInputType.multiline,
-                    onSubmitted: null,
+                    onSubmitted: (value){},
                     onChanged: (password) => _formatPassword(password),
                   ),
                   WarningMessage(
@@ -108,15 +92,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     message: _messagePassword,
                   ),
                   const ForgotPasswordBtn(),
-                  RememberMeCheckbox(
-                      rememberMe: _rememberMe,
-                      onChange: (value) {
-                        setState(() {
-                          _rememberMe = value!;
-                        });
-                      }),
+                  // RememberMeCheckbox(
+                  //     rememberMe: _rememberMe,
+                  //     onChange: (value) {
+                  //       setState(() {
+                  //         _rememberMe = value!;
+                  //       });
+                  //     }),
                   LargeRoundButton(
-                    textButton: 'Login',
+                    textButton: AppLocalizations.of(context)!.login_btn,
                     onTap: _loginApp,
                   ),
                   const SignInOtherWays(),
@@ -146,12 +130,12 @@ class _LoginScreenState extends State<LoginScreen> {
     if (password.isEmpty) {
       setState(() {
         _isValidPassword = true;
-        _messagePassword = 'Password is required!';
+        _messagePassword = AppLocalizations.of(context)!.required_password;
       });
     } else if (password.length < 6) {
       setState(() {
         _isValidPassword = true;
-        _messagePassword = 'Must be more than 5 characters!';
+        _messagePassword = AppLocalizations.of(context)!.more_than_5_charac;
       });
     } else {
       setState(() {

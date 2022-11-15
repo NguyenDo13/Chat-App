@@ -8,7 +8,7 @@ import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ItemRequestView extends StatelessWidget {
   final User user;
   final String time;
@@ -64,7 +64,7 @@ class ItemRequestView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CustomBtnWidget(
-                    title: 'Xác nhận',
+                    title: AppLocalizations.of(context)!.accept,
                     onPressed: () {
                       Provider.of<ChatBloc>(context, listen: false).add(
                         AcceptFriendRequestEvent(
@@ -76,7 +76,7 @@ class ItemRequestView extends StatelessWidget {
                   ),
                   SizedBox(width: 12.w),
                   CustomBtnWidget(
-                    title: 'Xóa',
+                    title: AppLocalizations.of(context)!.delete,
                     onPressed: () {
                       Provider.of<ChatBloc>(context, listen: false).add(
                         RemoveFriendRequest(

@@ -2,7 +2,6 @@ import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
-import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ import 'package:socket_io_client/socket_io_client.dart'
     as IO; // ignore: library_prefixes
 
 AppBar appBarPageManagar(
-  int currentPage,
+  String currentPage,
   BuildContext context,
   String img,
   String name,
@@ -39,56 +38,58 @@ AppBar appBarPageManagar(
           ),
         ),
         Text(
-          titlesPage[currentPage],
+          currentPage,
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ],
     ),
     actions: [
-      Stack(
-        alignment: Alignment.center,
-        children: [
-          IconButton(
-            onPressed: () {
-              Provider.of<ChatBloc>(context, listen: false).add(
-                LookingForFriendEvent(),
-              );
-            },
-            icon: Icon(
-              CupertinoIcons.person_add_solid,
-              color: appState.darkMode ? lightGreyDarkMode : darkGreyDarkMode,
-              size: 30.r,
+      if (requests != 0) ...[
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            IconButton(
+              onPressed: () {
+                Provider.of<ChatBloc>(context, listen: false).add(
+                  LookingForFriendEvent(),
+                );
+              },
+              icon: Icon(
+                CupertinoIcons.person_add_solid,
+                color: appState.darkMode ? lightGreyDarkMode : darkGreyDarkMode,
+                size: 30.r,
+              ),
             ),
-          ),
-          if (requests != 0) ...[
-            Positioned(
-              top: 10.h,
-              right: -2.w,
-              child: Container(
-                constraints: BoxConstraints(maxWidth: 22.h),
-                width: 20.w,
-                height: 20.h,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 2.h,
-                  vertical: 2.h,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40.r),
-                ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.red,
-                  child: Text(
-                    '$requests',
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          color: Colors.white,
-                        ),
+            if (requests != 0) ...[
+              Positioned(
+                top: 10.h,
+                right: -2.w,
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: 22.h),
+                  width: 20.w,
+                  height: 20.h,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 2.h,
+                    vertical: 2.h,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40.r),
+                  ),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.red,
+                    child: Text(
+                      '$requests',
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                            color: Colors.white,
+                          ),
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ],
-        ],
-      ),
+        ),
+      ],
       SizedBox(width: 14.w),
     ],
   );

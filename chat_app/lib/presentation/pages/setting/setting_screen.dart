@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'components/user_avatar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingScreen extends StatelessWidget {
   final IO.Socket socket;
@@ -53,16 +54,16 @@ class SettingScreen extends StatelessWidget {
             onchange: (value) => _changeDarkMode(value, context),
           ),
           sizedBox12,
-          _changeLaguage(),
+          _changeLaguage(context),
           sizedBox12,
           FeatureSetting(
             icon: CupertinoIcons.person_circle,
-            title: 'Thông tin cá nhân',
+            title: AppLocalizations.of(context)!.personal_info,
             color: Colors.deepPurple[400]!,
             onTap: () => _changeUserInfo(context),
           ),
           sizedBox12,
-          _bannedUser(),
+          _bannedUser(context),
           sizedBox12,
           _logout(context),
           sizedBox24,
@@ -71,10 +72,10 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  FeatureSetting _changeLaguage() {
+  FeatureSetting _changeLaguage(BuildContext context) {
     return FeatureSetting(
       icon: CupertinoIcons.textformat,
-      title: 'Ngôn ngữ',
+      title: AppLocalizations.of(context)!.language,
       color: Colors.green[400]!,
       onTap: () {},
     );
@@ -83,7 +84,7 @@ class SettingScreen extends StatelessWidget {
   FeatureSetting _logout(BuildContext context) {
     return FeatureSetting(
       icon: Icons.logout,
-      title: 'Chuyển tài khoản',
+      title: AppLocalizations.of(context)!.logout,
       color: Colors.pink[400]!,
       onTap: () {
         context.read<AuthBloc>().add(LogoutEvent(socket: socket));
@@ -91,10 +92,10 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  FeatureSetting _bannedUser() {
+  FeatureSetting _bannedUser(BuildContext context) {
     return FeatureSetting(
       icon: CupertinoIcons.person_crop_circle_badge_exclam,
-      title: 'Người dùng đã chặn',
+      title: AppLocalizations.of(context)!.list_ban,
       color: Colors.orange[400]!,
       onTap: () {},
     );

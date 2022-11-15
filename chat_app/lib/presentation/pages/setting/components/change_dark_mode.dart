@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangeDarkMode extends StatelessWidget {
   final bool isDarkMode;
@@ -36,7 +37,7 @@ class ChangeDarkMode extends StatelessWidget {
         ),
       ),
       title: Text(
-        'Chế độ tối',
+        AppLocalizations.of(context)!.darkmode,
         style: Theme.of(context).textTheme.bodyLarge,
       ),
       trailing: Container(

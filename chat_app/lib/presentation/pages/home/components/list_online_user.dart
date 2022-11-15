@@ -3,12 +3,15 @@ import 'package:chat_app/data/models/user_presence.dart';
 import 'package:chat_app/presentation/res/colors.dart';
 import 'package:chat_app/presentation/services/app_state_provider/app_state_provider.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_bloc.dart';
+import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class ListOnlineUser extends StatelessWidget {
   final List<dynamic> listFriend;
@@ -96,7 +99,11 @@ class ListOnlineUser extends StatelessWidget {
 
   Widget _addNewFriend(BuildContext context, bool theme) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Provider.of<ChatBloc>(context, listen: false).add(
+          LookingForFriendEvent(),
+        );
+      },
       child: Center(
         child: Container(
           margin: EdgeInsets.only(right: 12.w),
@@ -130,7 +137,7 @@ class ListOnlineUser extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
               Text(
-                "Thêm bạn",
+                AppLocalizations.of(context)!.add_friend,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 textAlign: TextAlign.center,

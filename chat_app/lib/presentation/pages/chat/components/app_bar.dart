@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 AppBar buildAppBar({
   required BuildContext context,
@@ -51,7 +52,7 @@ AppBar buildAppBar({
                   ),
                   if (state.isOnl) ...[
                     Text(
-                      "Đang hoạt động",
+                      AppLocalizations.of(context)!.onl,
                       style: Theme.of(context)
                           .textTheme
                           .labelLarge!
@@ -67,21 +68,6 @@ AppBar buildAppBar({
       },
     ),
     actions: [
-      // IconButton(
-      //   onPressed: () {},
-      //   icon: Icon(
-      //     Icons.phone,
-      //     color: Colors.blue,
-      //     size: Dimensions.double12 * 2,
-      //   ),
-      // ),
-      // IconButton(
-      //   onPressed: () {},
-      //   icon: Icon(
-      //     Icons.videocam_rounded,
-      //     size: Dimensions.double30,
-      //   ),
-      // ),
       IconButton(
         onPressed: () {
           Navigator.push(

@@ -99,7 +99,6 @@ class _AudioMessageState extends State<AudioMessage> {
               width: 160.w,
               height: 2,
               child: Slider(
-                label: "sinh",
                 activeColor: Colors.white,
                 inactiveColor: Colors.white54,
                 min: 0,

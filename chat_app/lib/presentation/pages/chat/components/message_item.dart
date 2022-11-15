@@ -228,8 +228,11 @@ class _MessageItemState extends State<MessageItem> {
     );
   }
 
-  Widget _actionMessage(
-      {required IconData icon, Function()? action, required String title}) {
+  Widget _actionMessage({
+    required IconData icon,
+    Function()? action,
+    required String title,
+  }) {
     return Column(
       children: [
         IconButton(

@@ -3,6 +3,7 @@ import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignInBtn extends StatelessWidget {
   const SignInBtn({super.key});
@@ -17,7 +18,7 @@ class SignInBtn extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 8.h),
             child: Text(
-              'If you have an Account?',
+              AppLocalizations.of(context)!.have_an_account,
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 12.h,
@@ -31,7 +32,7 @@ class SignInBtn extends StatelessWidget {
               context.read<AuthBloc>().add(InitLoginEvent());
             },
             child: Text(
-              'Login',
+              AppLocalizations.of(context)!.login_btn,
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontSize: 20.h,
                     color: Colors.white70,

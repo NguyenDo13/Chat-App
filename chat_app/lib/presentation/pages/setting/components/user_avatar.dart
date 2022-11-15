@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserAvatar extends StatefulWidget {
   final String avatar;
@@ -103,7 +104,7 @@ class _UserAvatarState extends State<UserAvatar> {
             child: Column(
               children: [
                 Text(
-                  'Thay đổi ảnh đại diện',
+                  AppLocalizations.of(context)!.change_avatar,
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
@@ -117,7 +118,7 @@ class _UserAvatarState extends State<UserAvatar> {
                     color: Colors.black,
                   ),
                   title: Text(
-                    "Chụp ảnh",
+                    AppLocalizations.of(context)!.take_a_photo,
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!
@@ -131,7 +132,7 @@ class _UserAvatarState extends State<UserAvatar> {
                     color: Colors.black,
                   ),
                   title: Text(
-                    "Chọn ảnh từ thư viện",
+                    AppLocalizations.of(context)!.select_photo_gallery,
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium!

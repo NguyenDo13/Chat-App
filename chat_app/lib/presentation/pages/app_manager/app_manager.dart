@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:socket_io_client/socket_io_client.dart'
     as IO; // ignore: library_prefixes
 
@@ -32,6 +33,13 @@ class _AppManagerState extends State<AppManager> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> titlesPage = [
+      AppLocalizations.of(context)!.chats,
+      AppLocalizations.of(context)!.groups,
+      AppLocalizations.of(context)!.calls,
+      AppLocalizations.of(context)!.personal,
+    ];
+
     final List<Widget> pages = [
       HomeScreen(
         socket: widget.socket,
@@ -51,7 +59,7 @@ class _AppManagerState extends State<AppManager> {
       onWillPop: () => _exitApp(theme),
       child: Scaffold(
         appBar: appBarPageManagar(
-          currentPage,
+          titlesPage[currentPage],
           context,
           urlImage,
           widget.authUser.user?.name ?? '',
@@ -115,7 +123,7 @@ class _AppManagerState extends State<AppManager> {
     timeBackPressed = DateTime.now();
     if (isExitWarning) {
       Fluttertoast.showToast(
-        msg: 'Press back again to exit',
+        msg: AppLocalizations.of(context)!.exit_app,
         fontSize: 10.r,
         textColor: theme ? Colors.white : Colors.black,
         backgroundColor: theme ? darkGreyDarkMode : lightGreyLightMode,

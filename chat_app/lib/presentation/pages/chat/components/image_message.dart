@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_app/presentation/pages/chat/components/loading_msg.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'cannot_load_img.dart';
 
 class ImageMessage extends StatelessWidget {
@@ -45,12 +45,12 @@ class ImageMessage extends StatelessWidget {
             width: 214.w,
             isSender: isSender,
             theme: theme,
-            content: 'Đang tải lên 1 ảnh!',
+            content: AppLocalizations.of(context)!.loading_img,
           ),
           errorWidget: (context, url, error) => CannotLoadMsg(
             isSender: isSender,
             theme: theme,
-            content: 'Không thể tải ảnh!',
+            content: AppLocalizations.of(context)!.cannot_load_img,
           ),
         ),
       ),

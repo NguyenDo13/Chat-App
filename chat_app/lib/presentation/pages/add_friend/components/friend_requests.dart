@@ -3,6 +3,7 @@ import 'package:chat_app/presentation/pages/add_friend/components/item_request_v
 import 'package:chat_app/presentation/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FriendRequestView extends StatelessWidget {
   final List<dynamic> friendRequests;
@@ -14,7 +15,10 @@ class FriendRequestView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const TitleWidget(title: 'Yêu cầu kết bạn', isUpper: false),
+        TitleWidget(
+          title: AppLocalizations.of(context)!.friend_request,
+          isUpper: false,
+        ),
         SizedBox(height: 20.h),
         Container(
           constraints: BoxConstraints(maxHeight: maxHieght),

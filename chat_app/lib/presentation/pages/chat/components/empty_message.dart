@@ -3,6 +3,7 @@ import 'package:chat_app/presentation/utils/constants.dart';
 import 'package:chat_app/presentation/widgets/state_avatar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EmptyMessage extends StatelessWidget {
   final User friend;
@@ -32,7 +33,7 @@ class EmptyMessage extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             Text(
-              'Hãy gửi lời chào để bắt đầu cuộc trò chuyện!',
+              AppLocalizations.of(context)!.empty_message,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               maxLines: maxValueInteger,

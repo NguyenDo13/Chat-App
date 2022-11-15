@@ -5,4 +5,4 @@
     - đa ngôn ngữ
     - update them cai notification bang firebase de
 
-Tiếp theo: ưu tiên hoàn thành việc record voice và send voice!
+update lại giao diện khi record, làm cái badge, đa ngôn ngữ và CV

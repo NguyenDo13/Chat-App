@@ -52,7 +52,9 @@ class _AppAuthenticationState extends State<AppAuthentication> {
             AppStateProvider appState = context.read<AppStateProvider>();
             if (state.authUser != null) {
               appState.darkMode = state.authUser!.user!.isDarkMode!;
-              appState.urlImage = state.authUser!.user!.urlImage!;
+              if (state.authUser!.user!.urlImage != null) {
+                appState.urlImage = state.authUser!.user!.urlImage!;
+              }
             }
           }
         },
