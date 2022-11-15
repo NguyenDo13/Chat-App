@@ -7,8 +7,8 @@ ChitChat là một ứng dụng nhắn tin 1-1 dành cho các nền tảng di đ
     - Clone dự án này về VSC, mở dự án và đảm bảo đã cài đặt Flutter. Kết nối thiết bị và Run dự án. 
 
 ## Sử dụng
-1. Đăng ký
-2. Đăng nhập
-3. Kết bạn
-4. Nhắn tin
-5. Đăng xuất
+1. Đăng ký, Đăng nhập
+https://user-images.githubusercontent.com/84115673/201957212-ec30966c-f11a-4133-8408-4ca7dca6e937.mp4
+2. Kết bạn
+3. Nhắn tin
+4. Đăng xuất
