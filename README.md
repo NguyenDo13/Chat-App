@@ -23,4 +23,7 @@ https://user-images.githubusercontent.com/84115673/202114500-a75b3088-9f47-493b-
 
 https://user-images.githubusercontent.com/84115673/202114273-20e226a1-8abe-480e-8fc2-715f10b4af5a.mp4
 ### 3. Nhắn tin
+![Screenshot_2022-11-16-20-24-19-146_com example chat_app](https://user-images.githubusercontent.com/84115673/202192878-dab66086-20af-4041-8499-2079b526641c.jpg)
+
+![Screenshot_2022-11-16-20-25-02-419_com example chat_app](https://user-images.githubusercontent.com/84115673/202192974-83beb300-610b-4832-b763-f7e845d23d47.jpg)
 ### 4. Đăng xuất
