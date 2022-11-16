@@ -1,4 +1,5 @@
 import 'package:chat_app/data/models/auth_user.dart';
+import 'package:chat_app/data/models/chat_room.dart';
 import 'package:chat_app/presentation/pages/calls/calls_screen.dart';
 import 'package:chat_app/presentation/pages/groups/group_chat.dart';
 import 'package:chat_app/presentation/pages/home/home_screen.dart';
@@ -53,6 +54,7 @@ class _AppManagerState extends State<AppManager> {
     List<dynamic>? valueRequest = context.watch<ChatBloc>().requests;
     bool theme = context.watch<AppStateProvider>().darkMode;
     String urlImage = context.watch<AppStateProvider>().urlImage;
+    int valueOfChat = _getValue(context);
 
     return WillPopScope(
       onWillPop: () => _exitApp(theme),
@@ -84,9 +86,9 @@ class _AppManagerState extends State<AppManager> {
                 Theme.of(context).textSelectionTheme.selectionColor,
             items: [
               BottomNavigationBarItem(
-                icon: const StateBottomNavigationBar(
+                icon: StateBottomNavigationBar(
                   icon: CupertinoIcons.chat_bubble_fill,
-                  valueState: '1',
+                  valueState: valueOfChat > 0 ? '$valueOfChat' : null,
                 ),
                 label: titlesPage[0],
               ),
@@ -113,6 +115,23 @@ class _AppManagerState extends State<AppManager> {
         ),
       ),
     );
+  }
+
+  int _getValue(BuildContext context) {
+    int dem = 0;
+    final currentUserID = context.watch<ChatBloc>().currentUser.sId;
+    final dataRoom = context.watch<ChatBloc>().listDataRoom;
+    if (dataRoom == null) return dem;
+
+    for (var i = 0; i < dataRoom.length; i++) {
+      final room = ChatRoom.fromJson(dataRoom[i]['room']);
+      String senderID = room.lastMessage!.idSender;
+      int value = room.state!;
+      if (senderID != currentUserID && value > 0) {
+        dem++;
+      }
+    }
+    return dem;
   }
 
   Future<bool> _exitApp(bool theme) async {

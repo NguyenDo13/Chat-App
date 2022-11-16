@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:chat_app/data/models/message.dart';
 import 'package:chat_app/presentation/pages/chat/components/message_item.dart';
 import 'package:chat_app/presentation/res/colors.dart';
@@ -46,7 +48,7 @@ class _ClusterMessagesState extends State<ClusterMessages> {
 
     int currentIndex = 0;
     final timeMessageItem = Message.fromJson(widget.messages.last).time;
-
+    log(': ${widget.isLastCluster}');
     return Padding(
       padding: EdgeInsets.only(
         top: 10.h,

@@ -93,7 +93,15 @@ class ListOnlineUser extends StatelessWidget {
     UserPresence presence,
   ) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        // Provider.of<ChatBloc>(context, listen: false).add(
+        //     JoinRoomEvent(
+        //       roomID: widget.chatRoom.sId!,
+        //       friend: friend,
+        //       isOnl: presence.presence!,
+        //     ),
+        //   );
+      },
       child: Center(
         child: Container(
           margin: EdgeInsets.only(right: 12.w),

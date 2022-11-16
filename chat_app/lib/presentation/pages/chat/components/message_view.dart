@@ -39,57 +39,100 @@ class _MessageViewState extends State<MessageView> {
                   friend: state.friend,
                 );
               }
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: state.sourceChat!.length,
-                itemBuilder: (context, index) {
-                  int indexShowTime = 0;
-                  bool isLastClusterTime = _checkIsLastCluster(
-                    index,
-                    state.sourceChat!.length - 1,
-                  );
-                  List<dynamic> sourceChatItem = state.sourceChat![index];
-                  return Column(
-                    children: sourceChatItem.map((clusterMessage) {
-                      final isSender = _checkIsSender(
-                        clusterMessage,
-                        state.currentUser.sId,
-                      );
-                      bool isLastClusterMessage = false;
-                      if (isLastClusterTime) {
-                        isLastClusterMessage = _checkIsLastCluster(
-                          indexShowTime,
-                          sourceChatItem.length - 1,
-                        );
-                      }
-                      indexShowTime++;
-                      return Column(
-                        children: [
-                          if (indexShowTime == 1) ...[
-                            CluterMessagesTime(
-                              theme: appState.darkMode,
-                              time: state.listTime![index],
-                            ),
-                          ],
-                          ClusterMessages(
-                            avatarFriend: state.friend.urlImage!,
-                            theme: appState.darkMode,
-                            isSender: isSender,
-                            messages: clusterMessage,
-                            isLastCluster: isLastClusterMessage,
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  );
-                },
-              );
+              return _listMessage(state, appState);
             }
             return const Text('Error 500');
           }),
         ),
       ),
+    );
+  }
+
+  Widget _listMessage(HasSourceChatState state, AppStateProvider appState) {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: state.sourceChat!.length,
+      itemBuilder: (context, index) {
+        int indexShowTime = 0;
+        bool isLastClusterTime = _checkIsLastCluster(
+          index,
+          state.sourceChat!.length - 1,
+        );
+        List<dynamic> sourceChatItem = state.sourceChat![index];
+        return Column(
+          children: _listCluster(
+            sourceChatItem,
+            state,
+            isLastClusterTime,
+            indexShowTime,
+            appState,
+            index,
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _listCluster(
+    List<dynamic> sourceChatItem,
+    HasSourceChatState state,
+    bool isLastClusterTime,
+    int indexShowTime,
+    AppStateProvider appState,
+    int index,
+  ) {
+    return sourceChatItem.map((clusterMessage) {
+      final isSender = _checkIsSender(
+        clusterMessage,
+        state.currentUser.sId,
+      );
+      bool isLastClusterMessage = false;
+      if (isLastClusterTime) {
+        isLastClusterMessage = _checkIsLastCluster(
+          indexShowTime,
+          sourceChatItem.length - 1,
+        );
+      }
+      indexShowTime++;
+      
+      return _clusterWidget(
+        indexShowTime,
+        appState,
+        state,
+        index,
+        isSender,
+        clusterMessage,
+        isLastClusterMessage,
+      );
+    }).toList();
+  }
+
+  Column _clusterWidget(
+    int indexShowTime,
+    AppStateProvider appState,
+    HasSourceChatState state,
+    int index,
+    bool isSender,
+    clusterMessage,
+    bool isLastClusterMessage,
+  ) {
+    return Column(
+      children: [
+        if (indexShowTime == 1) ...[
+          CluterMessagesTime(
+            theme: appState.darkMode,
+            time: state.listTime![index],
+          ),
+        ],
+        ClusterMessages(
+          avatarFriend: state.friend.urlImage!,
+          theme: appState.darkMode,
+          isSender: isSender,
+          messages: clusterMessage,
+          isLastCluster: isLastClusterMessage,
+        ),
+      ],
     );
   }
 

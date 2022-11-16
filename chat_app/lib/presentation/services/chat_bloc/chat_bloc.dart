@@ -4,7 +4,6 @@ import 'package:chat_app/data/environment.dart';
 import 'package:chat_app/data/models/auth_user.dart';
 import 'package:chat_app/data/models/chat_room.dart';
 import 'package:chat_app/data/models/message.dart';
-import 'package:chat_app/data/models/user_presence.dart';
 import 'package:chat_app/data/repository/chat_repository.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_event.dart';
 import 'package:chat_app/presentation/services/chat_bloc/chat_state.dart';
@@ -212,9 +211,10 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     ));
 
     final time = DateFormat('kk:mm dd/MM/yyyy').format(DateTime.now());
+    final id = User.fromJson(event.friend['friend']).sId;
     socket.emit(
       'addFriendRequest',
-      {"userID": currentUser.sId, "friendID": event.friend.sId, "time": time},
+      {"userID": currentUser.sId, "friendID": id, "time": time},
     );
     await listenResponseRequestSuccess(event.friend);
   }
@@ -250,7 +250,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
 
   sendFilesEvent(SendFilesEvent event, Emitter<ChatState> emit) async {
     // upload files to server and get a response
-    String paths;
+    dynamic paths;
     if (event.fileType == 'audio') {
       paths = await chatRepository.sendAudio(path: event.listPath[0]);
     } else {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:chat_app/presentation/res/l10n/l10n.dart';
 import 'package:chat_app/presentation/app_authentication.dart';
 import 'package:chat_app/presentation/res/theme.dart';
