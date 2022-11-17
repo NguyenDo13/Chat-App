@@ -271,10 +271,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       currentUser: currentUser,
       friend: friend!,
     ));
-
+    final subMsg = event.fileType == 'audio'
+        ? 'đã gửi 1 ${event.fileType}'
+        : "đã gửi ${paths.length} ${event.fileType}";
     // add new message type img
     sendMessageBySocket(
-      "đã gửi ${paths.length} ${event.fileType}",
+      subMsg,
       req[0], // message
       req[1], // is current time or not
       event.friendID,

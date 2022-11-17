@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
             LoadingScreen().hide();
           }
           if (state.message != null) {
-            showToast(state.message ?? AppLocalizations.of(context)!.cannot_connect_to_server);
+            showToast(AppLocalizations.of(context)!.login_fail);
           }
         }
       },
@@ -63,13 +63,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SignInTitle(),
                   SizedBox(height: 20.h),
                   InputTextField(
-                    title:  AppLocalizations.of(context)!.email,
+                    title: AppLocalizations.of(context)!.email,
                     hint: AppLocalizations.of(context)!.enter_your_email,
                     icon: Icons.email,
                     keyInput: 'email',
                     obscure: false,
                     type: TextInputType.emailAddress,
-                    onSubmitted: (value){},
+                    onSubmitted: (value) {},
                     onChanged: (email) => _formatEmail(email),
                   ),
                   WarningMessage(
@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyInput: 'password',
                     obscure: true,
                     type: TextInputType.multiline,
-                    onSubmitted: (value){},
+                    onSubmitted: (value) {},
                     onChanged: (password) => _formatPassword(password),
                   ),
                   WarningMessage(

@@ -8,6 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class AppStateProvider extends ChangeNotifier {
+  //Language
+  Locale? _currentLocal;
+  Locale? get currentLocal => _currentLocal;
+  set changeLocal(String locale) {
+    _currentLocal = Locale(locale);
+    notifyListeners();
+  }
+
   // Check connect Network
   late Connectivity _connectivity;
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;

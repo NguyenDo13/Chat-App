@@ -30,11 +30,13 @@ class AppAuthentication extends StatefulWidget {
 class _AppAuthenticationState extends State<AppAuthentication> {
   @override
   Widget build(BuildContext context) {
+    //init screenUtil
     ScreenUtil.init(
       context,
       designSize: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height),
     );
+
     return BlocProvider<AuthBloc>(
       create: (context) => AuthBloc(
         AuthRepository(
@@ -50,6 +52,11 @@ class _AppAuthenticationState extends State<AppAuthentication> {
           if (state is LoggedState) {
             // app states
             AppStateProvider appState = context.read<AppStateProvider>();
+            //init locale
+            final Locale appLocale = Localizations.localeOf(context);
+            appState.changeLocal = appLocale.languageCode;
+
+            // get isDarkmode and urlImage of user
             if (state.authUser != null) {
               appState.darkMode = state.authUser!.user!.isDarkMode!;
               if (state.authUser!.user!.urlImage != null) {

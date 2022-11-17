@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:media_picker_widget/media_picker_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -79,10 +80,11 @@ class _ChatInputFieldState extends State<ChatInputField> {
                   () => _openImagePicker(context),
                 ),
                 // Button open record voice
-                _actionIcon(
-                  isRecording ? Icons.stop : Icons.mic,
-                  () => _recordVoice(),
-                ),
+                // _actionIcon(
+                //   isRecording ? Icons.stop : Icons.mic,
+                //   () => _recordVoice(),
+                // ),
+                _voiceRecognition(),
                 _inputMessage(
                   appState.darkMode,
                   _onChangeInputMessage,
@@ -148,6 +150,31 @@ class _ChatInputFieldState extends State<ChatInputField> {
     );
   }
 
+  Widget _voiceRecognition() {
+    return Visibility(
+      visible: isVisibility,
+      child: Container(
+        padding: EdgeInsets.only(right: 14.w),
+        child: InkWell(
+          onTap: () => _recordVoice(),
+          child: isRecording
+              ? SizedBox(
+                  width: 28.r,
+                  child: Lottie.asset(
+                    'assets/animations/voice_recognition.json',
+                    fit: BoxFit.fitWidth,
+                  ),
+                )
+              : Icon(
+                  Icons.mic,
+                  size: 28.r,
+                  color: Colors.blue,
+                ),
+        ),
+      ),
+    );
+  }
+
   Widget _actionIcon(IconData icon, Function()? onTap) {
     return Visibility(
       visible: isVisibility,
@@ -204,7 +231,7 @@ class _ChatInputFieldState extends State<ChatInputField> {
                         color: theme ? Colors.white : darkGreyLightMode,
                       ),
                   border: InputBorder.none,
-                  hintText:  AppLocalizations.of(context)!.inbox,
+                  hintText: AppLocalizations.of(context)!.inbox,
                 ),
               ),
             ),

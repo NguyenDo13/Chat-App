@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchBar extends StatelessWidget {
   final bool theme;
@@ -41,7 +42,7 @@ class SearchBar extends StatelessWidget {
             ),
             SizedBox(width: 14.w),
             Text(
-              'Tìm kiếm',
+              AppLocalizations.of(context)!.search,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: theme ? Colors.white : darkGreyDarkMode,
                   ),

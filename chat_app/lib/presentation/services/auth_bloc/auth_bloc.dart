@@ -141,7 +141,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     //* Check correct value data
     if (value == null || value.result != 1) {
-      return emit(LoginState(loading: false, message: 'Đăng nhập thất bại'));
+      return emit(LoginState(loading: false, message: 'fail'));
     }
 
     //* Get data of the user

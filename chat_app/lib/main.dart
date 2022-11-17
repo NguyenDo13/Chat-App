@@ -97,6 +97,7 @@ class _ChitChatAppState extends State<ChitChatApp> {
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
+            locale: appState.currentLocal,
             supportedLocales: L10n.all,
             home: AppAuthentication(
               sharedFuture: sharedFuture,

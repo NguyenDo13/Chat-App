@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'components/change_language.dart';
 import 'components/user_avatar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -54,7 +55,7 @@ class SettingScreen extends StatelessWidget {
             onchange: (value) => _changeDarkMode(value, context),
           ),
           sizedBox12,
-          _changeLaguage(context),
+          ChangeLanguage(app: appStateProvider),
           sizedBox12,
           FeatureSetting(
             icon: CupertinoIcons.person_circle,
@@ -69,15 +70,6 @@ class SettingScreen extends StatelessWidget {
           sizedBox24,
         ],
       ),
-    );
-  }
-
-  FeatureSetting _changeLaguage(BuildContext context) {
-    return FeatureSetting(
-      icon: CupertinoIcons.textformat,
-      title: AppLocalizations.of(context)!.language,
-      color: Colors.green[400]!,
-      onTap: () {},
     );
   }
 
