@@ -24,6 +24,7 @@ class TextFieldWidget extends StatefulWidget {
     this.labelText,
     this.enableRTLHintText = false,
     this.cursorColor = Colors.blue,
+    this.autofocus = false,
   }) : super(key: key);
   final Function(String)? onSubmitted;
   final Function(String) onChanged;
@@ -45,6 +46,7 @@ class TextFieldWidget extends StatefulWidget {
   final String? labelText;
   final bool enableRTLHintText;
   final Color cursorColor;
+  final bool autofocus;
   @override
   State<TextFieldWidget> createState() => _TextFieldWidgetState();
 }
@@ -75,6 +77,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
           color: widget.boxDecorationColor,
         ),
         child: TextField(
+          autofocus: widget.autofocus,
           controller: textEditingController,
           textAlign: TextAlign.start,
           textInputAction: widget.textInputAction,

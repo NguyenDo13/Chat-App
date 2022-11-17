@@ -11,8 +11,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class AddFriendScreen extends StatefulWidget {
-  const AddFriendScreen({super.key});
+  final bool focus;
+  const AddFriendScreen({
+    super.key,
+    required this.focus,
+  });
 
   @override
   State<AddFriendScreen> createState() => _AddFriendScreenState();
@@ -39,6 +44,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
             },
           ),
           title: TextFieldWidget(
+            autofocus: widget.focus,
             hintText: AppLocalizations.of(context)!.input_email,
             padding: 0,
             boxDecorationColor:
@@ -56,7 +62,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.all(14.h) ,
+          padding: EdgeInsets.all(14.h),
           child: BlocBuilder<ChatBloc, ChatState>(builder: (context, state) {
             return Center(
               child: state is LookingForFriendState && state.init!

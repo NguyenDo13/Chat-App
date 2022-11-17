@@ -1,10 +1,10 @@
 import 'package:chat_app/presentation/helper/loading/loading_screen.dart';
-import 'package:chat_app/presentation/helper/notify/alert_error.dart';
 import 'package:chat_app/presentation/pages/signup/components/signin_btn.dart';
 import 'package:chat_app/presentation/res/style.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_event.dart';
 import 'package:chat_app/presentation/services/auth_bloc/auth_state.dart';
+import 'package:chat_app/presentation/utils/functions.dart';
 import 'package:chat_app/presentation/widgets/input_text_field.dart';
 import 'package:chat_app/presentation/widgets/large_round_button.dart';
 import 'package:chat_app/presentation/widgets/warning_message_widget.dart';
@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -37,13 +38,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       listener: (context, state) {
         if (state is RegisterState) {
           if (state.message != null) {
-            showDialog(
-              context: context,
-              builder: (context) => AlertError(
-                title: "error",
-                content: state.message ?? 'Cannot connect to server',
-                nameBtn: 'Oke',
-              ),
+            showToast(
+              state.message ??
+                  AppLocalizations.of(context)!.cannot_connect_to_server,
             );
           }
           if (state.loading) {
@@ -142,7 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   _signupApp(BuildContext context) {
-    if (_isValidName || _isValidEmail || _isValidPassword || _isValidVerified){
+    if (_isValidName || _isValidEmail || _isValidPassword || _isValidVerified) {
       return;
     }
     context.read<AuthBloc>().add(

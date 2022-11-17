@@ -2,7 +2,4 @@
     - Làm màn hình review ảnh
 
     - đổi mật khẩu
-    - đa ngôn ngữ
     - update them cai notification bang firebase de
-
-update lại giao diện khi record, làm cái badge, đa ngôn ngữ và CV

@@ -63,7 +63,11 @@ class SendFilesEvent extends ChatEvent {
 }
 
 //* Friend
-class LookingForFriendEvent extends ChatEvent {}
+class LookingForFriendEvent extends ChatEvent {
+  final bool focus;
+
+  LookingForFriendEvent({this.focus = false});
+}
 
 class ExitFriendEvent extends ChatEvent {}
 

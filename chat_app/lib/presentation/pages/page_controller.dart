@@ -66,7 +66,7 @@ class _AppPageControllerState extends State<AppPageController> {
             return SearchScreen(listFriend: state.listFriend);
           }
           if (state is LookingForFriendState) {
-            return const AddFriendScreen();
+            return AddFriendScreen(focus: state.focus ?? false);
           }
           return AppManager(authUser: widget.authUser, socket: _socket);
         },

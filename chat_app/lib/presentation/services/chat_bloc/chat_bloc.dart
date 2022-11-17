@@ -181,7 +181,11 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       requests = [];
     }
     requests = friendRequests!.data!;
-    emit(LookingForFriendState(init: true, requests: requests));
+    emit(LookingForFriendState(
+      init: true,
+      focus: event.focus,
+      requests: requests,
+    ));
   }
 
   updateListDataRooms() {
